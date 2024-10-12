@@ -1,15 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <link>
-    <h1>Olá, você está pronto para usar o controller</h1>
-    <p>Basta acessar o aplicativo e conectar o IP local</p>
-    <!-- <button><link>Baixar</button></button> -->
-  </body>
-  <script src="renderer.js"></script>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>GyroMouse</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <script>
+    function generateBarCode() {
+      // var nric = $('#text').val();
+      var nric = '192.168.52.102';
+      var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=450x450';
+      $('#barcode').attr('src', url);
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Escaneie o QRCode para continuar</h1>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+  <!-- <input id="text" type="text" value="NRIC or Work Permit" style="Width:20%" onblur='generateBarCode();' /> -->
+
+  <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=192.168.52.102&amp;size=450x450" alt=""
+    title="QR Code" width="450" height="450" />
+  <!-- <button id="btn">Set Title</button> -->
+  <!-- <canvas id="canvas"></canvas> -->
+</body>
+<script src="bundle.js"></script>
+<script src="renderer.js"></script>
+
 </html>

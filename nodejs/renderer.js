@@ -1,10 +1,12 @@
-ocument.getElementById('generate-btn').addEventListener('click', async () => {
-  const text = document.getElementById('qr-input').value;
-  if (text) {
-    // Chamar a API exposta pelo preload.js para gerar o QR code
-    const qrCodeDataUrl = await window.qrcodeAPI.generateQRCode(text);
-    // Exibir o QR code no HTML
-    const qrCodeContainer = document.getElementById('qr-code');
-    qrCodeContainer.innerHTML = `<img src="${qrCodeDataUrl}" alt="QR Code">`;
-  }
-});
+// const { getIp } = require('/src/utils/ifconfig.ts')
+
+
+const setButton = document.getElementById('btn')
+const titleInput = document.getElementById('title')
+
+setButton?.addEventListener('click', () => {
+  const title = titleInput?.value;
+
+  // const ip = getIp();
+  window.electronAPI.setTitle(ip)
+})
