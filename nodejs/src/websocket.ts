@@ -3,7 +3,8 @@ import {WebSocket, WebSocketServer} from 'ws';
 // const WebSocket = require('ws');
 
 
-export const connectServer = function () {
+export function connectServer() {
+    console.log('Conectado')
 
     // const socket = new WebSocketServer({ port: 8080 });
     const server = new WebSocketServer({ port: 8080 });

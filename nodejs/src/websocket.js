@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectServer = void 0;
+exports.connectServer = connectServer;
 var robot_1 = require("./robot");
 var ws_1 = require("ws");
-var connectServer = function () {
+function connectServer() {
+    console.log('Conectado');
     var server = new ws_1.WebSocketServer({ port: 8080 });
     console.log('Servidor WebSocket rodando na porta 8080');
     server.on('connection', function (ws) {
@@ -33,6 +34,5 @@ var connectServer = function () {
             console.log('Cliente desconectado');
         });
     });
-};
-exports.connectServer = connectServer;
+}
 //# sourceMappingURL=websocket.js.map

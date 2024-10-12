@@ -1,17 +1,22 @@
 // 'use strict'; // Verificar se é necessário
 //  require('./src/websocket.js'); // Acessar a função de connectServer
 import { connectServer } from './src/websocket';
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { join } from 'path';
+// import { networkInterfaces } from 'os';
+import { QRCode } from 'qrcode';
 
 connectServer();
-
-
-console.log('working')
 
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
   })
 
   win.loadFile('index.html')
@@ -34,31 +39,3 @@ app.on('window-all-closed', () => {
 })
 
 
-
-function getIp() {
-  // ipconfig getifaddr en0
-
-  const { networkInterfaces } = require('os');
-
-  const nets = networkInterfaces();
-  const results = Object.create(null); // Or just '{}', an empty object
-
-  for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
-      // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
-      // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
-      const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
-      if (net.family === familyV4Value && !net.internal) {
-        if (!results[name]) {
-          results[name] = [];
-        }
-        results[name].push(net.address);
-      }
-    }
-  }
-
-  console.log(results.en0[0]);
-}
-
-
-getIp()

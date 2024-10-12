@@ -8,20 +8,27 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc -w -p . ",
-    "start": "electron .",
-    "rebuild": "npm rebuild --runtime=electron --target=32.2.0 --disturl=https://atom.io/download/atom-shell --abi=128"
+    "app": "electron .",
+    "rebuild": "npm rebuild --runtime=electron --target=32.2.0 --disturl=https://atom.io/download/atom-shell --abi=128",
+    "build": "npx @electron/packager . app --platform=darwin --arch=arm64 --overwrite"
   },
   "dependencies": {
     "@jitsi/robotjs": "^0.6.13",
+    "electron-squirrel-startup": "^1.0.1",
+    "qrcode": "^1.5.4",
     "ws": "^8.18.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
   },
   "devDependencies": {
+    "@electron/fuses": "^1.8.0",
+    "@electron/packager": "^18.3.5",
     "@electron/rebuild": "^3.7.0",
+    "@types/qrcode": "^1.5.5",
     "@types/ws": "^8.5.12",
     "electron": "^32.2.0",
+    "node-gyp": "^10.2.0",
     "typescript": "^5.6.3"
   }
 }

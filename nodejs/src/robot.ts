@@ -1,6 +1,7 @@
 import { getScreenSize, getMousePos, setMouseDelay, typeString, moveMouse, mouseClick } from '@jitsi/robotjs'
 
 
+// Alternative: https://nutjs.dev/docs/installation
 let screenSize = getScreenSize();
 
 let mousePos = getMousePos();
