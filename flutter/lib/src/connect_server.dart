@@ -2,6 +2,8 @@ import 'package:controller/src/cursor_move.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'connect_qr_code.dart';
+
 class ConnectToServerPage extends StatefulWidget {
   const ConnectToServerPage({super.key});
 
@@ -35,6 +37,19 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Conectar'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ConnectFromQrCodePage(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.qr_code),
+          )
+        ],
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 32),

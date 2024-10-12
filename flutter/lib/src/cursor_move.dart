@@ -183,7 +183,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
       }));
 
       acelerometerSubscription =
-          gyroscopeEventStream(samplingPeriod: SensorInterval.gameInterval)
+          // gyroscopeEventStream(samplingPeriod: SensorInterval.gameInterval)
+          gyroscopeEventStream(samplingPeriod: Duration(milliseconds: 15))
               .listen((GyroscopeEvent event) {
         sendMouseMovement(event.z * -1, event.x * -1, event.timestamp);
       });
@@ -215,8 +216,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
     x = (math.degrees(x * seconds));
     y = (math.degrees(y * seconds));
 
-    const double threshholdX = 0.1;
-    const double threshholdY = 0.1;
+    const double threshholdX = 0.08;
+    const double threshholdY = 0.08;
 
     if (x.abs() <= threshholdX) {
       x = 0;
