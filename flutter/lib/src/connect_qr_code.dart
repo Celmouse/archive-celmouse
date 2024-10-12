@@ -30,7 +30,9 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MoveMousePage(channel: channel!),
+        builder: (context) => MoveMousePage(
+          channel: channel,
+        ),
       ),
     );
 
@@ -38,9 +40,10 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
   }
 
   _handleBarcode(BarcodeCapture e) {
-    final rgx = RegExp(r'^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$');
+    final rgx =
+        RegExp(r'^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$');
     final value = e.barcodes.first.rawValue ?? '';
-    if(rgx.hasMatch(value)){
+    if (rgx.hasMatch(value)) {
       connect(value);
     }
   }
@@ -106,9 +109,11 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
         title: const Text('Conectar'),
       ),
       body: SafeArea(
-          child: MobileScanner(
-        controller: controller,
-      )),
+        child: MobileScanner(
+          controller: controller,
+          // overlayBuilder: (context, constraints) => ScannerOverlay(scanWindow: ),
+        ),
+      ),
     );
   }
 }

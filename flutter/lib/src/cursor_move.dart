@@ -184,7 +184,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
       acelerometerSubscription =
           // gyroscopeEventStream(samplingPeriod: SensorInterval.gameInterval)
-          gyroscopeEventStream(samplingPeriod: Duration(milliseconds: 15))
+          gyroscopeEventStream(samplingPeriod: const Duration(milliseconds: 15))
               .listen((GyroscopeEvent event) {
         sendMouseMovement(event.z * -1, event.x * -1, event.timestamp);
       });

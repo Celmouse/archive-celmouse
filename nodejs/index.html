@@ -5,25 +5,31 @@
   <meta charset="UTF-8">
   <title>GyroMouse</title>
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-  <script>
+  <!-- <script>
     function generateBarCode() {
       // var nric = $('#text').val();
       var nric = '192.168.52.102';
       var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=450x450';
       $('#barcode').attr('src', url);
     }
-  </script>
+  </script> -->
 </head>
 
 <body>
-  <h1>Escaneie o QRCode para continuar</h1>
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <!-- <h1>Escaneie o QRCode para continuar</h1> -->
+  <h1>Siga os passos para configurar</h1>
+  <ol>
+    <li>Abra o aplicativo de terminal em seu computador</li>
+    <li>Digite o código ipconfig getifaddr en0</li>
+    <li>Cole esse código no aplicativo em seu celular</li>
+    <li>Toque em conectar</li>
+  </ol>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 
   <!-- <input id="text" type="text" value="NRIC or Work Permit" style="Width:20%" onblur='generateBarCode();' /> -->
 
-  <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=192.168.52.109&amp;size=450x450" alt=""
-    title="QR Code" width="450" height="450" />
+  <!-- <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=192.168.52.102&amp;size=450x450" alt=""
+    title="QR Code" width="450" height="450" /> -->
   <!-- <button id="btn">Set Title</button> -->
   <!-- <canvas id="canvas"></canvas> -->
 </body>

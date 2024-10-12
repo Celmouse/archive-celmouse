@@ -25,7 +25,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
     // TODO: Alterar cores dos botões
     return Scaffold(
       appBar: AppBar(
-        title: Text('Configurações'),
+        title: const Text('Configurações'),
       ),
       body: SafeArea(
           child: ListView(
