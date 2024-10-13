@@ -1,2 +1,10 @@
 
 nodejs/dist/builder-effective-config.yaml
+server/electron.provisionprofile
+server/build/
+server/out/
+server/package-lock.json
+server/yarn.lock
+server/forge.config.ts
+server/package-lock.json
+server/yarn.lock
