@@ -1,8 +1,10 @@
 import type { ForgeConfig } from '@electron-forge/shared-types';
-import { MakerSquirrel } from '@electron-forge/maker-squirrel';
-import { MakerZIP } from '@electron-forge/maker-zip';
-import { MakerDeb } from '@electron-forge/maker-deb';
-import { MakerRpm } from '@electron-forge/maker-rpm';
+// import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+// import { MakerZIP } from '@electron-forge/maker-zip';
+// import { MakerDeb } from '@electron-forge/maker-deb';
+// import { MakerRpm } from '@electron-forge/maker-rpm';
+import { MakerDMG } from '@electron-forge/maker-dmg';
+import { MakerPKG } from '@electron-forge/maker-pkg';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
@@ -12,11 +14,25 @@ import { mainConfig } from './webpack.main.config';
 import { rendererConfig } from './webpack.renderer.config';
 
 const config: ForgeConfig = {
+  outDir: 'build',
   packagerConfig: {
+    appBundleId: 'com.gyromouse.desktop',
+    icon: './src/icon/win/icon',
+    extendInfo: {
+      LSMinimumSystemVersion: '12.0.0',
+      CFBundleShortVersionString: '1',
+      'com.apple.security.network.client': true,
+      'com.apple.security.network.server': true,
+      'com.apple.security.app-sandbox': true,
+    },
+    appCategoryType: 'public.app-category.utilities',
     asar: true,
+   
   },
+  
   rebuildConfig: {},
-  makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  makers: [
+  ],
   plugins: [
     new AutoUnpackNativesPlugin({}),
     new WebpackPlugin({
