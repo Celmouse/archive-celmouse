@@ -216,8 +216,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
     x = (math.degrees(x * seconds));
     y = (math.degrees(y * seconds));
 
-    const double threshholdX = 0.08;
-    const double threshholdY = 0.08;
+    const double threshholdX = 0.01;
+    const double threshholdY = 0.01;
 
     if (x.abs() <= threshholdX) {
       x = 0;
