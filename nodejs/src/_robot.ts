@@ -1,52 +1,50 @@
-// // import { getScreenSize, getMousePos, setMouseDelay, typeString, moveMouse, mouseClick } from '@jitsi/robotjs'
+import { getScreenSize, getMousePos, setMouseDelay, typeString, moveMouse, mouseClick } from '@jitsi/robotjs'
 
 
-// // Alternative: https://nutjs.dev/docs/installation
-// let screenSize = getScreenSize();
+// Alternative: https://nutjs.dev/docs/installation
+let screenSize = getScreenSize();
 
-// let mousePos = getMousePos();
-// setMouseDelay(1);
-// let defaultSensitivity = 10;
+let mousePos = getMousePos();
+setMouseDelay(1);
+let defaultSensitivity = 10;
 
-// let posx = 0
-// let posy = 0
+let posx = 0
+let posy = 0
 
 
-// export const changeSensitivity = (value: number) => {
-//     setMouseDelay(value);
-//     defaultSensitivity *= value;
-//     console.log('Mouse delay set to: ' + value);
-// };
+export const changeSensitivity = (value: number) => {
+    setMouseDelay(value);
+    defaultSensitivity *= value;
+    console.log('Mouse delay set to: ' + value);
+};
 
-// export const keyboardType = (value: string) => {
-//     typeString(value);
-//     console.log('Keyboard Typing: ' + value);
-// };
+export const keyboardType = (value: string) => {
+    typeString(value);
+    console.log('Keyboard Typing: ' + value);
+};
 
-// export async function moveCursor(x: number, y: number) {
-//     /*
-//     mousePos = getMousePos();
+export async function moveCursor(x: number, y: number) {
+    mousePos = getMousePos();
 
-//     console.log(`Mouse Motion (${x},${y})`)
+    console.log(`Mouse Motion (${x},${y})`)
 
-//     posx += (screenSize.width / 32) * x
-//     posy += (screenSize.height / 18) * y
+    posx += (screenSize.width / 32) * x
+    posy += (screenSize.height / 18) * y
 
-//     moveMouse(posx, posy);
+    moveMouse(posx, posy);
 
-//     console.log('Cursor moved to: ' + mousePos.x + ', ' + mousePos.y);
-//     */
-// }
+    console.log('Cursor moved to: ' + mousePos.x + ', ' + mousePos.y);
+}
 
-// export function centerCursor() {
-//     posx = screenSize.width / 2
-//     posy = screenSize.height / 2
-// }
+export function centerCursor() {
+    posx = screenSize.width / 2
+    posy = screenSize.height / 2
+}
 
-// export function rightClick() {
-//     mouseClick('right');
-// }
+export function rightClick() {
+    mouseClick('right');
+}
 
-// export function leftClick() {
-//     mouseClick('left');
-// }
+export function leftClick() {
+    mouseClick('left');
+}
