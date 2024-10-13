@@ -1,4 +1,4 @@
-import { changeSensitivity, keyboardType, moveCursor, centerCursor, rightClick, leftClick } from './robot';
+import { changeSensitivity, keyboardType, moveCursor, centerCursor, rightClick, leftClick } from './nut-js';
 import {WebSocket, WebSocketServer} from 'ws';
 // const WebSocket = require('ws');
 

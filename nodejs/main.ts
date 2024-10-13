@@ -4,7 +4,7 @@ import { connectServer } from './src/websocket';
 import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { join } from 'path';
 // import { networkInterfaces } from 'os';
-import { QRCode } from 'qrcode';
+// import { QRCode } from 'qrcode';
 
 connectServer();
 

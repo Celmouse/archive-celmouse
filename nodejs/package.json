@@ -5,6 +5,9 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "build": {
+    "appId": "com.gyromouse.desktop"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc -w -p . ",
@@ -14,8 +17,7 @@
     "windows": "npx @electron/packager . app --platform=win32 --overwrite"
   },
   "dependencies": {
-    "@jitsi/robotjs": "^0.6.13",
-    "electron-squirrel-startup": "^1.0.1",
+    "@nut-tree-fork/nut-js": "^4.2.2",
     "qrcode": "^1.5.4",
     "ws": "^8.18.0"
   },
