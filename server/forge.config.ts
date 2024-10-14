@@ -1,10 +1,10 @@
 import type { ForgeConfig } from '@electron-forge/shared-types';
-// import { MakerSquirrel } from '@electron-forge/maker-squirrel';
-// import { MakerZIP } from '@electron-forge/maker-zip';
+import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+import { MakerZIP } from '@electron-forge/maker-zip';
 // import { MakerDeb } from '@electron-forge/maker-deb';
 // import { MakerRpm } from '@electron-forge/maker-rpm';
-import { MakerDMG } from '@electron-forge/maker-dmg';
-import { MakerPKG } from '@electron-forge/maker-pkg';
+// import { MakerDMG } from '@electron-forge/maker-dmg';
+// import { MakerPKG } from '@electron-forge/maker-pkg';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
@@ -17,21 +17,32 @@ const config: ForgeConfig = {
   outDir: 'build',
   packagerConfig: {
     appBundleId: 'com.gyromouse.desktop',
-    icon: './src/icon/win/icon',
+    icon: './src/icon/win/',
     extendInfo: {
       LSMinimumSystemVersion: '12.0.0',
       CFBundleShortVersionString: '1',
       'com.apple.security.network.client': true,
       'com.apple.security.network.server': true,
-      'com.apple.security.app-sandbox': true,
+      'com.apple.security.appicon-sandbox': true,
     },
     appCategoryType: 'public.app-category.utilities',
     asar: true,
-   
+
   },
-  
+
   rebuildConfig: {},
   makers: [
+    new MakerSquirrel(
+      {
+        exe: 'GyroMouse.exe',
+        windowsSign: {
+          certificateFile: './my-certificate.pfx',
+          certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
+        }
+      }
+    ),
+    new MakerZIP({}, ['darwin']),
+
   ],
   plugins: [
     new AutoUnpackNativesPlugin({}),

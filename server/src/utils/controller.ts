@@ -22,7 +22,7 @@ export const changeSensitivity = (value: number) => {
 
 // Função para digitar texto no teclado
 export const keyboardType = async (value: string) => {
-    return;
+    // return;
     await keyboard.type(value);
     console.log('Keyboard Typing: ' + value);
 };
