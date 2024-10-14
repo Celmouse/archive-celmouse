@@ -8,13 +8,14 @@ export function connectServer() {
 
     console.log('Servidor WebSocket rodando na porta 8080');
 
-    configure();
-
 
     server.on('connection', ws => {
         console.log('Novo cliente conectado');
 
+        configure();
+
         ws.on('message', message => {
+
 
             const obj = JSON.parse(message.toString());
 
@@ -45,13 +46,4 @@ export function connectServer() {
             console.log('Cliente desconectado');
         });
     });
-
-
 }
-/*
-{
-event: "EVENT_NAME",
-data: {
-}
-}
-*/

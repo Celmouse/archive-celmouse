@@ -8,3 +8,9 @@ server/yarn.lock
 server/forge.config.ts
 server/package-lock.json
 server/yarn.lock
+server/Certificates.p12
+/server/dist
+/server/node_modules
+*.map
+server/.env
+server/AuthKey_2QD7X748AL.p8

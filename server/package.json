@@ -1,0 +1,45 @@
+{
+  "name": "gyromouse",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "ISC",
+  "description": "Control your PC from far away",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "watch": "tsc -w -p . ",
+    "app:dir": "electron-builder --dir",
+    "app:dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": {
+    "name": "Marcelo Viana",
+    "email": "marcelo.ita.boss@gmail.com",
+    "url": "https://github.com/cl0v/"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.12",
+    "electron": "^32.2.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@nut-tree-fork/nut-js": "^4.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.9.0",
+    "@typescript-eslint/parser": "^8.9.0",
+    "ws": "^8.18.0"
+  },
+  "build": {
+    "productName": "GyroMouse",
+    "appId": "com.gyromouse.desktop",
+    "mac": {
+      "target": "pkg",
+      "hardenedRuntime": true,
+      "category": "public.app-category.utilities"
+    },
+    "mas":{
+      "forceCodeSigning": true
+    }
+
+  }
+}
