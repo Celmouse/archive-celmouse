@@ -10,7 +10,10 @@ import 'package:vector_math/vector_math.dart' as math;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MoveMousePage extends StatefulWidget {
-  const MoveMousePage({super.key, required this.channel,});
+  const MoveMousePage({
+    super.key,
+    required this.channel,
+  });
 
   final WebSocketChannel channel;
 
@@ -73,7 +76,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
               height: 28,
             ),
             Flexible(
-              flex: 1,
+              flex: 2,
               child: SizedBox(
                 // height: double.infinity,
                 width: double.infinity,
@@ -135,6 +138,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                                   ? Colors.blue[200]
                                   : Colors.blue,
                         ),
+                        height: 200,
                         width: MediaQuery.of(context).size.width / 2 - 20,
                       ),
                     ),
@@ -142,11 +146,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 ),
               ),
             ),
-            const Flexible(
-                flex: 1,
-                child: SizedBox(
-                  height: 40,
-                )),
+            const Divider(),
             Flexible(
               flex: 2,
               child: GestureDetector(

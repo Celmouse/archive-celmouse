@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'GyroMouse',
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
       theme: ThemeData(
