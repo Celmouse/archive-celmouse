@@ -36,7 +36,7 @@ const config: ForgeConfig = {
       {
         exe: 'GyroMouse.exe',
         windowsSign: {
-          certificateFile: './my-certificate.pfx',
+          certificateFile: './certificates/my-certificate.pfx',
           certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
         }
       }
