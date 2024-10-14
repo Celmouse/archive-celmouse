@@ -3,8 +3,8 @@ import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 // import { MakerDeb } from '@electron-forge/maker-deb';
 // import { MakerRpm } from '@electron-forge/maker-rpm';
+import { MakerPKG } from '@electron-forge/maker-pkg';
 // import { MakerDMG } from '@electron-forge/maker-dmg';
-// import { MakerPKG } from '@electron-forge/maker-pkg';
 import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
@@ -15,16 +15,26 @@ import { rendererConfig } from './webpack.renderer.config';
 
 const config: ForgeConfig = {
   outDir: 'build',
+  buildIdentifier: 'v3',
   packagerConfig: {
     appBundleId: 'com.gyromouse.desktop',
     icon: './src/icon/win/',
-    extendInfo: {
-      LSMinimumSystemVersion: '12.0.0',
-      CFBundleShortVersionString: '1',
-      'com.apple.security.network.client': true,
-      'com.apple.security.network.server': true,
-      'com.apple.security.appicon-sandbox': true,
-    },
+    extendInfo: './Info.plist',
+    // extendInfo: {
+    //   'com.apple.security.app-sandbox': true,
+    //   'com.apple.security.cs.allow-unsigned-executable-memory': true,
+    //   'com.apple.security.cs.disable-library-validation': true,
+    //   LSMinimumSystemVersion: '12.0.0',
+    //   CFBundleShortVersionString: '1',
+    //   'com.apple.security.network.client': true,
+    //   'com.apple.security.network.server': true,
+    // },
+    extendHelperInfo: './Info.child.plist',
+    // helperBundleId:  'com.gyromouse.desktop',
+    // extendHelperInfo: {
+    //   'com.apple.security.app-sandbox': true,
+    // 'com.apple.security.inherit': true,
+    // },
     appCategoryType: 'public.app-category.utilities',
     asar: true,
 
@@ -32,15 +42,21 @@ const config: ForgeConfig = {
 
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel(
+
+    new MakerPKG(
       {
-        exe: 'GyroMouse.exe',
-        windowsSign: {
-          certificateFile: './certificates/my-certificate.pfx',
-          certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
-        }
+        identity: '3rd Party Mac Developer Installer: Marcelo Fernandes Viana (5NV6KB85G6)'
       }
     ),
+    // new MakerSquirrel(
+    //   {
+    //     exe: 'GyroMouse.exe',
+    //     windowsSign: {
+    //       certificateFile: './certificates/my-certificate.pfx',
+    //       certificatePassword: process.env.WINDOWS_CERTIFICATE_PASSWORD,
+    //     }
+    //   }
+    // ),
     new MakerZIP({}, ['darwin']),
 
   ],
