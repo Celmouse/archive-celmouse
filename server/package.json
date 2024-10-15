@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/ws": "^8.5.12",
     "electron": "^32.2.0",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^24.13.3",
     "typescript": "^5.6.3"
   },
   "dependencies": {
@@ -32,14 +32,17 @@
   "build": {
     "productName": "GyroMouse",
     "appId": "com.gyromouse.desktop",
+    "copyright": "Copyright © 2024 Marcelo Viana",
+    "forceCodeSigning": true,
     "mac": {
-      "target": "pkg",
-      "hardenedRuntime": true,
-      "category": "public.app-category.utilities"
-    },
-    "mas":{
-      "forceCodeSigning": true
+      "target": "mas",
+      "type": "distribution",
+      "hardenedRuntime": false,
+      "category": "public.app-category.utilities",
+      "provisioningProfile": "build/MacAppStore.provisionprofile",
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist"
     }
-
+    
   }
 }

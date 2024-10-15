@@ -14,3 +14,4 @@ server/Certificates.p12
 *.map
 server/.env
 server/AuthKey_2QD7X748AL.p8
+/server/_arch
