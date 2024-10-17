@@ -15,14 +15,14 @@ function connectServer() {
             if (obj.changeSensitivityEvent) {
                 (0, controller_1.changeSensitivity)(obj.changeSensitivityEvent);
             }
-            if (obj.keyboardTypeEvent) {
-                (0, controller_1.keyboardType)(obj.message);
-            }
             if (obj.rightClickEvent) {
                 (0, controller_1.rightClick)();
             }
             if (obj.leftClickEvent) {
                 (0, controller_1.leftClick)();
+            }
+            if (obj.keyboardTypeEvent) {
+                (0, controller_1.keyboardType)(obj.message);
             }
             if (obj.event == "MouseMotionStart") {
                 (0, controller_1.centerCursor)();

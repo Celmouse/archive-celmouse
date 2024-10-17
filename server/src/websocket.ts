@@ -16,22 +16,19 @@ export function connectServer() {
 
         ws.on('message', message => {
 
-
             const obj = JSON.parse(message.toString());
 
             if (obj.changeSensitivityEvent) {
                 changeSensitivity(obj.changeSensitivityEvent);
             }
-
-            if (obj.keyboardTypeEvent) {
-                keyboardType(obj.message);
-            }
-
             if (obj.rightClickEvent) {
                 rightClick();
             }
             if (obj.leftClickEvent) {
                 leftClick();
+            }
+            if (obj.keyboardTypeEvent) {
+                keyboardType(obj.message);
             }
             if (obj.event == "MouseMotionStart") {
                 centerCursor()
