@@ -54,12 +54,12 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.14.1
 
-flutter_launcher_icons:
-  android: "ic_launcher"
-  ios: true
-  image_path: "assets/logo.png"
-  remove_alpha_ios: true
-  min_sdk_android: 21
+# flutter_launcher_icons:
+#   android: "ic_launcher"
+#   ios: true
+#   image_path: "assets/icon.png"
+#   remove_alpha_ios: true
+#   min_sdk_android: 21
 
 
 # For information on the generic Dart part of this file, see the

@@ -1,6 +1,6 @@
 {
   "name": "gyromouse",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "license": "ISC",
   "description": "Control your PC from far away",
