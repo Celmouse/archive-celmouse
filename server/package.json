@@ -43,6 +43,13 @@
     "copyright": "Copyright © 2024 Marcelo Viana",
     "afterSign": "electron-builder-notarize",
     "mac": {
+      "target": {
+        "target": "default",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
       "category": "public.app-category.utilities",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
