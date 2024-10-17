@@ -1,16 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectServer = connectServer;
-var controller_1 = require("./controller");
-var ws_1 = require("ws");
+const controller_1 = require("./controller");
+const ws_1 = require("ws");
+// const WebSocket = require('ws');
 function connectServer() {
-    var server = new ws_1.WebSocketServer({ port: 8080 });
+    const server = new ws_1.WebSocketServer({ port: 8080 });
     console.log('Servidor WebSocket rodando na porta 8080');
-    server.on('connection', function (ws) {
+    server.on('connection', ws => {
         console.log('Novo cliente conectado');
         (0, controller_1.configure)();
-        ws.on('message', function (message) {
-            var obj = JSON.parse(message.toString());
+        ws.on('message', message => {
+            const obj = JSON.parse(message.toString());
             if (obj.changeSensitivityEvent) {
                 (0, controller_1.changeSensitivity)(obj.changeSensitivityEvent);
             }
@@ -30,7 +31,7 @@ function connectServer() {
                 (0, controller_1.moveCursor)(obj.axis.x, obj.axis.y);
             }
         });
-        ws.on('close', function () {
+        ws.on('close', () => {
             console.log('Cliente desconectado');
         });
     });

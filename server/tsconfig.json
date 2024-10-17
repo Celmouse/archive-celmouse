@@ -8,7 +8,7 @@
         "noImplicitAny": true,
         "sourceMap": true,
         "baseUrl": ".",
-        "outDir": "dist",
+        // "outDir": "dist",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "paths": {
@@ -17,6 +17,10 @@
             ]
         }
     },
+    "include": [
+        "src/**/*",
+        "tests/**/*"
+    ],
     "files": [
         "main.ts"
     ]

@@ -1,31 +1,25 @@
 import { join } from 'node:path'
 import { BrowserWindow, app } from 'electron'
-import { connectServer } from './src/websocket'
+// import { connectServer } from './src/websocket'
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      // sandbox: true,
-      preload: join(__dirname, 'preload.js')
+      preload: join(__dirname, 'src/preload.js')
     }
   })
 
-  win.loadURL(join(__dirname, 'index.html'))
-  win.webContents.openDevTools();
+  win.loadFile('src/index.html')
 }
 
 
 app.whenReady().then(() => {
   createWindow()
 
-  connectServer();
+  // connectServer();
 
 
   app.on('activate', () => {

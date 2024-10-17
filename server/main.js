@@ -1,28 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_path_1 = require("node:path");
-var electron_1 = require("electron");
-var websocket_1 = require("./src/websocket");
-(0, websocket_1.connectServer)();
+const node_path_1 = require("node:path");
+const electron_1 = require("electron");
+// import { connectServer } from './src/websocket'
 function createWindow() {
-    var win = new electron_1.BrowserWindow({
+    const win = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            preload: (0, node_path_1.join)(__dirname, 'preload.js')
+            preload: (0, node_path_1.join)(__dirname, 'src/preload.js')
         }
     });
-    win.loadFile('index.html');
+    win.loadFile('src/index.html');
 }
-electron_1.app.whenReady().then(function () {
+electron_1.app.whenReady().then(() => {
     createWindow();
-    electron_1.app.on('activate', function () {
+    // connectServer();
+    electron_1.app.on('activate', () => {
         if (electron_1.BrowserWindow.getAllWindows().length === 0) {
             createWindow();
         }
     });
 });
-electron_1.app.on('window-all-closed', function () {
+electron_1.app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         electron_1.app.quit();
     }
