@@ -4,8 +4,8 @@ import * as url from 'url'
 import * as path from 'path'
 // import { connectServer } from './src/websocket'
 
-
 function createWindow() {
+
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -14,13 +14,7 @@ function createWindow() {
     }
   })
 
-  globalShortcut.register('CommandOrControl+Shift+K', () => {
-    win.webContents.openDevTools()
-  })
-
-  window.addEventListener('beforeunload', () => {
-    globalShortcut.unregisterAll()
-  })
+  // win.webContents.openDevTools()
 
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'src/app/index.html'),
@@ -28,7 +22,6 @@ function createWindow() {
     slashes: true
   }));
 
-  // win.loadFile(join(__dirname,'src/app/index.html'))
 }
 
 app.whenReady().then(() => {

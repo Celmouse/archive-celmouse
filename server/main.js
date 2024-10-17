@@ -27,7 +27,12 @@ const node_path_1 = require("node:path");
 const electron_1 = require("electron");
 const url = __importStar(require("url"));
 const path = __importStar(require("path"));
-// import { connectServer } from './src/websocket'
+// import debug from 'electron-debug'
+// debug();
+// // import { connectServer } from './src/websocket'
+// debug(
+//   { isEnabled: true }
+// );
 function createWindow() {
     const win = new electron_1.BrowserWindow({
         width: 800,
@@ -36,12 +41,7 @@ function createWindow() {
             preload: (0, node_path_1.join)(__dirname, 'src/app/preload.js')
         }
     });
-    electron_1.globalShortcut.register('CommandOrControl+Shift+K', () => {
-        win.webContents.openDevTools();
-    });
-    window.addEventListener('beforeunload', () => {
-        electron_1.globalShortcut.unregisterAll();
-    });
+    win.webContents.openDevTools();
     win.loadURL(url.format({
         pathname: path.join(__dirname, 'src/app/index.html'),
         protocol: 'file:',

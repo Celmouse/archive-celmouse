@@ -1,6 +1,9 @@
+import { globalShortcut } from "electron"
 
 // preload.js
-
+window.addEventListener('beforeunload', () => {
+  globalShortcut.unregisterAll()
+})
 // All the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 window.addEventListener('DOMContentLoaded', () => {
