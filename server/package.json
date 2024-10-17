@@ -18,10 +18,10 @@
     "url": "https://github.com/cl0v/"
   },
   "devDependencies": {
+    "@electron/notarize": "^2.5.0",
     "@types/ws": "^8.5.12",
-    "electron": "^32.2.0",
-    "electron-builder": "^25.1.8",
-    "electron-notarize": "^1.2.2",
+    "electron": "^32.2.1",
+    "electron-builder": "^25.1.7",
     "typescript": "^5.6.3"
   },
   "dependencies": {
@@ -43,6 +43,9 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mas.plist",
       "entitlementsInherit": "build/entitlements.mas.inherit.plist"
+    },
+    "mas": {
+      "sign": false
     },
     "dmg": {
       "sign": false
