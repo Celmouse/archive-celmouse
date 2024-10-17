@@ -42,6 +42,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               setState(() {
                 sensibilidade = v;
               });
+              
           
               var data = {"changeSensitivityEvent": v};
               widget.channel.sink.add(jsonEncode(data));

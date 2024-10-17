@@ -4,8 +4,32 @@ import * as url from 'url'
 import * as path from 'path'
 import { connectServer } from './src/websocket'
 
-function createWindow() {
+import { loadConfig } from './src/config';
 
+async function main() {
+  const config = await loadConfig();
+
+  app.whenReady().then(() => {
+    createWindow()
+
+    connectServer(config);
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+      }
+    })
+  })
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+}
+
+
+function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -21,22 +45,6 @@ function createWindow() {
     protocol: 'file:',
     slashes: true
   }));
-
 }
 
-app.whenReady().then(() => {
-  createWindow()
-  connectServer();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+main().catch(console.error);

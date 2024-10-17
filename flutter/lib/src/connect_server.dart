@@ -12,15 +12,20 @@ class ConnectToServerPage extends StatefulWidget {
 }
 
 class _ConnectToServerPageState extends State<ConnectToServerPage> {
-  var macIP = "192.168.52.102";
-  late TextEditingController ipController = TextEditingController(text: macIP);
   WebSocketChannel? channel;
 
+  final TextEditingController ipController = TextEditingController();
+
+  @override
+  void initState() {
+    ipController.text = "192.168.52.102";
+    super.initState();
+  }
+
   connect([String? ipAdd]) {
-    macIP = ipAdd ?? (ipController.text.isEmpty ? macIP : ipController.text);
     setState(() {
       channel = WebSocketChannel.connect(
-        Uri.parse('ws://$macIP:8080'),
+        Uri.parse('ws://${ipController.text}:8080'),
       );
     });
     if (channel == null) return;
