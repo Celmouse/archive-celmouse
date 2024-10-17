@@ -1,19 +1,27 @@
 <!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
 
-    <!-- You can also require other files to run in this process -->
-    <script src="./renderer.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>GyroMouse</title>
+</head>
+
+<body>
+  <h1>Controle seu mouse e teclado a distância</h1>
+  <h3>Passos para a configuração:</h3>
+  <ol>
+    <li>Baixe o aplicativo GyroMouse na <a href="https://apps.apple.com/br/app/gyromouse/id6736866466">App Store</a> ou <a>Google Play</a></li>
+    <li>Siga as instruções na página incial do App em "descobrir IP"</li>
+    <li>Continue pelo aplicativo</li>
+  </ol>
+
+  <sub>ATENÇÃO: Não utilize esse aplicativo em rede pública (Aeroportos, Rodoviárias, etc)</sub></br>
+  <sub>Melhorias de segurança nas próximas atualizações, acompanhe no <a>site</a>.</sub>
+  <!-- You can also require other files to run in this process -->
+  <script src="./renderer.js"></script>
+</body>
+
 </html>

@@ -9,7 +9,8 @@
     "start": "electron .",
     "watch": "tsc -w -p . ",
     "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder"
+    "app:dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": {
     "name": "Marcelo Viana",
@@ -20,27 +21,31 @@
     "@types/ws": "^8.5.12",
     "electron": "^32.2.0",
     "electron-builder": "^25.1.8",
+    "electron-notarize": "^1.2.2",
     "typescript": "^5.6.3"
   },
   "dependencies": {
     "@nut-tree-fork/nut-js": "^4.2.2",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
     "@typescript-eslint/parser": "^8.9.0",
+    "dotenv": "^16.4.5",
+    "electron-builder-notarize": "^1.5.2",
     "ws": "^8.18.0"
   },
   "build": {
     "productName": "GyroMouse",
     "appId": "com.gyromouse.desktop",
     "copyright": "Copyright © 2024 Marcelo Viana",
-    "forceCodeSigning": true,
+    "afterSign": "electron-builder-notarize",
     "mac": {
-      "target": "dmg",
-      "type": "distribution",
-      "hardenedRuntime": false,
       "category": "public.app-category.utilities",
-      "provisioningProfile": "build/AppleDevelopment.provisionprofile",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mas.plist",
       "entitlementsInherit": "build/entitlements.mas.inherit.plist"
+    },
+    "dmg": {
+      "sign": false
     }
   }
 }
