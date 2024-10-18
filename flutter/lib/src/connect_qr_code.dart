@@ -129,8 +129,6 @@ class ScannerOverlay extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO: use `Offset.zero & size` instead of Rect.largest
-    // we need to pass the size to the custom paint widget
     final backgroundPath = Path()..addRect(Rect.largest);
 
     final cutoutPath = Path()

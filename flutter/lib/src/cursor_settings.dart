@@ -20,7 +20,6 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Adicionar alterar sensibilidade.
     // TODO: Adicionar troca de layout dos botões.
     // TODO: Alterar cores dos botões
     return Scaffold(
