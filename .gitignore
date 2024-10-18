@@ -14,3 +14,4 @@ server/AuthKey_2QD7X748AL.p8
 /server/_arch
 .DS_Store
 server/.DS_Store
+server/app.log
