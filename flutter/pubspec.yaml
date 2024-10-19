@@ -42,6 +42,7 @@ dependencies:
   
   vector_math: ^2.1.4
   mobile_scanner: ^6.0.1
+  get_it: ^8.0.0
   # speech_to_text: ^7.0.0
 
 

@@ -27,16 +27,20 @@ class MouseControl {
     _send(data);
   }
 
-  void scroll(String direction, double intensity) {
+  void scroll(String direction) {
     final data = Protocol(event: Events.mouseScroll, data: {
       "direction": direction,
-      "intensity": intensity,
     });
     _send(data);
   }
 
   void changeSensitivity(num amount) {
     final data = Protocol(event: Events.changeSensitivity, data: amount);
+    _send(data);
+  }
+
+  void changeScrollSensitivity(num amount) {
+    final data = Protocol(event: Events.changeScrollSensitivity, data: amount);
     _send(data);
   }
 
@@ -56,7 +60,8 @@ class MouseConfigs {
   /// Value calculated in ms
   static const int inputLag = 15;
 
-  static const double scrollIntensityX = 8;
-  static const double scrollIntensityY = 10;
-  static const bool invertedScroll = false;
+  bool invertedPointerX = false;
+  bool invertedPointerY = false;
+
+  bool invertedScroll = false;
 }

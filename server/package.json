@@ -1,5 +1,5 @@
 {
-  "name": "gyromouse",
+  "name": "celmouse",
   "version": "1.0.1",
   "main": "main.js",
   "license": "ISC",
@@ -38,7 +38,7 @@
     "asarUnpack": [
       "**/*.node"
     ],
-    "productName": "GyroMouse",
+    "productName": "CelMouse",
     "appId": "com.gyromouse.desktop",
     "copyright": "Copyright © 2024 Marcelo Viana",
     "afterSign": "electron-builder-notarize",

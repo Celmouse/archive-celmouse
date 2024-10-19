@@ -53,6 +53,9 @@ function handleMessage(message) {
         case events.changeSensitivity:
             /// obj.data should be a number
             return (0, mice_1.updateSensitivity)(obj.data);
+        case events.changeScrollSensitivity:
+            /// obj.data should be a number
+            return (0, mice_1.updateScrollSensitivity)(obj.data);
         case events.keyPressed:
             /// obj.data should be a list with the keys.
             return (0, keyboard_1.keyboardType)(obj.data);

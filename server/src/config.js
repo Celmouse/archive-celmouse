@@ -22,6 +22,7 @@ function loadConfig() {
             return {
                 mice: {
                     defaultSensitivity: 5,
+                    defaultScrollSensitivity: 8,
                     HEIGHT_DIVIDER: 36,
                     WIDTH_DIVIDER: 64,
                     allowBruscalMoviments: false,

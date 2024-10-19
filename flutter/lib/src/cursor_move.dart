@@ -1,3 +1,4 @@
+import 'package:controller/getit.dart';
 import 'package:controller/src/core/mouse_movement.dart';
 import 'package:controller/src/cursor_settings.dart';
 import 'package:controller/src/socket/keyboard.dart';
@@ -39,6 +40,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   @override
   void initState() {
+    if (!getIt.isRegistered<MouseConfigs>()) {
+      getIt.registerSingleton<MouseConfigs>(MouseConfigs());
+    }
     mouse = MouseControl(widget.channel);
     keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
@@ -82,7 +86,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
       isCursorMovingEnabled = tmpCursorMovingEnabled;
     });
     movement.stopScrollMovement();
-    if(isCursorMovingEnabled) movement.startMouseMovement();
+    if (isCursorMovingEnabled) movement.startMouseMovement();
   }
 
   @override

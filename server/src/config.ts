@@ -12,6 +12,7 @@ export interface WebSocketConfig {
 
 export interface MiceConfig {
     defaultSensitivity: number;
+    defaultScrollSensitivity: number;
     HEIGHT_DIVIDER: number;
     WIDTH_DIVIDER: number;
     allowBruscalMoviments: boolean;
@@ -30,6 +31,7 @@ export async function loadConfig(): Promise<(GlobalConfig)> {
         return {
             mice: {
                 defaultSensitivity: 5,
+                defaultScrollSensitivity: 8,
                 HEIGHT_DIVIDER: 36,
                 WIDTH_DIVIDER: 64,
                 allowBruscalMoviments: false,

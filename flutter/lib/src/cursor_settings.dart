@@ -1,3 +1,4 @@
+import 'package:controller/getit.dart';
 import 'package:controller/src/socket/mouse.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -42,13 +43,31 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter:",
+                  "Inverter eixo Vertical:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: false,
-                onChanged: (value) {},
+                value: getIt.get<MouseConfigs>().invertedPointerY,
+                onChanged: (value) {
+                  setState(() {
+                    getIt.get<MouseConfigs>().invertedPointerY = value;
+                  });
+                },
+              ),
+              SwitchListTile(
+                title: Text(
+                  "Inverter eixo Horizontal:",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                value: getIt.get<MouseConfigs>().invertedPointerX,
+                onChanged: (value) {
+                  setState(() {
+                    getIt.get<MouseConfigs>().invertedPointerX = value;
+                  });
+                },
               ),
               ListTile(
                 title: Text(
@@ -86,8 +105,12 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: false,
-                onChanged: (value) {},
+                value: getIt.get<MouseConfigs>().invertedScroll,
+                onChanged: (value) {
+                  setState(() {
+                    getIt.get<MouseConfigs>().invertedScroll = value;
+                  });
+                },
               ),
               ListTile(
                 title: Text(
@@ -107,7 +130,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                   setState(() {
                     scrollSensitivity = amount.round();
                   });
-                  // mouse.changeSensitivity(amount);
+                  mouse.changeScrollSensitivity(amount);
                 },
               ),
 

@@ -5,6 +5,7 @@ export const mouseClick = "MouseClick";
 export const mouseDoubleClick = "MouseDoubleClick";
 
 export const changeSensitivity = "ChangeSensitivity";
+export const changeScrollSensitivity = "ChangeScrollSensitivity";
 
 export const mouseCenter = "MouseCenter";
 export const mouseMove = "MouseMove";

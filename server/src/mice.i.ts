@@ -1,6 +1,6 @@
 export interface MiceScrollData {
     direction: string
-    intensity: number
+    // intensity: number
 }
 
 export interface MiceMoveData {

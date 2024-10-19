@@ -12,6 +12,7 @@ class Protocol {
 class Events {
   static const keyPressed = "KeyPressed";
   static const changeSensitivity = "ChangeSensitivity";
+  static const changeScrollSensitivity = "ChangeScrollSensitivity";
   // Movement
   static const mouseMove = "MouseMove";
   static const mouseCenter = "MouseCenter";

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:controller/getit.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../socket/mouse.dart';
@@ -86,7 +87,10 @@ class MouseMovement {
           y = 0;
         }
 
-        mouse.move(x, y);
+        mouse.move(
+          (getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1 ) * x,
+          (getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1 ) * y,
+        );
 
         print('Cursor Movement');
         print("X: $x");
@@ -122,21 +126,20 @@ class MouseMovement {
 
   _sendScrollMovement(double x, double y) {
     String direction = "";
-    double intensity = 0;
 
     if (x.abs() > y.abs()) {
-      direction = ((MouseConfigs.invertedScroll ? -1 : 1) * x.sign < 0)
-          ? ScrollDirections.left
-          : ScrollDirections.right;
-      intensity = MouseConfigs.scrollIntensityX;
+      direction =
+          ((getIt.get<MouseConfigs>().invertedScroll ? 1 : -1) * x.sign < 0)
+              ? ScrollDirections.left
+              : ScrollDirections.right;
     } else if ((x.abs() < y.abs())) {
-      direction = ((MouseConfigs.invertedScroll ? -1 : 1) * y.sign < 0)
-          ? ScrollDirections.down
-          : ScrollDirections.up;
-      intensity = MouseConfigs.scrollIntensityY;
+      direction =
+          ((getIt.get<MouseConfigs>().invertedScroll ? 1 : -1) * y.sign < 0)
+              ? ScrollDirections.down
+              : ScrollDirections.up;
     }
 
-    mouse.scroll(direction, intensity);
+    mouse.scroll(direction);
   }
 }
 
