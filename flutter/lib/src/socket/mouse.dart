@@ -64,4 +64,7 @@ class MouseConfigs {
   bool invertedPointerY = false;
 
   bool invertedScroll = false;
+
+  int sensitivity = 5;
+  int scrollSensitivity = 3;
 }

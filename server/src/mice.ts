@@ -38,7 +38,7 @@ export const updateSensitivity = (value: number) => {
 };
 
 export const updateScrollSensitivity = (value: number) => {
-    scrollSensitivity = (10 ** ((10 + value) / 10));
+    scrollSensitivity = (5 ** ((10 + value) / 10));
     logger.info('Scroll sensitivity set to: ' + scrollSensitivity);
 };
 

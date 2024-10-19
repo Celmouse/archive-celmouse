@@ -7,10 +7,10 @@ class CursorSettingsPage extends StatefulWidget {
   const CursorSettingsPage({
     super.key,
     required this.channel,
-    this.sensibilidade = 5,
+    required this.configs,
   });
 
-  final int sensibilidade;
+  final MouseConfigs configs;
   final WebSocketChannel channel;
 
   @override
@@ -19,11 +19,6 @@ class CursorSettingsPage extends StatefulWidget {
 
 class _CursorSettingsPageState extends State<CursorSettingsPage> {
   late final mouse = MouseControl(widget.channel);
-
-  late int pointerSensitivity = widget.sensibilidade;
-  late int scrollSensitivity = 4;
-  bool invertedScroll = false;
-  bool invertedPointer = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +38,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter eixo Vertical:",
+                  "Inverter eixo vertical:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -57,7 +52,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter eixo Horizontal:",
+                  "Inverter eixo horizontal:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -78,14 +73,14 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
               ),
               Slider(
-                label: pointerSensitivity.toString(),
-                value: pointerSensitivity.toDouble(),
+                label: getIt.get<MouseConfigs>().sensitivity.toString(),
+                value: getIt.get<MouseConfigs>().sensitivity.toDouble(),
                 min: 1,
                 divisions: 9,
                 max: 10,
                 onChanged: (amount) {
                   setState(() {
-                    pointerSensitivity = amount.round();
+                    getIt.get<MouseConfigs>().sensitivity = amount.round();
                   });
                   mouse.changeSensitivity(amount);
                 },
@@ -121,14 +116,15 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
               ),
               Slider(
-                label: scrollSensitivity.toString(),
-                value: scrollSensitivity.toDouble(),
+                label: getIt.get<MouseConfigs>().scrollSensitivity.toString(),
+                value: getIt.get<MouseConfigs>().scrollSensitivity.toDouble(),
                 min: 1,
                 divisions: 9,
                 max: 10,
                 onChanged: (amount) {
                   setState(() {
-                    scrollSensitivity = amount.round();
+                    getIt.get<MouseConfigs>().scrollSensitivity =
+                        amount.round();
                   });
                   mouse.changeScrollSensitivity(amount);
                 },

@@ -91,11 +91,6 @@ class MouseMovement {
           (getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1 ) * x,
           (getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1 ) * y,
         );
-
-        print('Cursor Movement');
-        print("X: $x");
-        print("Y: $y");
-        print("\n####\n####\n");
       },
     );
   }

@@ -1,10 +1,10 @@
 {
     "mice" : {
         "defaultSensitivity": 5,
+        "defaultScrollSensitivity": 3,
         "HEIGHT_DIVIDER": 36,
         "WIDTH_DIVIDER": 64,
-        "allowBruscalMoviments": false,
-        "defaultScrollSensitivity": 8
+        "allowBruscalMoviments": false
     },
     "socket": {
         "port": 8080

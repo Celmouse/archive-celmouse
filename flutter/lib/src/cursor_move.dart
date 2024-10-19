@@ -119,6 +119,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
               builder: (context) {
                 return CursorSettingsPage(
                   channel: widget.channel,
+                  configs: getIt.get<MouseConfigs>(),
                 );
               },
             )),
