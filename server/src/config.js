@@ -20,11 +20,16 @@ function loadConfig() {
         catch (error) {
             console.warn('Failed to load config file, using defaults:', error);
             return {
-                port: 8080,
-                defaultSensitivity: 0.5,
-                HEIGHT_DIVIDER: 36,
-                WIDTH_DIVIDER: 64,
-                allowBruscalMoviments: false,
+                mice: {
+                    defaultSensitivity: 5,
+                    HEIGHT_DIVIDER: 36,
+                    WIDTH_DIVIDER: 64,
+                    allowBruscalMoviments: false,
+                },
+                socket: {
+                    port: 8080
+                },
+                keyboard: {}
             };
         }
     });

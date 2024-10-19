@@ -17,13 +17,13 @@ const logger = (0, logger_1.createLogger)('keyboard-controller');
 function initKeyboard(config) {
     return __awaiter(this, void 0, void 0, function* () {
         // TODO: Implement keyboard initial configurations
+        nut_js_1.keyboard.config = { autoDelayMs: 1 };
     });
 }
 // Função para digitar texto no teclado
 const keyboardType = (value) => __awaiter(void 0, void 0, void 0, function* () {
-    // return;
     yield nut_js_1.keyboard.type(value);
     logger.info('Keyboard Typing: ' + value);
 });
 exports.keyboardType = keyboardType;
-//# sourceMappingURL=controller.js.map
+//# sourceMappingURL=keyboard.js.map

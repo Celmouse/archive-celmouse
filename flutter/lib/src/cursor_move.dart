@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
-
+import 'package:controller/src/core/mouse_movement.dart';
 import 'package:controller/src/cursor_settings.dart';
-import 'package:controller/src/keyboard_type.dart';
+import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/material.dart';
-import 'package:sensors_plus/sensors_plus.dart';
-import 'package:vector_math/vector_math.dart' as math;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'socket/mouse.dart';
+import 'socket/protocol.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -28,26 +26,90 @@ enum CursorKeysPressed {
 }
 
 class _MoveMousePageState extends State<MoveMousePage> {
+  // bool isMicOn = false;
+  bool isScrollingEnabled = false;
   bool isCursorMovingEnabled = false;
 
   CursorKeysPressed cursorKeysPressed = CursorKeysPressed.none;
 
+  var gyroscopePointer = (x: 0, y: 0);
+
+  late final MouseControl mouse;
+  late final MouseMovement movement;
+  late final KeyboardControl keyboard;
+
+  @override
+  void initState() {
+    mouse = MouseControl(widget.channel);
+    keyboard = KeyboardControl(widget.channel);
+    movement = MouseMovement(mouse: mouse);
+    super.initState();
+  }
+
+  /// Enable the mouse movement and center the cursor
+  void enableMouseMovement() {
+    setState(() {
+      isCursorMovingEnabled = true;
+    });
+
+    mouse.center();
+    movement.startMouseMovement();
+  }
+
+  void disableMouseMovement() {
+    setState(() {
+      isCursorMovingEnabled = false;
+    });
+
+    movement.stopMouseMovement();
+  }
+
+  bool tmpCursorMovingEnabled = false;
+
+  enableScrolling() {
+    tmpCursorMovingEnabled = isCursorMovingEnabled;
+
+    setState(() {
+      isScrollingEnabled = true;
+      isCursorMovingEnabled = false;
+    });
+
+    movement.startScrollMovement();
+  }
+
+  disableScrolling() {
+    setState(() {
+      isScrollingEnabled = false;
+      isCursorMovingEnabled = tmpCursorMovingEnabled;
+    });
+    movement.stopScrollMovement();
+    if(isCursorMovingEnabled) movement.startMouseMovement();
+  }
+
+  @override
+  void dispose() {
+    widget.channel.sink.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mouse'),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return KeyboardTyppingPage(
-                  channel: widget.channel,
-                );
-              },
-            )),
-            icon: const Icon(Icons.keyboard),
+          Visibility(
+            visible: false,
+            child: IconButton(
+              onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
+              icon: Icon(
+                Icons.mic,
+                color: null, // isMicOn ? Colors.greenAccent : null,
+              ),
+            ),
           ),
           IconButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(
@@ -88,10 +150,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.leftClick;
                         });
-                        final data = {
-                          "leftClickEvent": true,
-                        };
-                        widget.channel.sink.add(jsonEncode(data));
+                        mouse.click(ClickEventData.left);
                       },
                       onTapUp: (_) {
                         setState(() {
@@ -109,7 +168,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                                   ? Colors.red[200]
                                   : Colors.red,
                         ),
-                        width: MediaQuery.of(context).size.width / 2 - 20,
+                        width: size.width / 2 - 20,
                       ),
                     ),
                     GestureDetector(
@@ -117,10 +176,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.rightClick;
                         });
-                        final data = {
-                          "rightClickEvent": true,
-                        };
-                        widget.channel.sink.add(jsonEncode(data));
+                        mouse.click(ClickEventData.right);
                       },
                       onTapUp: (_) {
                         setState(() {
@@ -138,8 +194,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
                                   ? Colors.blue[200]
                                   : Colors.blue,
                         ),
-                        height: 200,
-                        width: MediaQuery.of(context).size.width / 2 - 20,
+                        height: size.height * 0.3,
+                        width: size.width / 2 - 20,
                       ),
                     ),
                   ],
@@ -147,103 +203,61 @@ class _MoveMousePageState extends State<MoveMousePage> {
               ),
             ),
             const Divider(),
+
+            /// Mouse movement
             Flexible(
               flex: 2,
-              child: GestureDetector(
-                onTap: onMouseMoveEnableTapped,
-                child: Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: isCursorMovingEnabled ? Colors.green : Colors.grey,
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 8,
+                    child: GestureDetector(
+                      onTap: isCursorMovingEnabled
+                          ? disableMouseMovement
+                          : enableMouseMovement,
+                      child: Container(
+                        width: double.infinity,
+                        height: size.height * 0.13,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          color: isCursorMovingEnabled
+                              ? Colors.green
+                              : Colors.grey,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Flexible(
+                    flex: 3,
+                    child: GestureDetector(
+                      onTapDown: (_) => enableScrolling(),
+                      onTapUp: (_) => disableScrolling(),
+                      child: Container(
+                        width: double.infinity,
+                        height: size.height * 0.13,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          color:
+                              isScrollingEnabled ? Colors.purple : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const Flexible(
-                flex: 1,
-                child: SizedBox(
-                  height: 0,
-                )),
+              flex: 1,
+              child: SizedBox(
+                height: 0,
+              ),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  void onMouseMoveEnableTapped() {
-    if (!isCursorMovingEnabled) {
-      setState(() {
-        isCursorMovingEnabled = true;
-      });
-
-      widget.channel.sink.add(jsonEncode({
-        "event": "MouseMotionStart",
-      }));
-
-      acelerometerSubscription =
-          // gyroscopeEventStream(samplingPeriod: SensorInterval.gameInterval)
-          gyroscopeEventStream(samplingPeriod: const Duration(milliseconds: 15))
-              .listen((GyroscopeEvent event) {
-        sendMouseMovement(event.z * -1, event.x * -1, event.timestamp);
-      });
-    } else {
-      setState(() {
-        isCursorMovingEnabled = false;
-      });
-      acelerometerSubscription?.cancel();
-      acelerometerSubscription = null;
-
-      widget.channel.sink.add(jsonEncode({
-        "event": "MouseMotionStop",
-      }));
-    }
-  }
-
-  StreamSubscription? acelerometerSubscription;
-
-  DateTime lastMouseMovement = DateTime.now();
-
-  sendMouseMovement(double x, double y, DateTime timestamp) {
-    // X é Z e pra direita é negativo
-    // X é Y e pra cima é positivo
-
-    var seconds =
-        timestamp.difference(lastMouseMovement).inMicroseconds / (pow(10, 6));
-    lastMouseMovement = timestamp;
-
-    x = (math.degrees(x * seconds));
-    y = (math.degrees(y * seconds));
-
-    const double threshholdX = 0.01;
-    const double threshholdY = 0.01;
-
-    if (x.abs() <= threshholdX) {
-      x = 0;
-    }
-
-    if (y.abs() <= threshholdY) {
-      y = 0;
-    }
-
-    final data = {
-      "event": "MouseMotionMove",
-      "axis": {
-        "x": x,
-        "y": y,
-      }
-    };
-
-    if (isCursorMovingEnabled) {
-      widget.channel.sink.add(jsonEncode(data));
-    }
-  }
-
-  @override
-  void dispose() {
-    // Fechar o canal ao sair
-    widget.channel.sink.close();
-    super.dispose();
   }
 }

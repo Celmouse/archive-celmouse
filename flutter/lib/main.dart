@@ -1,6 +1,7 @@
 import 'package:controller/src/connect_server.dart';
 import 'package:flutter/material.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const ConnectToServerPage(),
+      // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
       // home:  Container(color: Colors.red,),
     );
   }

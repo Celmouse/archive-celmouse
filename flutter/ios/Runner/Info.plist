@@ -49,5 +49,9 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>Digitação por voz</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>É necessário acesso por voz para liberar recursos de digitação e dar comandos rápidos</string>
 	</dict>
 </plist>

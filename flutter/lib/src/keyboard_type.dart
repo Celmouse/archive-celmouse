@@ -1,7 +1,55 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+
+
+/*
+  enableVoiceType() {
+    setState(() {
+      isMicOn = true;
+    });
+    if (speechAvailable) {
+      speech.listen(
+          onResult: onSpeechRecognizion,
+          localeId: 'pt-BR',
+          listenOptions: SpeechListenOptions(
+            listenMode: ListenMode.search,
+          ));
+    }
+  }
+
+  initSpeechToText() async {
+    speechAvailable = await speech.initialize();
+    // var speechLocales = await speech.locales();
+    // speechLocale = speechLocales.firstWhere((l)=>l.localeId == 'pt-BR');
+  }
+
+  onSpeechRecognizion(SpeechRecognitionResult result) {
+    final words = result.recognizedWords;
+    String splited = "";
+    if (speechedText == "") {
+      if (words.length > speechedText.length) {
+        splited = speechedText.substring(speechedText.length);
+      }
+    } else {
+      splited = words;
+    }
+
+    print('Words: $words | Speeched: $speechedText | Result: $splited');
+    keyboard.type(splited);
+    speechedText = words;
+  }
+
+  disableVoiceType() {
+    setState(() {
+      isMicOn = false;
+    });
+    speech.stop();
+    speechedText = "";
+  }
+
+  */
+
 
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
@@ -28,11 +76,7 @@ class _KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
           child: TextField(
             onSubmitted: (text) {
               // Envia mensagem para o WebSocket quando o usuário submeter
-              final data = {
-                "keyboardTypeEvent": true,
-                "message": text,
-              };
-              widget.channel.sink.add(jsonEncode(data));
+              
             },
             decoration: const InputDecoration(labelText: 'Usar teclado'),
           ),

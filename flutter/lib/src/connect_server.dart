@@ -18,7 +18,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
 
   @override
   void initState() {
-    ipController.text = "192.168.52.102";
+    ipController.text = "192.168.52.109";
     super.initState();
   }
 
