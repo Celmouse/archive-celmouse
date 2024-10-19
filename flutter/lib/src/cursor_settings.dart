@@ -9,7 +9,7 @@ class CursorSettingsPage extends StatefulWidget {
     this.sensibilidade = 5,
   });
 
-  final double sensibilidade;
+  final int sensibilidade;
   final WebSocketChannel channel;
 
   @override
@@ -19,7 +19,8 @@ class CursorSettingsPage extends StatefulWidget {
 class _CursorSettingsPageState extends State<CursorSettingsPage> {
   late final mouse = MouseControl(widget.channel);
 
-  late double sensibilidade = widget.sensibilidade;
+  late int pointerSensitivity = widget.sensibilidade;
+  late int scrollSensitivity = 4;
   bool invertedScroll = false;
   bool invertedPointer = false;
 
@@ -58,18 +59,19 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
               ),
               Slider(
-                label: sensibilidade.round().toString(),
-                value: sensibilidade,
+                label: pointerSensitivity.toString(),
+                value: pointerSensitivity.toDouble(),
                 min: 1,
                 divisions: 9,
                 max: 10,
                 onChanged: (amount) {
                   setState(() {
-                    sensibilidade = amount;
+                    pointerSensitivity = amount.round();
                   });
                   mouse.changeSensitivity(amount);
                 },
               ),
+
               /// Scroll configurations
               Text(
                 'Rolagem',
@@ -96,17 +98,28 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
               ),
               Slider(
-                label: sensibilidade.round().toString(),
-                value: sensibilidade,
+                label: scrollSensitivity.toString(),
+                value: scrollSensitivity.toDouble(),
                 min: 1,
                 divisions: 9,
                 max: 10,
                 onChanged: (amount) {
                   setState(() {
-                    sensibilidade = amount;
+                    scrollSensitivity = amount.round();
                   });
-                  mouse.changeSensitivity(amount);
+                  // mouse.changeSensitivity(amount);
                 },
+              ),
+
+              /// Layout
+              Visibility(
+                visible: false,
+                child: Text(
+                  'Layout',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
             ],
           )),

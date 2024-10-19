@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:controller/src/core/mouse_movement.dart';
 import 'package:controller/src/cursor_settings.dart';
 import 'package:controller/src/socket/keyboard.dart';
@@ -52,7 +51,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
       isCursorMovingEnabled = true;
     });
 
-    mouse.center();
+    // mouse.center();
     movement.startMouseMovement();
   }
 
