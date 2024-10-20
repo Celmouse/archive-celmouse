@@ -1,6 +1,6 @@
 {
   "name": "celmouse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "main.js",
   "license": "ISC",
   "description": "Control your PC from far away",
