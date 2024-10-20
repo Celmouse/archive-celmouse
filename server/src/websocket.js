@@ -23,14 +23,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectServer = connectServer;
+exports.startServer = startServer;
 const mice_1 = require("./mice");
 const keyboard_1 = require("./keyboard");
 const ws_1 = require("ws");
 const logger_1 = require("./logger");
 const events = __importStar(require("./events"));
 const logger = (0, logger_1.createLogger)('websocket');
-function connectServer(config) {
+function startServer(config) {
     const server = new ws_1.WebSocketServer({ port: config.socket.port });
     logger.info(`WebSocket server running on port ${config.socket.port}`);
     (0, mice_1.initMice)(config.mice);
@@ -71,4 +71,17 @@ function handleMessage(message) {
 function handleDisconnection() {
     logger.info('Cliente desconectado');
 }
+// <script>
+//     function generateBarCode() {
+//       // var nric = $('#text').val();
+//       var nric = '192.168.52.102';
+//       var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=450x450';
+//       $('#barcode').attr('src', url);
+//     }
+//   </script>
+// */
+// <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+// <!-- <input id="text" type="text" value="NRIC or Work Permit" style="Width:20%" onblur='generateBarCode();' /> -->
+// <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=192.168.52.102&amp;size=450x450" alt=""
+//   title="QR Code" width="450" height="450" />
 //# sourceMappingURL=websocket.js.map
