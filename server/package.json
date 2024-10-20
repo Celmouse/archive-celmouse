@@ -42,7 +42,7 @@
     "asarUnpack": [
       "**/*.node"
     ],
-    "productName": "CelMouse",
+    "productName": "Celmouse",
     "appId": "com.gyromouse.desktop",
     "copyright": "Copyright © 2024 Marcelo Viana",
     "afterSign": "electron-builder-notarize",
