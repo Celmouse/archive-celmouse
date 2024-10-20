@@ -2,7 +2,7 @@ console.log('Renderer Loaded');
 
 const ipText = document.getElementById('iptext')
 
-window.electronAPI.onUpdateIP((value) => {
+window.electronAPI.onUpdateIP((value: string) => {
   ipText.innerText += value.toString()
 })
 

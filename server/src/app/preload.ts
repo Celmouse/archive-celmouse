@@ -1,5 +1,7 @@
-const { contextBridge, ipcRenderer } = require('electron/renderer')
+console.log('Preload Loaded');
+
+import { contextBridge, ipcRenderer } from 'electron/renderer'
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  onUpdateIP: (callback) => ipcRenderer.on('update-ip', (_event, value) => callback(value)),
+  onUpdateIP: (callback: (ip: string) => void) => ipcRenderer.on('update-ip', (_event, value) => callback(value)),
 })
