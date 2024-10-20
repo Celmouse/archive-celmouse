@@ -1,7 +1,7 @@
 import { mouse, Button, screen, straightTo, Point } from "@nut-tree-fork/nut-js";
 import { MiceConfig } from './config';
 import { createLogger } from './logger';
-import { MiceMoveData, MiceScrollData } from "./mice.i";
+import { MiceMoveData, MiceScrollData, } from './mice.d'
 
 const POINTER_SENSITIVITY_DIV = 10;
 const SCROLL_SENSITIVITY_DIV = 2;
