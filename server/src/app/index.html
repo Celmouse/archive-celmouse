@@ -4,25 +4,26 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-  <title>CelMouse</title>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+  <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:;default-src 'self'; script-src 'self'">
+  <title>Celmouse</title>
 </head>
 
 <body>
   <h1>Controle seu mouse e teclado a distância</h1>
   <h3>Passos para a configuração:</h3>
   <ol>
-    <li>Baixe o aplicativo CelMouse na <a href="https://apps.apple.com/br/app/gyromouse/id6736866466">App Store</a> ou
-      <a>Google Play</a></li>
-    <li>Siga as instruções na página incial do App em "descobrir IP"</li>
-    <li>Continue pelo aplicativo</li>
+    <li>Baixe o aplicativo Celmouse na <a href="https://apps.apple.com/br/app/gyromouse/id6736866466">App Store</a> ou
+      <a>Google Play</a>
+    </li>
+    <li>Certifique de estar conectado no mesmo Wi-Fi</li>
+    <li>Escaneie o QRCode ou digite o IP</li>
+    <li>Continue pelo aplicativo!</li>
   </ol>
 
-  <h1 id="iptext">Meu IP: </h1>
-  <!-- <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=192.168.52.102&amp;size=450x450" alt="" title="QR Code" width="450" height="450" /> -->
-  <script lang="ts" src="./renderer.js"></script>
+  <h1 id="iptext" class="ipText">Meu IP: </h1>
+  <div id="qrcode"></div>
 
+  <script lang="ts" src="./renderer.js"></script>
   <sub>ATENÇÃO: Não utilize esse aplicativo em rede pública (Aeroportos, Rodoviárias, etc)</sub></br>
   <sub>Melhorias de segurança nas próximas atualizações, acompanhe no <a>site</a>.</sub>
 </body>

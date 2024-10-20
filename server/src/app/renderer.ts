@@ -1,10 +1,15 @@
 console.log('Renderer Loaded');
 
 const ipText = document.getElementById('iptext')
+const qrImg = document.getElementById('qrcode')
 
-window.electronAPI.onUpdateIP((value: string) => {
-  ipText.innerText += value.toString()
-})
+window.electronAPI.onUpdateQR((qr: any) => {
+  qrImg.innerHTML = `<img src=${qr} alt="QR Code" height=200 />`
+});
+
+window.electronAPI.onUpdateIPText((ip: string) => {
+  ipText.innerText += ip
+});
 
 // <script>
 //     function generateBarCode() {

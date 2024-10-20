@@ -38,9 +38,10 @@ async function main() {
 
 function createWindow() {
   window = new BrowserWindow({
-    title: "CelMouse",
-    width: 800,
+    title: "Celmouse",
+    width: 600,
     height: 600,
+    resizable: false,
     webPreferences: {
       preload: join(__dirname, 'src/app/preload.js')
     }
@@ -53,9 +54,12 @@ function createWindow() {
     slashes: true
   }));
 
-  window.webContents.on('did-finish-load', () => {
+  window.webContents.on('did-finish-load', async () => {
     const ip = require('my-local-ip')()
-    window.webContents.send('update-ip', ip);
+    const qr = await require('qrcode').toDataURL(ip)
+
+    window.webContents.send('update-ip-text', ip);
+    window.webContents.send('update-qr', qr);
   });
 }
 
