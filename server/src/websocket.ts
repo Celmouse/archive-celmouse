@@ -9,7 +9,7 @@ const logger = createLogger('websocket');
 
 export function startServer(config: GlobalConfig) {
     const server = new WebSocketServer({ port: config.socket.port });
-    
+
     logger.info(`WebSocket server running on port ${config.socket.port}`);
 
     initMice(config.mice);

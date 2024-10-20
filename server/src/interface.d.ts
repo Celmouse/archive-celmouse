@@ -1,5 +1,5 @@
 export interface IElectronAPI {
-    setQRCodeIP: (string) => Promise<void>,
+    onUpdateIP: (string) => Promise<void>,
 }
 
 declare global {
