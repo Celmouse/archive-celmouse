@@ -21,13 +21,13 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
   StreamSubscription<Object?>? _subscription;
 
-  connect(String ip) async {
+  Future<dynamic> connect(String ip) async {
     WebSocketChannel channel = WebSocketChannel.connect(
-      Uri.parse('ws://$ip:8080'),
+      Uri.parse('ws://$ip:7771'),
     );
     unawaited(_subscription?.cancel());
 
-    await Navigator.push(
+    return Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => MoveMousePage(
@@ -35,16 +35,16 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
         ),
       ),
     );
-
-    _subscription = controller.barcodes.listen(_handleBarcode);
   }
 
-  _handleBarcode(BarcodeCapture e) {
+  _handleBarcode(BarcodeCapture e) async {
     final rgx =
         RegExp(r'^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$');
     final value = e.barcodes.first.rawValue ?? '';
     if (rgx.hasMatch(value)) {
-      connect(value);
+      _subscription?.pause();
+      await connect(value);
+      _subscription?.resume();
     }
   }
 
