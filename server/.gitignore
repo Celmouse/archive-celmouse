@@ -1,3 +1,6 @@
 node_modules/
 dist/
 **/**.map.js
+src/**.js
+main.js
+.DS_Store
