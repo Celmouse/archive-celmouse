@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CelMouse',
+      title: 'Celmouse',
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
       theme: ThemeData(

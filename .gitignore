@@ -18,3 +18,5 @@ server/app.log
 flutter/upload-keystore.jks
 flutter/pubspec.lock
 flutter/.metadata
+server/notarization-error.log
+*.log

@@ -4,6 +4,7 @@ import * as url from 'url'
 import * as path from 'path'
 import { startServer } from './src/websocket'
 import { loadConfig } from './src/config';
+import { shell } from 'electron/common'
 
 
 
@@ -47,6 +48,11 @@ function createWindow() {
     }
   })
 
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    console.log(url)
+    shell.openExternal(url);
+    return { action: 'deny' };
+  })
 
   window.loadURL(url.format({
     pathname: path.join(__dirname, 'src/app/index.html'),
