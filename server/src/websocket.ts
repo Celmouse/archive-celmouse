@@ -3,16 +3,13 @@ import { keyboardType } from './keyboard'
 import { WebSocketServer } from 'ws';
 import { GlobalConfig, WebSocketConfig } from './config';
 import { createLogger } from './logger';
-import { ExceptionHandler } from 'winston';
-
 import * as events from './events'
-
 const logger = createLogger('websocket');
 
 
-export function connectServer(config: GlobalConfig) {
+export function startServer(config: GlobalConfig) {
     const server = new WebSocketServer({ port: config.socket.port });
-
+    
     logger.info(`WebSocket server running on port ${config.socket.port}`);
 
     initMice(config.mice);
@@ -60,3 +57,21 @@ function handleMessage(message: any) {
 function handleDisconnection() {
     logger.info('Cliente desconectado');
 }
+
+
+// <script>
+//     function generateBarCode() {
+//       // var nric = $('#text').val();
+//       var nric = '192.168.52.102';
+//       var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=450x450';
+//       $('#barcode').attr('src', url);
+//     }
+//   </script>
+// */
+
+// <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+// <!-- <input id="text" type="text" value="NRIC or Work Permit" style="Width:20%" onblur='generateBarCode();' /> -->
+
+// <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=192.168.52.102&amp;size=450x450" alt=""
+//   title="QR Code" width="450" height="450" />
