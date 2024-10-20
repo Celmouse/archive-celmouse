@@ -28,7 +28,7 @@ function loadConfig() {
                     allowBruscalMoviments: false,
                 },
                 socket: {
-                    port: 8080
+                    port: 7771
                 },
                 keyboard: {}
             };

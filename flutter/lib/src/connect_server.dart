@@ -25,7 +25,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
   connect([String? ipAdd]) {
     setState(() {
       channel = WebSocketChannel.connect(
-        Uri.parse('ws://${ipController.text}:8080'),
+        Uri.parse('ws://${ipController.text}:7771'),
       );
     });
     if (channel == null) return;

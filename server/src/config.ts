@@ -37,7 +37,7 @@ export async function loadConfig(): Promise<(GlobalConfig)> {
                 allowBruscalMoviments: false,
             },
             socket: {
-                port: 8080
+                port: 7771
             },
             keyboard: {
                 
