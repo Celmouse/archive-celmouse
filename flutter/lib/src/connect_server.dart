@@ -73,6 +73,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   childrenPadding: const EdgeInsets.only(bottom: 16),
                   children: [
+                    'Baixe o aplicativo no site.',
                     'No Windows: Acesse o power shell',
                     'Digite o comando: ipconfig getifaddr en0',
                     'No Linux: Acesse o terminal do Linux',
