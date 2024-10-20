@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import { BrowserWindow, app, globalShortcut } from 'electron'
 import * as url from 'url'
 import * as path from 'path'
-import { connectServer } from './src/websocket'
+import { startServer } from './src/websocket'
 
 import { loadConfig } from './src/config';
 
@@ -12,7 +12,7 @@ async function main() {
   app.whenReady().then(() => {
     createWindow()
 
-    connectServer(config);
+    startServer(config);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -31,6 +31,7 @@ async function main() {
 
 function createWindow() {
   const win = new BrowserWindow({
+    title: "CelMouse",
     width: 800,
     height: 600,
     webPreferences: {
