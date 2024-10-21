@@ -17,6 +17,11 @@ class MouseControl {
     _send(data);
   }
 
+  void doubleClick(String type) {
+    final data = Protocol(event: Events.mouseDoubleClick, data: type);
+    _send(data);
+  }
+
   void center() {
     final data = Protocol(event: Events.mouseCenter, data: null);
     _send(data);
@@ -48,6 +53,18 @@ class MouseControl {
   _send(Protocol data) => channel.sink.add(data.toJson());
 }
 
+enum DoubleClickDelayOptions {
+  veryFast(100, "Muito rápido"),
+  fast(300, "Rápido"),
+  standard(500, "Padrão"),
+  slow(700, "Lento"),
+  verySlow(900, "Muito lento");
+
+  const DoubleClickDelayOptions(this.duration, this.text);
+  final int duration;
+  final String text;
+}
+
 class MouseConfigs {
   /// Threshhold helps reducing shakiness
   static const double threshholdX = 0.031;
@@ -68,4 +85,6 @@ class MouseConfigs {
 
   int sensitivity = 5;
   int scrollSensitivity = 3;
+
+  int doubleClickDelayMS = DoubleClickDelayOptions.standard.duration;
 }

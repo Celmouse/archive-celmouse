@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:controller/getit.dart';
 import 'package:controller/src/core/mouse_movement.dart';
 import 'package:controller/src/cursor_settings.dart';
+import 'package:controller/src/keyboard_type.dart';
 import 'package:controller/src/socket/keyboard.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'socket/mouse.dart';
@@ -67,10 +71,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
     movement.stopMouseMovement();
   }
 
-  bool tmpCursorMovingEnabled = false;
+  // bool tmpCursorMovingEnabled = false;
 
   enableScrolling() {
-    tmpCursorMovingEnabled = isCursorMovingEnabled;
 
     setState(() {
       isScrollingEnabled = true;
@@ -83,11 +86,11 @@ class _MoveMousePageState extends State<MoveMousePage> {
   disableScrolling() {
     setState(() {
       isScrollingEnabled = false;
-      isCursorMovingEnabled = tmpCursorMovingEnabled;
     });
     movement.stopScrollMovement();
-    if (isCursorMovingEnabled) movement.startMouseMovement();
   }
+
+  Timer? doubleClickDelay;
 
   @override
   void dispose() {
@@ -104,8 +107,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
         title: const Text('Mouse'),
         centerTitle: true,
         actions: [
-          Visibility(
-            visible: false,
+          const Visibility(
+            visible: kDebugMode,
             child: IconButton(
               onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
               icon: Icon(
@@ -114,6 +117,17 @@ class _MoveMousePageState extends State<MoveMousePage> {
               ),
             ),
           ),
+          Visibility(
+              visible: kDebugMode,
+              child: IconButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => KeyboardTyppingPage(
+                          channel: widget.channel,
+                        ),
+                      )),
+                  icon: const Icon(Icons.keyboard))),
           IconButton(
             onPressed: () => Navigator.push(context, MaterialPageRoute(
               builder: (context) {
@@ -154,7 +168,18 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.leftClick;
                         });
-                        mouse.click(ClickEventData.left);
+                        if (doubleClickDelay?.isActive == true) {
+                          mouse.doubleClick(ClickEventData.left);
+                        } else {
+                          mouse.click(ClickEventData.left);
+                        }
+                        doubleClickDelay ??= Timer(
+                            Duration(
+                              milliseconds:
+                                  getIt.get<MouseConfigs>().doubleClickDelayMS,
+                            ), () {
+                          doubleClickDelay = null;
+                        });
                       },
                       onTapUp: (_) {
                         setState(() {
