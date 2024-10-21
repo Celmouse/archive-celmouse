@@ -95,15 +95,29 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter:",
+                  "Inverter eixo vertical:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: getIt.get<MouseConfigs>().invertedScroll,
+                value: getIt.get<MouseConfigs>().invertedScrollY,
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().invertedScroll = value;
+                    getIt.get<MouseConfigs>().invertedScrollY = value;
+                  });
+                },
+              ),
+              SwitchListTile(
+                title: Text(
+                  "Inverter eixo horizontal:",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                value: getIt.get<MouseConfigs>().invertedScrollX,
+                onChanged: (value) {
+                  setState(() {
+                    getIt.get<MouseConfigs>().invertedScrollX = value;
                   });
                 },
               ),

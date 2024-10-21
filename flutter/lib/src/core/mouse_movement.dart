@@ -124,12 +124,12 @@ class MouseMovement {
 
     if (x.abs() > y.abs()) {
       direction =
-          ((getIt.get<MouseConfigs>().invertedScroll ? 1 : -1) * x.sign < 0)
+          ((getIt.get<MouseConfigs>().invertedScrollX ? 1 : -1) * x.sign < 0)
               ? ScrollDirections.left
               : ScrollDirections.right;
     } else if ((x.abs() < y.abs())) {
       direction =
-          ((getIt.get<MouseConfigs>().invertedScroll ? 1 : -1) * y.sign < 0)
+          ((getIt.get<MouseConfigs>().invertedScrollY ? 1 : -1) * y.sign < 0)
               ? ScrollDirections.down
               : ScrollDirections.up;
     }
