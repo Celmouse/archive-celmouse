@@ -74,20 +74,25 @@ class _MoveMousePageState extends State<MoveMousePage> {
   // bool tmpCursorMovingEnabled = false;
 
   enableScrolling() {
+    // tmpCursorMovingEnabled = isCursorMovingEnabled;
 
     setState(() {
       isScrollingEnabled = true;
       isCursorMovingEnabled = false;
     });
 
+    movement.stopMouseMovement();
     movement.startScrollMovement();
   }
 
   disableScrolling() {
     setState(() {
       isScrollingEnabled = false;
+      // isCursorMovingEnabled = tmpCursorMovingEnabled;
     });
     movement.stopScrollMovement();
+    // if (isCursorMovingEnabled)
+    // movement.startMouseMovement();
   }
 
   Timer? doubleClickDelay;

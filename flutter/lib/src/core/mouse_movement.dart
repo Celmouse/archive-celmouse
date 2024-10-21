@@ -35,7 +35,6 @@ class MouseMovement {
   startScrollMovement() {
     lastTimeGyroscopeMouseMovement = DateTime.now();
 
-    moveGyroscopeSubscription?.pause();
     scrollGyroscopeSubscription ??= gyroscopeEventStream(
       samplingPeriod: SensorInterval.gameInterval,
     ).listen((
@@ -57,10 +56,10 @@ class MouseMovement {
 
       _sendScrollMovement(x, y);
 
-      print('Cursor Scroll');
-      print("X: $x");
-      print("Y: $y");
-      print("\n####\n####\n");
+      // print('Cursor Scroll');
+      // print("X: $x");
+      // print("Y: $y");
+      // print("\n####\n####\n");
     });
   }
 
