@@ -143,6 +143,44 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                   mouse.changeScrollSensitivity(amount);
                 },
               ),
+              Text(
+                'Clique',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              ListTile(
+                title: Text(
+                  'Velocidade do clique duplo:',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              DropdownButton(
+                alignment: Alignment.center,
+                isExpanded: true,
+                value: getIt.get<MouseConfigs>().doubleClickDelayMS,
+                items: DoubleClickDelayOptions.values
+                    .map((o) => DropdownMenuItem(
+                          alignment: Alignment.center,
+                          value: o.duration,
+                          child: Text(
+                            o.text,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    getIt.get<MouseConfigs>().doubleClickDelayMS =
+                        value ?? DoubleClickDelayOptions.standard.duration;
+                  });
+                },
+              ),
 
               /// Layout
               Visibility(
