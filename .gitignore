@@ -21,3 +21,4 @@ flutter/.metadata
 server/notarization-error.log
 *.log
 server/.DS_Store
+.DS_Store
