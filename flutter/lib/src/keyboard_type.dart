@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-
+import 'socket/keyboard.dart';
 
 /*
   enableVoiceType() {
@@ -50,13 +50,12 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
   */
 
-
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
     super.key,
     required this.channel,
   });
-  
+
   final WebSocketChannel channel;
 
   @override
@@ -64,6 +63,7 @@ class KeyboardTyppingPage extends StatefulWidget {
 }
 
 class _KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
+  late final keyboard = KeyboardControl(widget.channel);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,8 +75,7 @@ class _KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
         child: Center(
           child: TextField(
             onSubmitted: (text) {
-              // Envia mensagem para o WebSocket quando o usuário submeter
-              
+              keyboard.type(text);
             },
             decoration: const InputDecoration(labelText: 'Usar teclado'),
           ),
