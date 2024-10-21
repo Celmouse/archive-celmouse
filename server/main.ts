@@ -16,12 +16,10 @@ function showIp(ip: string) {
 };
 
 async function main() {
-  const config = await loadConfig();
 
   app.whenReady().then(() => {
     createWindow()
 
-    startServer(config);
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -63,6 +61,9 @@ function createWindow() {
   window.webContents.on('did-finish-load', async () => {
     const ip = require('my-local-ip')()
     const qr = await require('qrcode').toDataURL(ip)
+
+    const config = await loadConfig();
+    startServer(config);
 
     window.webContents.send('update-ip-text', ip);
     window.webContents.send('update-qr', qr);
