@@ -147,9 +147,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.all(20.0),
+        minimum: const EdgeInsets.symmetric(horizontal:20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const Spacer(),
             ElevatedButton.icon(
@@ -283,12 +283,12 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 ],
               ),
             ),
-            const Flexible(
-              flex: 1,
-              child: SizedBox(
-                height: 0,
-              ),
-            ),
+            // const Flexible(
+            //   flex: 1,
+            //   child: SizedBox(
+            //     height: 0,
+            //   ),
+            // ),
           ],
         ),
       ),
