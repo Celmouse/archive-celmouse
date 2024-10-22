@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:controller/getit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../socket/mouse.dart';
@@ -10,6 +11,8 @@ import '../socket/protocol.dart';
 
 class MouseMovement {
   final MouseControl mouse;
+
+  final ValueNotifier<bool> gyroscopeError = ValueNotifier<bool>(false);
 
   MouseMovement({
     required this.mouse,
@@ -37,30 +40,35 @@ class MouseMovement {
 
     scrollGyroscopeSubscription ??= gyroscopeEventStream(
       samplingPeriod: SensorInterval.gameInterval,
-    ).listen((
-      GyroscopeEvent event,
-    ) {
-      var (x, y) = _tranformGyroscopeCoordinates(
-        event.z * -1,
-        event.x * -1,
-        event.timestamp,
-      );
+    ).listen(
+        (
+          GyroscopeEvent event,
+        ) {
+          var (x, y) = _tranformGyroscopeCoordinates(
+            event.z * -1,
+            event.x * -1,
+            event.timestamp,
+          );
 
-      if (x.abs() <= MouseConfigs.scrollThreshholdX) {
-        x = 0;
-      }
+          if (x.abs() <= MouseConfigs.scrollThreshholdX) {
+            x = 0;
+          }
 
-      if (y.abs() <= MouseConfigs.scrollThreshholdY) {
-        y = 0;
-      }
+          if (y.abs() <= MouseConfigs.scrollThreshholdY) {
+            y = 0;
+          }
 
-      _sendScrollMovement(x, y);
+          _sendScrollMovement(x, y);
 
-      // print('Cursor Scroll');
-      // print("X: $x");
-      // print("Y: $y");
-      // print("\n####\n####\n");
-    });
+          // print('Cursor Scroll');
+          // print("X: $x");
+          // print("Y: $y");
+          // print("\n####\n####\n");
+        },
+        cancelOnError: true,
+        onError: (err, stack) {
+          gyroscopeError.value = true;
+        });
   }
 
   startMouseMovement() {
@@ -69,32 +77,35 @@ class MouseMovement {
     moveGyroscopeSubscription ??= gyroscopeEventStream(
       samplingPeriod: const Duration(milliseconds: 10),
     ).listen(
-      (
-        GyroscopeEvent event,
-      ) {
-        var (x, y) = _tranformGyroscopeCoordinates(
-          event.z * -1,
-          event.x * -1,
-          event.timestamp,
-        );
+        (
+          GyroscopeEvent event,
+        ) {
+          var (x, y) = _tranformGyroscopeCoordinates(
+            event.z * -1,
+            event.x * -1,
+            event.timestamp,
+          );
 
-        if (x.abs() <= MouseConfigs.threshholdX) {
-          x = 0;
-        }
+          final threshold = getIt.get<MouseConfigs>().threshhold;
 
-        if (y.abs() <= MouseConfigs.threshholdY) {
-          y = 0;
-        }
+          if (x.abs() <= threshold) {
+            x = 0;
+          }
 
-        mouse.move(
-          (getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1 ) * x,
-          (getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1 ) * y,
-        );
-      },
-    );
+          if (y.abs() <= threshold) {
+            y = 0;
+          }
+
+          mouse.move(
+            (getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1) * x,
+            (getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1) * y,
+          );
+        },
+        cancelOnError: true,
+        onError: (err, stack) {
+          gyroscopeError.value = true;
+        });
   }
-
-  startScrolling() {}
 
   (double x, double y) _tranformGyroscopeCoordinates(
     double x,

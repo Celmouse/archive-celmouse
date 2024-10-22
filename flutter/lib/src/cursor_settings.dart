@@ -27,7 +27,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
         title: const Text('Configurações'),
       ),
       body: SafeArea(
-          minimum: const EdgeInsets.symmetric(horizontal: 12),
+          minimum: const EdgeInsets.only(left: 12, right: 12, bottom: 10),
           child: ListView(
             children: [
               Text(
@@ -157,7 +157,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                       ),
                 ),
               ),
-              DropdownButton(
+              DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
                 alignment: Alignment.center,
                 isExpanded: true,
                 value: getIt.get<MouseConfigs>().doubleClickDelayMS,
@@ -180,6 +183,54 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         value ?? DoubleClickDelayOptions.standard.duration;
                   });
                 },
+              ),
+
+              ExpansionTile(
+                title: Text(
+                  'Opções avançadas',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                children: [
+                  ListTile(
+                    title: Text(
+                      'Reduzir vibração:',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  DropdownButtonFormField(
+                    decoration:  InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      
+                    ),
+                    
+                    alignment: Alignment.center,
+                    isExpanded: true,
+                    value: getIt.get<MouseConfigs>().threshhold,
+                    items: ReduceVibrationOptions.values
+                        .map((o) => DropdownMenuItem(
+                              alignment: Alignment.center,
+                              value: o.threshhold,
+                              child: Text(
+                                o.text,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        getIt.get<MouseConfigs>().threshhold =
+                            value ?? ReduceVibrationOptions.standard.threshhold;
+                      });
+                    },
+                  ),
+                ],
               ),
 
               /// Layout

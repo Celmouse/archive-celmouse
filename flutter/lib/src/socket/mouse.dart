@@ -65,10 +65,22 @@ enum DoubleClickDelayOptions {
   final String text;
 }
 
+enum ReduceVibrationOptions {
+  strong(0.04, "Muito"),
+  standard(0.031, "Padrão"),
+  weak(0.023, "Pouco"),
+  veryWeak(0.013, "Muito Pouco");
+
+  const ReduceVibrationOptions(this.threshhold, this.text);
+  final double threshhold;
+  final String text;
+}
+
 class MouseConfigs {
   /// Threshhold helps reducing shakiness
-  static const double threshholdX = 0.031;
-  static const double threshholdY = 0.031;
+  double threshhold = ReduceVibrationOptions.standard.threshhold;
+  //  = 0.023; //0.031;
+  // static const double threshholdY = 0.023; //0.031;
 
   static const double scrollThreshholdX = 0.15;
   static const double scrollThreshholdY = 0.15;
