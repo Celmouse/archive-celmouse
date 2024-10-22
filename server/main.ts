@@ -5,6 +5,9 @@ import * as path from 'path'
 import { startServer } from './src/websocket'
 import { loadConfig } from './src/config';
 import { shell } from 'electron/common'
+import { createLogger } from './src/logger';
+
+const logger = createLogger("Main")
 
 
 
@@ -58,4 +61,6 @@ function createWindow() {
   });
 }
 
-main().catch(console.error);
+main().catch((reason) => {
+  logger.info(reason);
+});
