@@ -2,14 +2,21 @@ console.log('Renderer Loaded');
 
 const ipText = document.getElementById('iptext')
 const qrImg = document.getElementById('qrcode')
+const connectionStatus = document.getElementById('connected')
 
-window.electronAPI.onUpdateQR((qr: any) => {
+window.electronAPI.onUpdateQR((qr: string) => {
   qrImg.innerHTML = `<img src=${qr} alt="QR Code" height=200 />`
 });
 
 window.electronAPI.onUpdateIPText((ip: string) => {
   ipText.innerText += ip
 });
+
+window.electronAPI.onClientConnected((connected: boolean) => {
+  connectionStatus.innerText = connected ? "Conectado" : "Desconectado"
+  connectionStatus.style['color'] = connected ? "green" : "red"
+  
+})
 
 // <script>
 //     function generateBarCode() {

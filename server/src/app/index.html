@@ -4,8 +4,24 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:;default-src 'self'; script-src 'self'">
+  <meta http-equiv="Content-Security-Policy"
+    content="img-src 'self' data:; default-src 'self'; script-src 'self' ; style-src 'self' 'unsafe-inline';">
   <title>Celmouse</title>
+  <style>
+    .row {
+      display: flex;
+      justify-content: start;
+      vertical-align: middle;
+    }
+
+    .block_container6>div {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -18,6 +34,11 @@
     <li>Escaneie o QRCode ou digite o IP</li>
     <li>Continue pelo aplicativo!</li>
   </ol>
+
+  <div class="row">
+      <h5>Status: </h5>
+      <h5 id="connected"> Aguardando...</h5>
+  </div>
 
   <h1 id="iptext" class="ipText">Meu IP: </h1>
   <div id="qrcode"></div>

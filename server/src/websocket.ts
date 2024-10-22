@@ -4,10 +4,11 @@ import { WebSocketServer } from 'ws';
 import { GlobalConfig, WebSocketConfig } from './config';
 import { createLogger } from './logger';
 import * as events from './events'
+import { BrowserWindow } from 'electron/main';
 const logger = createLogger('websocket');
 
 
-export function startServer(config: GlobalConfig) {
+export function startServer(config: GlobalConfig, window: BrowserWindow) {
     const server = new WebSocketServer({ port: config.socket.port });
 
     logger.info(`WebSocket server running on port ${config.socket.port}`);
@@ -16,10 +17,17 @@ export function startServer(config: GlobalConfig) {
 
     server.on('connection', ws => {
         console.log('Novo cliente conectado');
+        
+        window.webContents.send('connected-client', true)
 
         ws.on('message', (data) => handleMessage(data))
 
-        ws.on('close', handleDisconnection);
+        ws.on('close', () => {
+            window.webContents.send('connected-client', false)
+
+            logger.info('Cliente desconectado');
+
+        });
     });
 }
 
@@ -54,9 +62,9 @@ function handleMessage(message: any) {
     }
 }
 
-function handleDisconnection() {
-    logger.info('Cliente desconectado');
-}
+// function handleDisconnection() {
+//     logger.info('Cliente desconectado');
+// }
 
 
 // <script>

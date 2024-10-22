@@ -6,7 +6,7 @@
   "description": "Control your PC from far away",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
+    "start": "tsc && electron .",
     "watch": "tsc -w -p . ",
     "build": "tsc",
     "app:dir": "electron-builder --dir",

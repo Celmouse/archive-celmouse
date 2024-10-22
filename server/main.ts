@@ -63,7 +63,7 @@ function createWindow() {
     const qr = await require('qrcode').toDataURL(ip)
 
     const config = await loadConfig();
-    startServer(config);
+    startServer(config, window);
 
     window.webContents.send('update-ip-text', ip);
     window.webContents.send('update-qr', qr);
