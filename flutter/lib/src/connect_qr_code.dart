@@ -25,16 +25,19 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
     WebSocketChannel channel = WebSocketChannel.connect(
       Uri.parse('ws://$ip:7771'),
     );
-    unawaited(_subscription?.cancel());
+    
+    await _subscription?.cancel();
 
-    return Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MoveMousePage(
-          channel: channel,
+    if (mounted) {
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MoveMousePage(
+            channel: channel,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   _handleBarcode(BarcodeCapture e) async {
@@ -44,13 +47,13 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
     if (rgx.hasMatch(value)) {
       _subscription?.pause();
       await connect(value);
-      _subscription?.resume();
     }
   }
 
   @override
   void initState() {
     super.initState();
+
     // Start listening to lifecycle changes.
     WidgetsBinding.instance.addObserver(this);
 
