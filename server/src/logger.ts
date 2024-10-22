@@ -12,7 +12,7 @@ export function createLogger(module: string) {
         ),
         transports: [
             new transports.Console(),
-            new transports.File({ filename: 'app.log' }),
+            new transports.File({ filename: 'logs.log' }),
         ],
     });
 }

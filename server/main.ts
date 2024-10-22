@@ -10,16 +10,10 @@ import { shell } from 'electron/common'
 
 let window: BrowserWindow
 
-function showIp(ip: string) {
-  console.log('Teste')
-  window.webContents.send('update-ip', 1);
-};
-
 async function main() {
 
   app.whenReady().then(() => {
     createWindow()
-
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -44,12 +38,6 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, 'src/app/preload.js')
     }
-  })
-
-  window.webContents.setWindowOpenHandler(({ url }) => {
-    console.log(url)
-    shell.openExternal(url);
-    return { action: 'deny' };
   })
 
   window.loadURL(url.format({

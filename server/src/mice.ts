@@ -28,7 +28,7 @@ export async function initMice(config: MiceConfig) {
     HEIGHT_DIVIDER = config.HEIGHT_DIVIDER;
     WIDTH_DIVIDER = config.WIDTH_DIVIDER;
 
-    logger.info('configurado!')
+    logger.info('Configured!')
 }
 
 // Função para alterar a sensibilidade do mouse
