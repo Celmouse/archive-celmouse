@@ -96,9 +96,12 @@ class MouseMovement {
             y = 0;
           }
 
+          final invertedX = getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1;
+          final invertedY = getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1;
+
           mouse.move(
-            (getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1) * x,
-            (getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1) * y,
+            invertedX * x,
+            invertedY * y,
           );
         },
         cancelOnError: true,
