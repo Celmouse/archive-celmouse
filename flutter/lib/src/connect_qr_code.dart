@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'core/connect.dart';
 import 'cursor_move.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
@@ -21,14 +22,22 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
   StreamSubscription<Object?>? _subscription;
 
-  Future<dynamic> connect(String ip) async {
-    WebSocketChannel channel = WebSocketChannel.connect(
-      Uri.parse('ws://$ip:7771'),
-    );
-    
-    await _subscription?.cancel();
 
-    if (mounted) {
+  _handleBarcode(BarcodeCapture e) async {
+    final value = e.barcodes.first.rawValue ?? '';
+    _subscription?.pause();
+    final WebSocketChannel? channel = await connectWS(value, (err) {
+      setState(() {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(err),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ));
+      });
+    });
+    if (channel != null && mounted) {
+      _subscription?.cancel();
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -37,16 +46,8 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
           ),
         ),
       );
-    }
-  }
-
-  _handleBarcode(BarcodeCapture e) async {
-    final rgx =
-        RegExp(r'^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$');
-    final value = e.barcodes.first.rawValue ?? '';
-    if (rgx.hasMatch(value)) {
-      _subscription?.pause();
-      await connect(value);
+    } else {
+      _subscription?.resume();
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'connect_qr_code.dart';
+import 'core/connect.dart';
 
 class ConnectToServerPage extends StatefulWidget {
   const ConnectToServerPage({super.key});
@@ -16,24 +17,32 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
 
   final TextEditingController ipController = TextEditingController();
 
+  String connError = "";
+
   @override
   void initState() {
     super.initState();
   }
 
-  connect([String? ipAdd]) {
-    setState(() {
-      channel = WebSocketChannel.connect(
-        Uri.parse('ws://${ipController.text}:7771'),
-      );
+  connect() async {
+    channel = await connectWS(ipController.text, (err) {
+      setState(() {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(err),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ));
+      });
     });
-    if (channel == null) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MoveMousePage(channel: channel!),
-      ),
-    );
+    if (channel != null && mounted) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MoveMousePage(
+            channel: channel!,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -91,10 +100,17 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                 ),
                 TextField(
                   controller: ipController,
-                  onSubmitted: connect,
+                  onSubmitted: (_) => connect(),
                   decoration: const InputDecoration(
                     labelText: 'Type the Desktop App IP',
                   ),
+                ),
+                Visibility(
+                  visible: connError.isNotEmpty,
+                  child: Text(connError,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.error,
+                          )),
                 ),
                 ElevatedButton(
                   onPressed: connect,

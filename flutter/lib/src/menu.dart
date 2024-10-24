@@ -81,7 +81,7 @@ class CardList extends StatelessWidget {
               leading: Icon(item.icon, size: 40, color: Colors.white),
               title: Text(
                 item.title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -89,7 +89,7 @@ class CardList extends StatelessWidget {
               ),
               subtitle: Text(
                 item.description,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white70,
                 ),
