@@ -96,7 +96,7 @@ export async function moveCursor(data: MiceMoveData) {
 
     await mouse.move([new Point(x, y)]);
 
-    logger.info(`Cursor moved to (${x}, ${y})`);
+    // logger.info(`Cursor moved to (${x}, ${y})`);
 }
 
 async function checkScreenBoundaries(x: number, y: number): Promise<{ x: number; y: number; }> {

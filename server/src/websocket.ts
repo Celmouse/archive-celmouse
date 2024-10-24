@@ -13,11 +13,12 @@ export function startServer(config: GlobalConfig, window: BrowserWindow) {
 
     logger.info(`WebSocket server running on port ${config.socket.port}`);
 
-    initMice(config.mice);
 
     server.on('connection', ws => {
-        logger.info('Novo cliente conectado');
-        
+        logger.info('Client connected');
+
+        initMice(config.mice);
+
         window.webContents.send('connected-client', true)
 
         ws.on('message', (data) => handleMessage(data))
@@ -25,7 +26,7 @@ export function startServer(config: GlobalConfig, window: BrowserWindow) {
         ws.on('close', () => {
             window.webContents.send('connected-client', false)
 
-            logger.info('Cliente desconectado');
+            logger.info('Client disconnected');
 
         });
     });

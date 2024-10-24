@@ -13,7 +13,7 @@ window.electronAPI.onUpdateIPText((ip: string) => {
 });
 
 window.electronAPI.onClientConnected((connected: boolean) => {
-  connectionStatus.innerText = connected ? "Conectado" : "Desconectado"
+  connectionStatus.innerText = connected ? "Connected" : "Disconnected"
   connectionStatus.style['color'] = connected ? "green" : "red"
   
 })
