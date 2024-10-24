@@ -18,7 +18,6 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
 
   @override
   void initState() {
-    ipController.text = "192.168.52.109";
     super.initState();
   }
 
@@ -68,18 +67,20 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                   dense: true,
                   tilePadding: EdgeInsets.zero,
                   title: const Text(
-                    'Como descobrir o IP do meu computador?',
+                    "How to find my computer's local IP?",
                   ),
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   childrenPadding: const EdgeInsets.only(bottom: 16),
                   children: [
-                    'Baixe o aplicativo no site.',
-                    'No Windows: Acesse o power shell',
-                    'Digite o comando: ipconfig getifaddr en0',
-                    'No Linux: Acesse o terminal do Linux',
-                    'Digite o comando: ifconfig en0',
-                    'No MacOS: Acesse o terminal do MacOS',
-                    'Digite o comando: ipconfig getifaddr en0',
+                    'Donwload the Desktop App.',
+                    'On Windows: Launch the Power Shell',
+                    'Type the command: ipconfig getifaddr en0',
+                    'On Linux: Launch the terminal',
+                    'Type the command: ifconfig en0',
+                    'On MacOS: Launch the terminal',
+                    'Type the command: ipconfig getifaddr en0',
+                    "The IP usually is 4x 1 to 3 digits separated by dots.",
+                    "Looks like: 192.168.0.100"
                   ]
                       .asMap()
                       .map((i, v) {
@@ -92,7 +93,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                   controller: ipController,
                   onSubmitted: connect,
                   decoration: const InputDecoration(
-                    labelText: 'Digite o IP do dispositivo',
+                    labelText: 'Type the Desktop App IP',
                   ),
                 ),
                 ElevatedButton(
@@ -100,7 +101,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                   child: const SizedBox(
                     width: double.infinity,
                     child: Center(
-                      child: Text('Conectar'),
+                      child: Text('Connect'),
                     ),
                   ),
                 ),

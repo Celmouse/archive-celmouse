@@ -1,6 +1,7 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/socket/mouse.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class CursorSettingsPage extends StatefulWidget {
@@ -24,21 +25,39 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configurações'),
+        title: const Text('Configuration'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                launchUrl(
+                  Uri.parse(
+                    "https://wa.me/send?phone=5533997312898",
+                  ),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+              icon: const Icon(
+                Icons.support_agent,
+              ))
+        ],
       ),
       body: SafeArea(
-          minimum: const EdgeInsets.only(left: 12, right: 12, bottom: 10),
+          minimum: const EdgeInsets.only(
+            left: 12,
+            right: 12,
+            bottom: 10,
+          ),
           child: ListView(
             children: [
               Text(
-                'Ponteiro',
+                'Pointer',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter eixo vertical:",
+                  "Invert vertical axis:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -52,7 +71,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter eixo horizontal:",
+                  "Invert horizontal axis:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -66,7 +85,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               ListTile(
                 title: Text(
-                  'Sensibilidade:',
+                  'Sensitivity:',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -88,14 +107,14 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
 
               /// Scroll configurations
               Text(
-                'Rolagem',
+                'Scroll',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter eixo vertical:",
+                  "Invert vertical axis:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -109,7 +128,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               SwitchListTile(
                 title: Text(
-                  "Inverter eixo horizontal:",
+                  "Invert horizontal axis:",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -123,7 +142,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
               ),
               ListTile(
                 title: Text(
-                  'Sensibilidade:',
+                  'Sensitivity:',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -144,14 +163,14 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 },
               ),
               Text(
-                'Clique',
+                'Click',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               ListTile(
                 title: Text(
-                  'Velocidade do clique duplo:',
+                  'Double click speed:',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -187,26 +206,22 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
 
               ExpansionTile(
                 title: Text(
-                  'Opções avançadas',
+                  'Advanced options',
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
                 children: [
                   ListTile(
                     title: Text(
-                      'Reduzir vibração:',
+                      'Reduce vibration:',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),
                   ),
                   DropdownButtonFormField(
-                    decoration:  InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                     ),
-                    
                     alignment: Alignment.center,
                     isExpanded: true,
                     value: getIt.get<MouseConfigs>().threshhold,

@@ -109,7 +109,7 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Conectar'),
+        title: const Text('Connect from Qr Code'),
       ),
       body: SafeArea(
         child: MobileScanner(

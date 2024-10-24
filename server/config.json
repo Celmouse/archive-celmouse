@@ -1,7 +1,7 @@
 {
     "mice" : {
-        "defaultSensitivity": 5,
-        "defaultScrollSensitivity": 3,
+        "defaultSensitivity": 7,
+        "defaultScrollSensitivity": 5,
         "HEIGHT_DIVIDER": 36,
         "WIDTH_DIVIDER": 64,
         "allowBruscalMoviments": false

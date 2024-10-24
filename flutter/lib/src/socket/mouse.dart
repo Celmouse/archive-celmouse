@@ -54,11 +54,11 @@ class MouseControl {
 }
 
 enum DoubleClickDelayOptions {
-  veryFast(100, "Muito rápido"),
-  fast(300, "Rápido"),
-  standard(500, "Padrão"),
-  slow(700, "Lento"),
-  verySlow(900, "Muito lento");
+  veryFast(100, "Very Fast"),
+  fast(300, "Fast"),
+  standard(500, "Default"),
+  slow(700, "Slow"),
+  verySlow(900, "Very Slow");
 
   const DoubleClickDelayOptions(this.duration, this.text);
   final int duration;
@@ -66,10 +66,10 @@ enum DoubleClickDelayOptions {
 }
 
 enum ReduceVibrationOptions {
-  strong(0.04, "Muito"),
-  standard(0.031, "Padrão"),
-  weak(0.023, "Pouco"),
-  veryWeak(0.013, "Muito Pouco");
+  strong(0.04, "Hard"),
+  standard(0.031, "Default"),
+  weak(0.023, "Weak"),
+  veryWeak(0.013, "Very weak");
 
   const ReduceVibrationOptions(this.threshhold, this.text);
   final double threshhold;
