@@ -161,7 +161,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal: 20.0),
+        minimum: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -217,6 +217,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                                   : Colors.red,
                         ),
                         width: size.width / 2 - 20,
+                        height: size.height * 0.3,
                       ),
                     ),
                     GestureDetector(
