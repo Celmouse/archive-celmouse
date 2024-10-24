@@ -50,6 +50,20 @@ class _MoveMousePageState extends State<MoveMousePage> {
     mouse = MouseControl(widget.channel);
     keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
+
+    widget.channel.stream.listen((_) {}, onDone: () {
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    }, onError: (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Connection Error: $e"),
+          ),
+        );
+      }
+    });
     super.initState();
   }
 
@@ -147,7 +161,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal:20.0),
+        minimum: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
