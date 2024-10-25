@@ -51,20 +51,19 @@ function createWindow() {
 
   window.webContents.on('did-finish-load', async () => {
     var network = require('network');
-    let ipAddr: string
-    
-    await network.get_private_ip(function(err: any, ip: any) {
-      ipAddr = err || ip; // err may be 'No active network interface found'.
+
+    await network.get_private_ip(async function (err: any, ip: any) {
+      let ipAddr: string = err || ip;
       console.log(ip)
+
+      const qr = await require('qrcode').toDataURL(ipAddr)
+
+      const config = await loadConfig();
+      startServer(config, window);
+
+      window.webContents.send('update-ip-text', ipAddr);
+      window.webContents.send('update-qr', qr);
     })
-
-    const qr = await require('qrcode').toDataURL(ipAddr)
-
-    const config = await loadConfig();
-    startServer(config, window);
-
-    window.webContents.send('update-ip-text', ipAddr);
-    window.webContents.send('update-qr', qr);
   });
 }
 
