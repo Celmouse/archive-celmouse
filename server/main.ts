@@ -55,6 +55,7 @@ function createWindow() {
     
     await network.get_private_ip(function(err: any, ip: any) {
       ipAddr = err || ip; // err may be 'No active network interface found'.
+      console.log(ip)
     })
     const qr = await require('qrcode').toDataURL(ipAddr)
 
