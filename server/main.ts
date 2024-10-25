@@ -53,7 +53,7 @@ function createWindow() {
     var network = require('network');
 
     network.get_private_ip(async function (err: any, ip: any) {
-      let ipAddr: string = err || ip;
+      let ipAddr: string = err || ip || require('my-local-ip')();
       console.log(ip)
 
       const qr = await require('qrcode').toDataURL(ipAddr)
