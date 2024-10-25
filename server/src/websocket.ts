@@ -13,6 +13,11 @@ export function startServer(config: GlobalConfig, window: BrowserWindow) {
 
     logger.info(`WebSocket server running on port ${config.socket.port}`);
 
+    server.on('error', err => {
+        console.log(err);
+        logger.info(`Connection error: ${err}}`)
+    });
+
 
     server.on('connection', ws => {
         logger.info('Client connected');
