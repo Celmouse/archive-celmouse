@@ -50,13 +50,14 @@ function createWindow() {
   }));
 
   window.webContents.on('did-finish-load', async () => {
-    let ipAddr = require('my-local-ip')()
     var network = require('network');
+    let ipAddr: string
     
     await network.get_private_ip(function(err: any, ip: any) {
       ipAddr = err || ip; // err may be 'No active network interface found'.
       console.log(ip)
     })
+
     const qr = await require('qrcode').toDataURL(ipAddr)
 
     const config = await loadConfig();
