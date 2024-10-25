@@ -51,7 +51,12 @@ function createWindow() {
 
   window.webContents.on('did-finish-load', async () => {
     const ip = require('my-local-ip')()
+    var network = require('network');
     const qr = await require('qrcode').toDataURL(ip)
+
+    network.get_private_ip(function(err: any, ip: any) {
+      console.log(err || ip); // err may be 'No active network interface found'.
+    })
 
     const config = await loadConfig();
     startServer(config, window);
