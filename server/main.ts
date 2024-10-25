@@ -52,7 +52,7 @@ function createWindow() {
   window.webContents.on('did-finish-load', async () => {
     var network = require('network');
 
-    await network.get_private_ip(async function (err: any, ip: any) {
+    network.get_private_ip(async function (err: any, ip: any) {
       let ipAddr: string = err || ip;
       console.log(ip)
 
