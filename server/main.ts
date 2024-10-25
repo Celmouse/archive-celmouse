@@ -50,18 +50,18 @@ function createWindow() {
   }));
 
   window.webContents.on('did-finish-load', async () => {
-    let ip = require('my-local-ip')()
+    let ipAddr = require('my-local-ip')()
     var network = require('network');
-    const qr = await require('qrcode').toDataURL(ip)
-
+    
     await network.get_private_ip(function(err: any, ip: any) {
-      ip = err || ip; // err may be 'No active network interface found'.
+      ipAddr = err || ip; // err may be 'No active network interface found'.
     })
+    const qr = await require('qrcode').toDataURL(ipAddr)
 
     const config = await loadConfig();
     startServer(config, window);
 
-    window.webContents.send('update-ip-text', ip);
+    window.webContents.send('update-ip-text', ipAddr);
     window.webContents.send('update-qr', qr);
   });
 }
