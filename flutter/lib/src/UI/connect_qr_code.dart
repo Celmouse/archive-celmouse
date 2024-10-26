@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'core/connect.dart';
+import '../core/connect.dart';
 import 'cursor_move.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {

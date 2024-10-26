@@ -1,9 +1,9 @@
-import 'package:controller/src/cursor_move.dart';
+import 'package:controller/src/UI/cursor_move.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'connect_qr_code.dart';
-import 'core/connect.dart';
+import '../core/connect.dart';
 
 class ConnectToServerPage extends StatefulWidget {
   const ConnectToServerPage({super.key});
@@ -24,24 +24,44 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     super.initState();
   }
 
+  bool isLoading = false;
+
   connect() async {
-    channel = await connectWS(ipController.text, (err) {
-      setState(() {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      channel = await connectWS(ipController.text, (err) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(err),
           backgroundColor: Theme.of(context).colorScheme.error,
         ));
-      });
-    });
-    if (channel != null && mounted) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MoveMousePage(
-            channel: channel!,
+      }).timeout(const Duration(seconds: 10));
+      if (channel != null && mounted) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MoveMousePage(
+              channel: channel!,
+            ),
           ),
-        ),
-      );
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text("Erro de conexão, IP incorreto, tente outro"),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ));
+      } else {
+        setState(() {
+          connError = "Erro de conexão, IP incorreto...";
+        });
+      }
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -114,10 +134,14 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                 ),
                 ElevatedButton(
                   onPressed: connect,
-                  child: const SizedBox(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Center(
-                      child: Text('Connect'),
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              strokeCap: StrokeCap.square,
+                            )
+                          : const Text('Connect'),
                     ),
                   ),
                 ),

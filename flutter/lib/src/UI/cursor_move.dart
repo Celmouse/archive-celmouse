@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:controller/getit.dart';
 import 'package:controller/src/core/mouse_movement.dart';
-import 'package:controller/src/cursor_settings.dart';
-import 'package:controller/src/keyboard_type.dart';
+import 'package:controller/src/UI/cursor_settings.dart';
+import 'package:controller/src/UI/keyboard_type.dart';
 import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'socket/mouse.dart';
-import 'socket/protocol.dart';
+import '../socket/mouse.dart';
+import '../socket/protocol.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -83,6 +83,20 @@ class _MoveMousePageState extends State<MoveMousePage> {
     });
 
     movement.stopMouseMovement();
+  }
+
+  Future<void> clickAnimation(CursorKeysPressed type) async {
+    //TODO: Fix animation
+    setState(() async {
+      cursorKeysPressed = type;
+      print('Clickado');
+    });
+    Timer(const Duration(seconds: 1), () {
+      print('desclicado');
+      setState(() async {
+        cursorKeysPressed = CursorKeysPressed.none;
+      });
+    });
   }
 
   // bool tmpCursorMovingEnabled = false;
@@ -165,6 +179,33 @@ class _MoveMousePageState extends State<MoveMousePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            const Row(
+              // crossAxisAlignment: CrossAxisAlignment.baseline,
+              mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CursorFeatLabel("L Click", Colors.red),
+                    CursorFeatLabel("Toggle Move", Colors.green),
+                  ],
+                ),
+                SizedBox(width: 16,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CursorFeatLabel("R Click", Colors.blue),
+                    CursorFeatLabel("Hold Scroll", Colors.purple),
+                  ],
+                ),
+              ],
+            ),
             const Spacer(),
             ElevatedButton.icon(
               onPressed: null,
@@ -183,27 +224,13 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTapDown: (_) {
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.leftClick;
-                        });
-                        if (doubleClickDelay?.isActive == true) {
-                          mouse.doubleClick(ClickEventData.left);
-                        } else {
-                          mouse.click(ClickEventData.left);
-                        }
-                        doubleClickDelay ??= Timer(
-                            Duration(
-                              milliseconds:
-                                  getIt.get<MouseConfigs>().doubleClickDelayMS,
-                            ), () {
-                          doubleClickDelay = null;
-                        });
+                      onDoubleTap: () {
+                        clickAnimation(CursorKeysPressed.leftClick);
+                        mouse.doubleClick(ClickEventData.left);
                       },
-                      onTapUp: (_) {
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.none;
-                        });
+                      onTap: () {
+                        clickAnimation(CursorKeysPressed.leftClick);
+                        mouse.click(ClickEventData.left);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -218,6 +245,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         ),
                         width: size.width / 2 - 20,
                         height: size.height * 0.3,
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Icon(Icons.circle, color: Colors.red),
+                        ),
                       ),
                     ),
                     GestureDetector(
@@ -245,6 +276,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         ),
                         height: size.height * 0.3,
                         width: size.width / 2 - 20,
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Icon(Icons.circle, color: Colors.blue),
+                        ),
                       ),
                     ),
                   ],
@@ -273,6 +308,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
                               ? Colors.green
                               : Colors.grey,
                         ),
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Icon(Icons.circle, color: Colors.green),
+                        ),
                       ),
                     ),
                   ),
@@ -292,6 +331,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
                           color:
                               isScrollingEnabled ? Colors.purple : Colors.grey,
                         ),
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Icon(Icons.circle, color: Colors.purple),
+                        ),
                       ),
                     ),
                   ),
@@ -307,6 +350,32 @@ class _MoveMousePageState extends State<MoveMousePage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CursorFeatLabel extends StatelessWidget {
+  const CursorFeatLabel(
+    this.text,
+    this.color, {
+    super.key,
+  });
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          Icons.circle,
+          color: color,
+        ),
+        Text(
+          text,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )
+      ],
     );
   }
 }
