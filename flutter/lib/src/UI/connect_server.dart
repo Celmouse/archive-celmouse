@@ -1,3 +1,4 @@
+import 'package:controller/src/UI/components/support_button.dart';
 import 'package:controller/src/UI/cursor/cursor_move.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -70,7 +71,9 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Conectar'),
+        centerTitle: true,
         actions: [
+          const SupportButtonComponent(),
           IconButton(
             onPressed: () {
               Navigator.push(

@@ -22,11 +22,14 @@ class Events {
   static const mouseDoubleClick = "MouseDoubleClick";
 }
 
+enum ClickType {
+  left("left"),
+  middle("middle"),
+  right("right");
 
-class ClickEventData {
-  static const right = "right";
-  static const left = "left";
-  static const middle = "middle";
+  const ClickType(this.type);
+
+  final String type;
 }
 
 class ScrollDirections {

@@ -1,8 +1,10 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/socket/mouse.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'help_walkthrough.dart';
 
 class CursorSettingsPage extends StatefulWidget {
   const CursorSettingsPage({
@@ -27,18 +29,20 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
       appBar: AppBar(
         title: const Text('Configuration'),
         actions: [
-          IconButton(
+          Visibility(
+            visible: kDebugMode,
+            child: IconButton(
               onPressed: () {
-                launchUrl(
-                  Uri.parse(
-                    "https://wa.me/send?phone=5533997312898",
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MouseScreenHelpWalkthrough(),
                   ),
-                  mode: LaunchMode.externalApplication,
                 );
               },
-              icon: const Icon(
-                Icons.support_agent,
-              ))
+              icon: const Icon(Icons.help),
+            ),
+          ),
         ],
       ),
       body: SafeArea(
@@ -271,6 +275,9 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
+              ),
+              const SizedBox(
+                height: 42,
               ),
             ],
           )),

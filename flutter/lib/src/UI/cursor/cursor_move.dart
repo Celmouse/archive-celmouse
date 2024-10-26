@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:controller/getit.dart';
 import 'package:controller/src/core/mouse_movement.dart';
 import 'package:controller/src/UI/cursor/cursor_settings.dart';
@@ -38,8 +37,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   CursorKeysPressed cursorKeysPressed = CursorKeysPressed.none;
 
-  var gyroscopePointer = (x: 0, y: 0);
-
   late final MouseControl mouse;
   late final MouseMovement movement;
   late final KeyboardControl keyboard;
@@ -53,6 +50,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
     if (!getIt.isRegistered<MouseConfigs>()) {
       getIt.registerSingleton<MouseConfigs>(MouseConfigs());
     }
+
     mouse = MouseControl(widget.channel);
     keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
@@ -91,22 +89,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
     movement.stopMouseMovement();
   }
 
-  Future<void> clickAnimation(CursorKeysPressed type) async {
-    Timer(const Duration(milliseconds: 100), () {
-      setState(() {
-        cursorKeysPressed = CursorKeysPressed.none;
-      });
-    });
-    setState(() {
-      cursorKeysPressed = type;
-    });
-  }
-
-  // bool tmpCursorMovingEnabled = false;
-
   enableScrolling() {
-    // tmpCursorMovingEnabled = isCursorMovingEnabled;
-
     tmpCursorMovingEnabled = isCursorMovingEnabled;
 
     setState(() {
@@ -130,8 +113,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
       movement.startMouseMovement();
     }
     movement.stopScrollMovement();
-    // if (isCursorMovingEnabled)
-    // movement.startMouseMovement();
   }
 
   Timer? doubleClickDelay;
@@ -141,6 +122,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
     widget.channel.sink.close();
     super.dispose();
   }
+
+  int leftClickPressTimestamp = DateTime.now().millisecondsSinceEpoch;
+  int leftClickReleaseTimestamp = DateTime.now().millisecondsSinceEpoch;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +136,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
         centerTitle: true,
         actions: [
           const Visibility(
-            visible: kDebugMode,
+            visible: false,
             child: IconButton(
               onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
               icon: Icon(
@@ -198,28 +182,31 @@ class _MoveMousePageState extends State<MoveMousePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Hero(
-              tag: 'mouse-mode-switch',
-              child: ToggleSwitch(
-                initialLabelIndex: 0,
-                totalSwitches: 3,
-                inactiveBgColor: Colors.deepPurpleAccent,
-                activeBgColor: const [Colors.teal],
-                states: const [true, false, false],
-                minWidth: MediaQuery.of(context).size.width,
-                icons: const [
-                  Icons.phonelink_ring_outlined,
-                  Icons.touch_app,
-                  Icons.mouse,
-                ],
-                labels: const [
-                  'Move',
-                  'Touch',
-                  'Drag',
-                ],
-                onToggle: (index) {
-                  print('switched to: $index');
-                },
+            Visibility(
+              visible: kDebugMode,
+              child: Hero(
+                tag: 'mouse-mode-switch',
+                child: ToggleSwitch(
+                  initialLabelIndex: 0,
+                  totalSwitches: 3,
+                  inactiveBgColor: Colors.deepPurpleAccent,
+                  activeBgColor: const [Colors.teal],
+                  states: const [true, false, false],
+                  minWidth: MediaQuery.of(context).size.width,
+                  icons: const [
+                    Icons.phonelink_ring_outlined,
+                    Icons.touch_app,
+                    Icons.mouse,
+                  ],
+                  labels: const [
+                    'Move',
+                    'Touch',
+                    'Drag',
+                  ],
+                  onToggle: (index) {
+                    print('switched to: $index');
+                  },
+                ),
               ),
             ),
             const Row(
@@ -270,24 +257,46 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   children: [
                     GestureDetector(
                       onTapDown: (_) {
-                        clickAnimation(CursorKeysPressed.leftClick);
-                        // setState(() {
-                        //   cursorKeysPressed = CursorKeysPressed.leftClick;
-                        // });
+                        leftClickPressTimestamp =
+                            DateTime.now().millisecondsSinceEpoch;
+                        final pressedTimeDiff =
+                            DateTime.now().millisecondsSinceEpoch -
+                                leftClickReleaseTimestamp;
+                        if (kDebugMode) {
+                          print("Pressed after: $pressedTimeDiff");
+                        }
+
+                        setState(() {
+                          cursorKeysPressed = CursorKeysPressed.leftClick;
+                        });
+
+                        // Caso o leftClickPressTimestamp passe de
+                        // getIt.get<MouseConfigs>().dragStartInMS;
+                        // Iniciará um movimento de arrasto
+                        //
+                        // Caso o
                       },
                       onTapUp: (_) {
-                        // setState(() {
-                        //   cursorKeysPressed = CursorKeysPressed.none;
-                        // });
+                        leftClickReleaseTimestamp =
+                            DateTime.now().millisecondsSinceEpoch;
+
+                        final releaseTimeDiff =
+                            DateTime.now().millisecondsSinceEpoch -
+                                leftClickPressTimestamp;
+
+                        if (releaseTimeDiff <=
+                            getIt.get<MouseConfigs>().doubleClickDelayMS) {
+                          mouse.doubleClick(ClickType.left);
+                        } else {
+                          mouse.click(ClickType.left);
+                        }
+                        if (kDebugMode) {
+                          print("Released after: $releaseTimeDiff");
+                        }
+                        setState(() {
+                          cursorKeysPressed = CursorKeysPressed.none;
+                        });
                       },
-                      // onDoubleTap: () {
-                      //   clickAnimation(CursorKeysPressed.leftClick);
-                      //   mouse.doubleClick(ClickEventData.left);
-                      // },
-                      // onTap: () {
-                      //   clickAnimation(CursorKeysPressed.leftClick);
-                      //   mouse.click(ClickEventData.left);
-                      // },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
@@ -312,7 +321,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.rightClick;
                         });
-                        mouse.click(ClickEventData.right);
+                        mouse.click(ClickType.right);
                       },
                       onTapUp: (_) {
                         setState(() {

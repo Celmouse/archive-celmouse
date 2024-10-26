@@ -4,6 +4,7 @@ import 'protocol.dart';
 //TODO: Preciso trazer o threshhold e o samplingPeriod mais próximo daqui.
 // Nem que precise criar uma auxiliar (MouseConfigs)
 
+
 class MouseControl {
   final WebSocketChannel channel;
 
@@ -12,13 +13,13 @@ class MouseControl {
   /// Send simple click events.
   ///
   /// ( "right", "left", "middle" )
-  void click(String type) {
-    final data = Protocol(event: Events.mouseClick, data: type);
+  void click(ClickType type) {
+    final data = Protocol(event: Events.mouseClick, data: type.type);
     _send(data);
   }
 
-  void doubleClick(String type) {
-    final data = Protocol(event: Events.mouseDoubleClick, data: type);
+  void doubleClick(ClickType type) {
+    final data = Protocol(event: Events.mouseDoubleClick, data: type.type);
     _send(data);
   }
 
@@ -101,4 +102,6 @@ class MouseConfigs {
   int doubleClickDelayMS = DoubleClickDelayOptions.standard.duration;
 
   bool keepMovingAfterScroll = false;
+
+  int dragStartInMS = 230;
 }
