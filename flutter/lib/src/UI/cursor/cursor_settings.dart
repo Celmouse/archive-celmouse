@@ -104,6 +104,20 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                   mouse.changeSensitivity(amount);
                 },
               ),
+              SwitchListTile(
+                title: Text(
+                  "Keep moving after scroll:",
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                value: getIt.get<MouseConfigs>().keepMovingAfterScroll,
+                onChanged: (value) {
+                  setState(() {
+                    getIt.get<MouseConfigs>().keepMovingAfterScroll = value;
+                  });
+                },
+              ),
 
               /// Scroll configurations
               Text(

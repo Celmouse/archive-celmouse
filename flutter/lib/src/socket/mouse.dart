@@ -99,4 +99,6 @@ class MouseConfigs {
   int scrollSensitivity = 3;
 
   int doubleClickDelayMS = DoubleClickDelayOptions.standard.duration;
+
+  bool keepMovingAfterScroll = false;
 }

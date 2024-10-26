@@ -2,14 +2,16 @@ import 'dart:async';
 
 import 'package:controller/getit.dart';
 import 'package:controller/src/core/mouse_movement.dart';
-import 'package:controller/src/UI/cursor_settings.dart';
-import 'package:controller/src/UI/keyboard_type.dart';
+import 'package:controller/src/UI/cursor/cursor_settings.dart';
+import 'package:controller/src/UI/keyboard/keyboard_type.dart';
 import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import '../socket/mouse.dart';
-import '../socket/protocol.dart';
+import '../../socket/mouse.dart';
+import '../../socket/protocol.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -44,6 +46,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     if (!getIt.isRegistered<MouseConfigs>()) {
       getIt.registerSingleton<MouseConfigs>(MouseConfigs());
     }
@@ -86,16 +92,13 @@ class _MoveMousePageState extends State<MoveMousePage> {
   }
 
   Future<void> clickAnimation(CursorKeysPressed type) async {
-    //TODO: Fix animation
-    setState(() async {
-      cursorKeysPressed = type;
-      print('Clickado');
-    });
-    Timer(const Duration(seconds: 1), () {
-      print('desclicado');
-      setState(() async {
+    Timer(const Duration(milliseconds: 100), () {
+      setState(() {
         cursorKeysPressed = CursorKeysPressed.none;
       });
+    });
+    setState(() {
+      cursorKeysPressed = type;
     });
   }
 
@@ -103,6 +106,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   enableScrolling() {
     // tmpCursorMovingEnabled = isCursorMovingEnabled;
+
+    tmpCursorMovingEnabled = isCursorMovingEnabled;
 
     setState(() {
       isScrollingEnabled = true;
@@ -113,11 +118,17 @@ class _MoveMousePageState extends State<MoveMousePage> {
     movement.startScrollMovement();
   }
 
+  bool tmpCursorMovingEnabled = false;
+
   disableScrolling() {
     setState(() {
       isScrollingEnabled = false;
-      // isCursorMovingEnabled = tmpCursorMovingEnabled;
+      isCursorMovingEnabled = tmpCursorMovingEnabled &&
+          getIt.get<MouseConfigs>().keepMovingAfterScroll;
     });
+    if (isCursorMovingEnabled) {
+      movement.startMouseMovement();
+    }
     movement.stopScrollMovement();
     // if (isCursorMovingEnabled)
     // movement.startMouseMovement();
@@ -153,23 +164,31 @@ class _MoveMousePageState extends State<MoveMousePage> {
           Visibility(
               visible: kDebugMode,
               child: IconButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => KeyboardTyppingPage(
-                          channel: widget.channel,
-                        ),
-                      )),
+                  onPressed: () {
+                    movement.stopMouseMovement();
+                    movement.stopScrollMovement();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => KeyboardTyppingPage(
+                            channel: widget.channel,
+                          ),
+                        ));
+                  },
                   icon: const Icon(Icons.keyboard))),
           IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return CursorSettingsPage(
-                  channel: widget.channel,
-                  configs: getIt.get<MouseConfigs>(),
-                );
-              },
-            )),
+            onPressed: () {
+              movement.stopMouseMovement();
+              movement.stopScrollMovement();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return CursorSettingsPage(
+                    channel: widget.channel,
+                    configs: getIt.get<MouseConfigs>(),
+                  );
+                },
+              ));
+            },
             icon: const Icon(Icons.settings),
           )
         ],
@@ -177,8 +196,32 @@ class _MoveMousePageState extends State<MoveMousePage> {
       body: SafeArea(
         minimum: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            Hero(
+              tag: 'mouse-mode-switch',
+              child: ToggleSwitch(
+                initialLabelIndex: 0,
+                totalSwitches: 3,
+                inactiveBgColor: Colors.deepPurpleAccent,
+                activeBgColor: const [Colors.teal],
+                states: const [true, false, false],
+                minWidth: MediaQuery.of(context).size.width,
+                icons: const [
+                  Icons.phonelink_ring_outlined,
+                  Icons.touch_app,
+                  Icons.mouse,
+                ],
+                labels: const [
+                  'Move',
+                  'Touch',
+                  'Drag',
+                ],
+                onToggle: (index) {
+                  print('switched to: $index');
+                },
+              ),
+            ),
             const Row(
               // crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -194,7 +237,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                     CursorFeatLabel("Toggle Move", Colors.green),
                   ],
                 ),
-                SizedBox(width: 16,),
+                SizedBox(
+                  width: 16,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -224,14 +269,25 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onDoubleTap: () {
+                      onTapDown: (_) {
                         clickAnimation(CursorKeysPressed.leftClick);
-                        mouse.doubleClick(ClickEventData.left);
+                        // setState(() {
+                        //   cursorKeysPressed = CursorKeysPressed.leftClick;
+                        // });
                       },
-                      onTap: () {
-                        clickAnimation(CursorKeysPressed.leftClick);
-                        mouse.click(ClickEventData.left);
+                      onTapUp: (_) {
+                        // setState(() {
+                        //   cursorKeysPressed = CursorKeysPressed.none;
+                        // });
                       },
+                      // onDoubleTap: () {
+                      //   clickAnimation(CursorKeysPressed.leftClick);
+                      //   mouse.doubleClick(ClickEventData.left);
+                      // },
+                      // onTap: () {
+                      //   clickAnimation(CursorKeysPressed.leftClick);
+                      //   mouse.click(ClickEventData.left);
+                      // },
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(

@@ -1,4 +1,4 @@
-import 'package:controller/src/UI/cursor_move.dart';
+import 'package:controller/src/UI/cursor/cursor_move.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
