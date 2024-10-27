@@ -146,32 +146,39 @@ class _MoveMousePageState extends State<MoveMousePage> {
             ),
           ),
           Visibility(
-              visible: kDebugMode,
-              child: IconButton(
-                  onPressed: () {
-                    movement.stopMouseMovement();
-                    movement.stopScrollMovement();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => KeyboardTyppingPage(
-                            channel: widget.channel,
-                          ),
-                        ));
-                  },
-                  icon: const Icon(Icons.keyboard))),
+            visible: kDebugMode,
+            child: IconButton(
+              onPressed: () {
+                movement.stopMouseMovement();
+                movement.stopScrollMovement();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KeyboardTyppingPage(
+                        channel: widget.channel,
+                      ),
+                    ));
+              },
+              icon: const Icon(
+                Icons.keyboard,
+              ),
+            ),
+          ),
           IconButton(
             onPressed: () {
               movement.stopMouseMovement();
               movement.stopScrollMovement();
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return CursorSettingsPage(
-                    channel: widget.channel,
-                    configs: getIt.get<MouseConfigs>(),
-                  );
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return CursorSettingsPage(
+                      channel: widget.channel,
+                      configs: getIt.get<MouseConfigs>(),
+                    );
+                  },
+                ),
+              );
             },
             icon: const Icon(Icons.settings),
           )
@@ -262,7 +269,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         final pressedTimeDiff =
                             DateTime.now().millisecondsSinceEpoch -
                                 leftClickReleaseTimestamp;
-                        if(pressedTimeDiff  <= getIt.get<MouseConfigs>().doubleClickDelayMS) {
+                        if (pressedTimeDiff <=
+                            getIt.get<MouseConfigs>().doubleClickDelayMS) {
                           mouse.doubleClick(ClickType.left);
                         }
 
@@ -272,7 +280,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.leftClick;
                         });
-
 
                         // Caso o leftClickPressTimestamp passe de
                         // getIt.get<MouseConfigs>().dragStartInMS;
@@ -288,12 +295,12 @@ class _MoveMousePageState extends State<MoveMousePage> {
                             DateTime.now().millisecondsSinceEpoch -
                                 leftClickPressTimestamp;
 
-                        if (releaseTimeDiff <=
-                            getIt.get<MouseConfigs>().doubleClickDelayMS) {
-                          // mouse.doubleClick(ClickType.left);
-                        } else {
-                          mouse.click(ClickType.left);
-                        }
+                        // if (releaseTimeDiff <=
+                        //     getIt.get<MouseConfigs>().doubleClickDelayMS) {
+                        //   // mouse.doubleClick(ClickType.left);
+                        // } else {
+                        mouse.click(ClickType.left);
+                        // }
                         if (kDebugMode) {
                           print("Released after: $releaseTimeDiff");
                         }

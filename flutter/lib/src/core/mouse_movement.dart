@@ -75,7 +75,7 @@ class MouseMovement {
     lastTimeGyroscopeMouseMovement = DateTime.now();
 
     moveGyroscopeSubscription ??= gyroscopeEventStream(
-      samplingPeriod: const Duration(milliseconds: 10),
+      samplingPeriod: const Duration(milliseconds: 16, microseconds: 666),
     ).listen(
         (
           GyroscopeEvent event,
