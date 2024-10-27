@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../core/connect.dart';
-import 'cursor/cursor_move.dart';
+import '../../core/connect.dart';
+import '../cursor/cursor_move.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
   const ConnectFromQrCodePage({super.key});
@@ -17,37 +17,48 @@ class ConnectFromQrCodePage extends StatefulWidget {
 class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
     with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController(
-      // required options for the scanner
-      );
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    // required options for the scanner
+  );
 
   StreamSubscription<Object?>? _subscription;
 
-
   _handleBarcode(BarcodeCapture e) async {
     final value = e.barcodes.first.rawValue ?? '';
-    _subscription?.pause();
-    final WebSocketChannel? channel = await connectWS(value, (err) {
-      setState(() {
+    setState(() {
+      _subscription?.pause();
+    });
+    try {
+      final WebSocketChannel? channel = await connectWS(value, (err) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(err),
           backgroundColor: Theme.of(context).colorScheme.error,
         ));
-      });
-    });
-    if (channel != null && mounted) {
-      _subscription?.cancel();
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MoveMousePage(
-            channel: channel,
+      }, 2);
+      if (channel != null && mounted) {
+        _subscription?.cancel();
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MoveMousePage(
+              channel: channel,
+            ),
           ),
-        ),
-      );
-    } else {
-      _subscription?.resume();
+        );
+      }
+    } finally {
+      if (mounted) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text("Invalid IP, try another!"),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ));
+      }
+      setState(() {
+        _subscription?.resume();
+      });
     }
   }
 
@@ -115,6 +126,15 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
       body: SafeArea(
         child: MobileScanner(
           controller: controller,
+          overlayBuilder: (context, constraints) =>
+              _subscription?.isPaused == true
+                  ? Container(
+                      color: Colors.black.withOpacity(0.7),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : const SizedBox(),
           // overlayBuilder: (context, constraints) => ScannerOverlay(scanWindow: ),
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'connect_qr_code.dart';
-import '../core/connect.dart';
+import '../../core/connect.dart';
 
 class ConnectToServerPage extends StatefulWidget {
   const ConnectToServerPage({super.key});

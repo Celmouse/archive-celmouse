@@ -262,13 +262,17 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         final pressedTimeDiff =
                             DateTime.now().millisecondsSinceEpoch -
                                 leftClickReleaseTimestamp;
+                        if(pressedTimeDiff  <= getIt.get<MouseConfigs>().doubleClickDelayMS) {
+                          mouse.doubleClick(ClickType.left);
+                        }
+
                         if (kDebugMode) {
                           print("Pressed after: $pressedTimeDiff");
                         }
-
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.leftClick;
                         });
+
 
                         // Caso o leftClickPressTimestamp passe de
                         // getIt.get<MouseConfigs>().dragStartInMS;
@@ -286,7 +290,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
                         if (releaseTimeDiff <=
                             getIt.get<MouseConfigs>().doubleClickDelayMS) {
-                          mouse.doubleClick(ClickType.left);
+                          // mouse.doubleClick(ClickType.left);
                         } else {
                           mouse.click(ClickType.left);
                         }
