@@ -1,4 +1,4 @@
-import { updateSensitivity, moveCursor, centerCursor, initMice, handleClick, handleDoubleClick, scroll, updateScrollSensitivity } from './mice';
+import { updateSensitivity, releaseButton, pressButton, moveCursor, centerCursor, initMice, handleClick, handleDoubleClick, scroll, updateScrollSensitivity } from './mice';
 import { keyboardType } from './keyboard'
 import { WebSocketServer } from 'ws';
 import { GlobalConfig, WebSocketConfig } from './config';
@@ -47,6 +47,12 @@ function handleMessage(message: any) {
         case events.mouseDoubleClick:
             /// obj.data can be [ "right", "left", "middle" ]
             return handleDoubleClick(obj.data)
+        case events.mouseButtonPressed:
+            /// obj.data can be [ "right", "left", "middle" ]
+            return pressButton(obj.data)
+        case events.mouseButtonReleased:
+            /// obj.data can be [ "right", "left", "middle" ]
+            return releaseButton(obj.data)
         case events.changeSensitivity:
             /// obj.data should be a number
             return updateSensitivity(obj.data)

@@ -24,7 +24,7 @@ export async function initMice(config: MiceConfig) {
     updateScrollSensitivity(config.defaultScrollSensitivity)
 
     allowBruscalMoviments = config.allowBruscalMoviments;
-    
+
     HEIGHT_DIVIDER = config.HEIGHT_DIVIDER;
     WIDTH_DIVIDER = config.WIDTH_DIVIDER;
 
@@ -51,19 +51,7 @@ export async function centerCursor() {
 export async function handleClick(type: string) {
     logger.info(`Click: ${type}`)
 
-    let clickType: Button
-
-    switch (type) {
-        case "right":
-            clickType = Button.RIGHT
-            break;
-        case "left":
-            clickType = Button.LEFT
-            break;
-        case "middle":
-            clickType = Button.MIDDLE
-            break;
-    }
+    let clickType: Button = getButtonFromType(type)
 
     await mouse.click(clickType)
 }
@@ -71,8 +59,13 @@ export async function handleClick(type: string) {
 export async function handleDoubleClick(type: string) {
     logger.info(`Click: ${type}`)
 
-    let clickType: Button
+    let clickType: Button = getButtonFromType(type)
 
+    await mouse.doubleClick(clickType)
+}
+
+function getButtonFromType(type: string) {
+    let clickType: Button
     switch (type) {
         case "right":
             clickType = Button.RIGHT
@@ -84,8 +77,7 @@ export async function handleDoubleClick(type: string) {
             clickType = Button.MIDDLE
             break;
     }
-
-    await mouse.doubleClick(clickType)
+    return clickType;
 }
 
 // Função para mover o cursor
@@ -126,4 +118,20 @@ export function scroll(data: MiceScrollData) {
         case "down":
             return mouse.scrollDown(scrollSensitivity)
     }
+}
+
+export function pressButton(type: string) {
+    logger.info(`Button Pressed: ${type}`)
+
+    let clickType: Button = getButtonFromType(type)
+
+    mouse.pressButton(clickType);
+}
+
+export function releaseButton(type: string) {
+    logger.info(`Button Released: ${type}`)
+
+    let clickType: Button = getButtonFromType(type)
+
+    mouse.releaseButton(clickType);
 }

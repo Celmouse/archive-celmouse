@@ -20,6 +20,8 @@ class Events {
   // Clicks
   static const mouseClick = "MouseClick";
   static const mouseDoubleClick = "MouseDoubleClick";
+  static const mouseButtonPressed = "MouseButtonPressed";
+  static const mouseButtonReleased = "MouseButtonReleased";
 }
 
 enum ClickType {
@@ -38,4 +40,3 @@ class ScrollDirections {
   static const up = "up";
   static const down = "down";
 }
-

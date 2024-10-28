@@ -126,6 +126,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
   int leftClickPressTimestamp = DateTime.now().millisecondsSinceEpoch;
   int leftClickReleaseTimestamp = DateTime.now().millisecondsSinceEpoch;
 
+  int pressedTimeDiff = 1000;
+  int releasedTimeDiff = 1000;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -264,9 +267,11 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   children: [
                     GestureDetector(
                       onTapDown: (_) {
+                        mouse.press(ClickType.left);
+
                         leftClickPressTimestamp =
                             DateTime.now().millisecondsSinceEpoch;
-                        final pressedTimeDiff =
+                        pressedTimeDiff =
                             DateTime.now().millisecondsSinceEpoch -
                                 leftClickReleaseTimestamp;
                         if (pressedTimeDiff <=
@@ -274,9 +279,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
                           mouse.doubleClick(ClickType.left);
                         }
 
-                        if (kDebugMode) {
-                          print("Pressed after: $pressedTimeDiff");
-                        }
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.leftClick;
                         });
@@ -291,22 +293,25 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         leftClickReleaseTimestamp =
                             DateTime.now().millisecondsSinceEpoch;
 
-                        final releaseTimeDiff =
+                        releasedTimeDiff =
                             DateTime.now().millisecondsSinceEpoch -
                                 leftClickPressTimestamp;
-
-                        // if (releaseTimeDiff <=
-                        //     getIt.get<MouseConfigs>().doubleClickDelayMS) {
-                        //   // mouse.doubleClick(ClickType.left);
-                        // } else {
-                        mouse.click(ClickType.left);
-                        // }
-                        if (kDebugMode) {
-                          print("Released after: $releaseTimeDiff");
-                        }
                         setState(() {
                           cursorKeysPressed = CursorKeysPressed.none;
                         });
+
+                        mouse.release(ClickType.left);
+
+                        if (releasedTimeDiff >= getIt.get<MouseConfigs>().dragIndicatorTolerance) return;
+
+                        if (releasedTimeDiff <=
+                                getIt.get<MouseConfigs>().doubleClickDelayMS &&
+                            pressedTimeDiff <=
+                                getIt.get<MouseConfigs>().doubleClickDelayMS) {
+                          mouse.doubleClick(ClickType.left);
+                        } else {
+                          mouse.click(ClickType.left);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
