@@ -16,10 +16,7 @@ class ConnectFromQrCodePage extends StatefulWidget {
 
 class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
     with WidgetsBindingObserver {
-  final MobileScannerController controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.noDuplicates,
-    // required options for the scanner
-  );
+  late final MobileScannerController controller;
 
   StreamSubscription<Object?>? _subscription;
 
@@ -65,6 +62,11 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
   @override
   void initState() {
     super.initState();
+    controller = MobileScannerController(
+      // required options for the scanner
+      detectionSpeed: DetectionSpeed.normal,
+      detectionTimeoutMs: 800,
+    );
 
     // Start listening to lifecycle changes.
     WidgetsBinding.instance.addObserver(this);
