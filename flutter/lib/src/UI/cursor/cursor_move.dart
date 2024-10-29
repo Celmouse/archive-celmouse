@@ -279,6 +279,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                             mouse.press(ClickType.left);
                           },
                         );
+                        setState(() {
+                          cursorKeysPressed = CursorKeysPressed.leftClick;
+                        });
                       },
                       onTapUp: (_) {
                         if (!leftClickTimer.isActive) {
@@ -302,6 +305,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
                           ),
                           () {},
                         );
+
+                        setState(() {
+                          cursorKeysPressed = CursorKeysPressed.none;
+                        });
                       },
                       child: Container(
                         decoration: BoxDecoration(
