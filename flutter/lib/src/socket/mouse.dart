@@ -13,7 +13,6 @@ class MouseControl {
   ///
   /// ( "right", "left", "middle" )
   void click(ClickType type) {
-    print("Click");
     final data = Protocol(event: Events.mouseClick, data: type.type);
     _send(data);
   }
@@ -29,7 +28,6 @@ class MouseControl {
   }
 
   void doubleClick(ClickType type) {
-    print("Double Click");
     final data = Protocol(event: Events.mouseDoubleClick, data: type.type);
     _send(data);
   }
@@ -77,6 +75,18 @@ enum DoubleClickDelayOptions {
   final String text;
 }
 
+enum DragStartDelayOptions {
+  veryFast(100, "Very Fast"),
+  fast(180, "Fast"),
+  standard(250, "Default"),
+  slow(500, "Slow"),
+  verySlow(700, "Very Slow");
+
+  const DragStartDelayOptions(this.duration, this.text);
+  final int duration;
+  final String text;
+}
+
 enum ReduceVibrationOptions {
   strong(0.04, "Hard"),
   standard(0.031, "Default"),
@@ -111,8 +121,7 @@ class MouseConfigs {
   int scrollSensitivity = 3;
 
   int doubleClickDelayMS = DoubleClickDelayOptions.standard.duration;
+  int dragStartDelayMS = DragStartDelayOptions.standard.duration;
 
   bool keepMovingAfterScroll = false;
-
-  int dragIndicatorTolerance = 400;
 }

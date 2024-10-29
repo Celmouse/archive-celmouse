@@ -129,6 +129,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
   int pressedTimeDiff = 1000;
   int releasedTimeDiff = 1000;
 
+  late Timer leftClickTimer;
+  Timer? doubleClickTimer;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -267,51 +270,38 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   children: [
                     GestureDetector(
                       onTapDown: (_) {
-                        mouse.press(ClickType.left);
-
-                        leftClickPressTimestamp =
-                            DateTime.now().millisecondsSinceEpoch;
-                        pressedTimeDiff =
-                            DateTime.now().millisecondsSinceEpoch -
-                                leftClickReleaseTimestamp;
-                        if (pressedTimeDiff <=
-                            getIt.get<MouseConfigs>().doubleClickDelayMS) {
-                          mouse.doubleClick(ClickType.left);
-                        }
-
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.leftClick;
-                        });
-
-                        // Caso o leftClickPressTimestamp passe de
-                        // getIt.get<MouseConfigs>().dragStartInMS;
-                        // Iniciará um movimento de arrasto
-                        //
-                        // Caso o
+                        leftClickTimer = Timer(
+                          Duration(
+                            milliseconds:
+                                getIt.get<MouseConfigs>().dragStartDelayMS,
+                          ),
+                          () {
+                            mouse.press(ClickType.left);
+                          },
+                        );
                       },
                       onTapUp: (_) {
-                        leftClickReleaseTimestamp =
-                            DateTime.now().millisecondsSinceEpoch;
-
-                        releasedTimeDiff =
-                            DateTime.now().millisecondsSinceEpoch -
-                                leftClickPressTimestamp;
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.none;
-                        });
-
-                        mouse.release(ClickType.left);
-
-                        if (releasedTimeDiff >= getIt.get<MouseConfigs>().dragIndicatorTolerance) return;
-
-                        if (releasedTimeDiff <=
-                                getIt.get<MouseConfigs>().doubleClickDelayMS &&
-                            pressedTimeDiff <=
-                                getIt.get<MouseConfigs>().doubleClickDelayMS) {
-                          mouse.doubleClick(ClickType.left);
+                        if (!leftClickTimer.isActive) {
+                          mouse.release(ClickType.left);
                         } else {
-                          mouse.click(ClickType.left);
+                          bool shouldDoubleClick = doubleClickTimer != null &&
+                              doubleClickTimer!.isActive;
+
+                          if (shouldDoubleClick) {
+                            mouse.doubleClick(ClickType.left);
+                          } else {
+                            mouse.click(ClickType.left);
+                            doubleClickTimer?.cancel();
+                          }
                         }
+                        leftClickTimer.cancel();
+                        doubleClickTimer = Timer(
+                          Duration(
+                            milliseconds:
+                                getIt.get<MouseConfigs>().doubleClickDelayMS,
+                          ),
+                          () {},
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(

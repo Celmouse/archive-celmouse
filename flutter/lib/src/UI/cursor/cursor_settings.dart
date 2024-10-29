@@ -263,6 +263,41 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                       });
                     },
                   ),
+                  ListTile(
+                    title: Text(
+                      'Press and Hold delay:',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    alignment: Alignment.center,
+                    isExpanded: true,
+                    value: getIt.get<MouseConfigs>().dragStartDelayMS,
+                    items: DragStartDelayOptions.values
+                        .map((o) => DropdownMenuItem(
+                              alignment: Alignment.center,
+                              value: o.duration,
+                              child: Text(
+                                o.text,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        getIt.get<MouseConfigs>().dragStartDelayMS =
+                            value ?? DragStartDelayOptions.standard.duration;
+                      });
+                    },
+                  ),
                 ],
               ),
 
