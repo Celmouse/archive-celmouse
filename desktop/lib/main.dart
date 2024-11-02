@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import 'src/mouse.dart';
+
 /// Documentos para ajudar com os plugins
 ///
 /// https://pub.dev/packages/ffigen#configurations
@@ -66,18 +68,22 @@ class _HomeState extends State<Home> {
     if (binded) return;
     final server = await HttpServer.bind('0.0.0.0', 7771);
     binded = true;
-    print('Servidor WebSocket escutando em ws://localhost:7771');
 
     await for (HttpRequest request in server) {
       var socket = await WebSocketTransformer.upgrade(request);
-      print(request.method);
-      print(request.uri);
-      print(socket);
+      print(
+        'Servidor WebSocket escutando em ws://${server.address.address}:7771',
+      );
+      socket.listen((data) {
+        data = jsonDecode(data);
+        print(data.runtimeType);
+        if (data['event'] == "MouseMove") {
+          double x = data["data"]["x"];
+          double y = data["data"]["y"];
+          Mouse().moveMouse(x.round(), y.round());
+        }
+      });
       if (request.uri.path == '/ws') {
-        socket.listen((data) {
-          print('Dados recebidos: $data');
-          socket.add('Resposta do servidor: $data');
-        });
       } else {
         request.response
           ..statusCode = HttpStatus.forbidden
