@@ -142,7 +142,7 @@ packages:
   mouse:
     dependency: "direct main"
     description:
-      path: "plugins/mouse"
+      path: "../plugins/mouse"
       relative: true
     source: path
     version: "0.0.1"
