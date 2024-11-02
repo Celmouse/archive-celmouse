@@ -32,19 +32,30 @@ class MouseBindings {
   /// For very short-lived functions, it is fine to call them on the main isolate.
   /// They will block the Dart execution while running the native function, so
   /// only do this for native functions which are guaranteed to be short-lived.
-  int sum(
+  void move_mouse(
     int a,
     int b,
   ) {
-    return _sum(
+    return _move_mouse(
       a,
       b,
     );
   }
 
-  late final _sumPtr =
-      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Int, ffi.Int)>>('sum');
-  late final _sum = _sumPtr.asFunction<int Function(int, int)>();
+  late final _move_mousePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Int)>>(
+          'move_mouse');
+  late final _move_mouse = _move_mousePtr.asFunction<void Function(int, int)>();
+
+  MousePosition get_mouse_position() {
+    return _get_mouse_position();
+  }
+
+  late final _get_mouse_positionPtr =
+      _lookup<ffi.NativeFunction<MousePosition Function()>>(
+          'get_mouse_position');
+  late final _get_mouse_position =
+      _get_mouse_positionPtr.asFunction<MousePosition Function()>();
 
   /// A longer lived native function, which occupies the thread calling it.
   ///
@@ -66,4 +77,12 @@ class MouseBindings {
           'sum_long_running');
   late final _sum_long_running =
       _sum_long_runningPtr.asFunction<int Function(int, int)>();
+}
+
+final class MousePosition extends ffi.Struct {
+  @ffi.Int()
+  external int x;
+
+  @ffi.Int()
+  external int y;
 }

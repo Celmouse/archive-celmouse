@@ -38,6 +38,7 @@ class MouseControl {
   }
 
   void move(double x, double y) {
+    if(x==0 && y==0) return;
     final data = Protocol(event: Events.mouseMove, data: {"x": x, "y": y});
     _send(data);
   }
