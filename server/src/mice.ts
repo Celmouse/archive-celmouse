@@ -92,16 +92,20 @@ export async function moveCursor(data: MiceMoveData) {
 }
 
 async function checkScreenBoundaries(x: number, y: number): Promise<{ x: number; y: number; }> {
+
     const currentPos = await mouse.getPosition();
 
-    let newX = Math.max(0, Math.min(screenSize.width, currentPos.x + x * (WIDTH_DIVIDER * sensitivity)));
-    let newY = Math.max(0, Math.min(screenSize.height, currentPos.y + y * (HEIGHT_DIVIDER * sensitivity)));
+    // let newX = Math.max(0, Math.min(screenSize.width, currentPos.x + x * (WIDTH_DIVIDER * sensitivity)));
+    // let newY = Math.max(0, Math.min(screenSize.height, currentPos.y + y * (HEIGHT_DIVIDER * sensitivity)));
+    let newX = currentPos.x + x * (WIDTH_DIVIDER * sensitivity);
+    let newY = currentPos.y + y * (HEIGHT_DIVIDER * sensitivity);
 
     return { x: newX, y: newY };
 }
 
 /// Previne movimentos bruscos ou input estranhos.
 function preventBruscalMoviments(x: number, y: number) {
+    // return false;
     return (x > 8 || x < -8 || y < -8 || y > 8)
 }
 
