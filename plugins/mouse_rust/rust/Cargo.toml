@@ -8,4 +8,4 @@ crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
 flutter_rust_bridge = "=2.5.1"
-rdev = "0.5.3"
+enigo = "0.2.1"

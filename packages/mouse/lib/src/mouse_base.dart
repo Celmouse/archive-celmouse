@@ -6,4 +6,5 @@ class BaseMouse {
 
 class BaseMouseMoviment {
   move(double x, double y) => moveMouse(x: x, y: y);
+  (int, int) get getPosition => getMousePos();
 }
