@@ -8,6 +8,5 @@
         "**/Thumbs.db": true,
         "**/**.js.map": true,
         "**/**.js":true,
-    },
-    "cmake.ignoreCMakeListsMissing": true
+    }
 }
