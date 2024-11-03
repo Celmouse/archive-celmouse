@@ -6,8 +6,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import '../socket/mouse.dart';
 import 'package:vector_math/vector_math.dart' as math;
-
-import '../socket/protocol.dart';
+import 'package:protocol/protocol.dart';
 
 class MouseMovement {
   final MouseControl mouse;

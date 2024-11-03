@@ -1,8 +1,5 @@
+import 'package:protocol/protocol.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'protocol.dart';
-
-//TODO: Preciso trazer o threshhold e o samplingPeriod mais próximo daqui.
-// Nem que precise criar uma auxiliar (MouseConfigs)
 
 class MouseControl {
   final WebSocketChannel channel;

@@ -1,4 +1,5 @@
-import 'package:controller/src/socket/protocol.dart';
+import 'package:protocol/protocol.dart';
+
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class KeyboardControl {

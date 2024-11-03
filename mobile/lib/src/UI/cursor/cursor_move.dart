@@ -10,7 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../socket/mouse.dart';
-import '../../socket/protocol.dart';
+import 'package:protocol/protocol.dart';
+
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
