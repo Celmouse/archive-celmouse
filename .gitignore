@@ -8,12 +8,9 @@ server/yarn.lock
 server/Certificates.p12
 /server/dist
 /server/node_modules
-*.map
-server/.env
-**/*.p8
 /server/_arch
+server/.env
 **/.DS_Store
-**/*.log
 
 
 
@@ -25,4 +22,10 @@ melos_celmouse.iml
 
 /.idea
 /.dart_tool
+
+*.map
+*.p8
+*.log
 **/**/melos_**.iml
+*.g.dart
+*.freezed.dart

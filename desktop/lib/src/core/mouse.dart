@@ -17,7 +17,7 @@ class Mouse {
     //   coordinates.y + (y * yMultiplier),
     // );
 
-    moviment.move(x*xMultiplier*sensitivity, y*yMultiplier*sensitivity);
+    moviment.move(x * xMultiplier * sensitivity, y * yMultiplier * sensitivity);
   }
 
   MousePosition get coordinates {

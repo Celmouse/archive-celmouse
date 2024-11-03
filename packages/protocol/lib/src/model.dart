@@ -1,15 +1,25 @@
 import 'dart:convert';
 
-class Protocol {
-  final String event;
-  final dynamic data;
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'model.freezed.dart';
+part 'model.g.dart';
 
-  Protocol({required this.event, required this.data});
+@freezed
+class Protocol with _$Protocol {
+  @JsonSerializable(
+    explicitToJson: true,
+    createToJson: true,
+  )
+  const factory Protocol({
+    required String event,
+    required dynamic data,
+  }) = _Protocol;
 
-  String toJson() => jsonEncode({"event": event, "data": data});
+  factory Protocol.fromJson(Map<String, Object?> json) =>
+      _$ProtocolFromJson(json);
 }
 
-class Events {
+class ProtocolEvents {
   static const keyPressed = "KeyPressed";
   static const changeSensitivity = "ChangeSensitivity";
   static const changeScrollSensitivity = "ChangeScrollSensitivity";

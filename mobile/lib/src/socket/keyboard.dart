@@ -8,7 +8,7 @@ class KeyboardControl {
   KeyboardControl(this.channel);
 
   void type(String text) {
-    final data = Protocol(event: Events.keyPressed, data: text);
+    final data = Protocol(event: ProtocolEvents.keyPressed, data: text);
     _send(data);
   }
 
