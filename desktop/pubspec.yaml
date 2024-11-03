@@ -38,6 +38,9 @@ dependencies:
   
   mouse:
     path: ../plugins/mouse
+  
+  protocol:
+    path: ../packages/protocol
 
 dev_dependencies:
   flutter_test:
