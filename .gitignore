@@ -23,7 +23,7 @@ server/notarization-error.log
 server/.DS_Store
 .DS_Store
 pubspec_overrides.yaml
-pubspec.lock
+**/pubspec.lock
 melos_celmouse.iml
 /.vscode
 /.idea
