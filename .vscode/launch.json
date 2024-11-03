@@ -2,25 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flutter",
+      "name": "Mobile",
       "type": "dart",
       "request": "launch",
-      "program": "flutter/lib/main.dart",
+      "program": "mobile/lib/main.dart",
       "deviceId": "iPhone",
     },
     {
-      "name": "Electron",
-      "type": "node",
+      "name": "Desktop",
+      "type": "dart",
       "request": "launch",
-      "cwd": "${workspaceFolder}/server",
-      "runtimeExecutable": "${workspaceFolder}/server/node_modules/.bin/electron",
-      "windows": {
-        "runtimeExecutable": "${workspaceFolder}/server/node_modules/.bin/electron.cmd"
-      },
-      "args": [
-        "."
-      ],
-      "outputCapture": "std"
+      "program": "desktop/lib/main.dart",
+      "deviceId": "MacOS",
     }
   ]
 }
