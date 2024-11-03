@@ -1,0 +1,7 @@
+name: celmouse
+
+packages:
+  - mobile
+  - desktop
+  - packages/**
+  - plugins/**
