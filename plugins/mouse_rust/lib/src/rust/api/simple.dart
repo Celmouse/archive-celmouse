@@ -6,5 +6,5 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-String greet({required String name}) =>
-    RustLib.instance.api.crateApiSimpleGreet(name: name);
+void moveMouse({required double x, required double y}) =>
+    RustLib.instance.api.crateApiSimpleMoveMouse(x: x, y: y);

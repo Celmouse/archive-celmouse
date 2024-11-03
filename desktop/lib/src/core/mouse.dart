@@ -1,33 +1,38 @@
-// // ignore_for_file: public_member_api_docs, sort_constructors_first
-// import 'package:mouse/mouse.dart' as mouse;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:mouse/mouse.dart';
 
-// const yMultiplier = 42;
-// const xMultiplier = 54;
+const yMultiplier = 42;
+const xMultiplier = 54;
 
-// class Mouse {
-//   MousePosition _position = MousePosition(0, 0);
+class Mouse {
+  MousePosition _position = MousePosition(0, 0);
 
-//   void move(double x, double y) {
-//     _position.x = coordinates.x + (x * xMultiplier);
-//     _position.y = coordinates.y + (y * yMultiplier);
+  final moviment = BaseMouseMoviment();
 
-//     mouse.moveMouse(_position.x, _position.y);
-//   }
+  void move(double x, double y) {
+    position = MousePosition(
+      coordinates.x + (x * xMultiplier),
+      coordinates.y + (y * yMultiplier),
+    );
 
-//   MousePosition get coordinates {
-//     final pos = mouse.getPosition();
-//     return MousePosition(pos.x, pos.y);
-//   }
+    moviment.move(_position.x, _position.y);
+  }
 
-//   set position(MousePosition newPosition) => _position = newPosition;
-// }
+  MousePosition get coordinates {
+    // final pos = mouse.getPosition();
+    final pos = _position;
+    return MousePosition(pos.x, pos.y);
+  }
 
-// class MousePosition {
-//   double x;
-//   double y;
+  set position(MousePosition newPosition) => _position = newPosition;
+}
 
-//   MousePosition(this.x, this.y);
+class MousePosition {
+  double x;
+  double y;
 
-//   @override
-//   String toString() => "($x, $y)";
-// }
+  MousePosition(this.x, this.y);
+
+  @override
+  String toString() => "($x, $y)";
+}

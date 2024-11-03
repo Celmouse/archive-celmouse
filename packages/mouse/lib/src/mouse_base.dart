@@ -1,9 +1,9 @@
 import 'package:mouse_rust/mouse_rust.dart';
 
-class MouseBase {
+class BaseMouse {
   static Future<void> init() => RustLib.init();
 }
 
-class Mouse {
-  move() => greet(name: 'Teste');
+class BaseMouseMoviment {
+  move(double x, double y) => moveMouse(x: x, y: y);
 }

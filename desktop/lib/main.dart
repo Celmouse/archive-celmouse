@@ -5,7 +5,7 @@ import 'src/UI/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MouseBase.init();
+  await BaseMouse.init();
   runApp(const MyApp());
 }
 
