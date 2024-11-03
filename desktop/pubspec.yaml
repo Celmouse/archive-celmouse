@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   
   mouse:
-    path: ../plugins/mouse
+    path: ../packages/mouse
   
   protocol:
     path: ../packages/protocol

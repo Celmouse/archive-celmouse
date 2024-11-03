@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mouse/mouse.dart';
 
 import 'src/UI/home.dart';
 
-
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MouseBase.init();
   runApp(const MyApp());
 }
 
