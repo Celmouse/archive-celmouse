@@ -22,3 +22,9 @@ server/notarization-error.log
 *.log
 server/.DS_Store
 .DS_Store
+pubspec_overrides.yaml
+pubspec.lock
+melos_celmouse.iml
+/.vscode
+/.idea
+/.dart_tool
