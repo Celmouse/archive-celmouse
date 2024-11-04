@@ -21,8 +21,8 @@ class Mouse {
   }
 
   MousePosition get coordinates {
-    final pos = moviment.getPosition;
-    position = MousePosition(pos.$1.toDouble(), pos.$2.toDouble());
+    // final pos = moviment.getPosition;
+    // position = MousePosition(pos.$1.toDouble(), pos.$2.toDouble());
     return _position;
   }
 

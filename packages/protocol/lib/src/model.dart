@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'model.freezed.dart';
 part 'model.g.dart';
@@ -11,7 +9,7 @@ class Protocol with _$Protocol {
     createToJson: true,
   )
   const factory Protocol({
-    required String event,
+    required ProtocolEvents event,
     required dynamic data,
   }) = _Protocol;
 
@@ -19,19 +17,19 @@ class Protocol with _$Protocol {
       _$ProtocolFromJson(json);
 }
 
-class ProtocolEvents {
-  static const keyPressed = "KeyPressed";
-  static const changeSensitivity = "ChangeSensitivity";
-  static const changeScrollSensitivity = "ChangeScrollSensitivity";
+enum ProtocolEvents {
+  keyPressed,
+  changeSensitivity,
+  changeScrollSensitivity,
   // Movement
-  static const mouseMove = "MouseMove";
-  static const mouseCenter = "MouseCenter";
-  static const mouseScroll = "MouseScroll";
+  mouseMove,
+  mouseCenter,
+  mouseScroll,
   // Clicks
-  static const mouseClick = "MouseClick";
-  static const mouseDoubleClick = "MouseDoubleClick";
-  static const mouseButtonPressed = "MouseButtonPressed";
-  static const mouseButtonReleased = "MouseButtonReleased";
+  mouseClick,
+  mouseDoubleClick,
+  mouseButtonPressed,
+  mouseButtonReleased,
 }
 
 enum ClickType {

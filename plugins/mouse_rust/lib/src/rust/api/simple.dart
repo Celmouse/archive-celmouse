@@ -6,7 +6,5 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-void moveMouse({required double x, required double y}) =>
-    RustLib.instance.api.crateApiSimpleMoveMouse(x: x, y: y);
-
-(int, int) getMousePos() => RustLib.instance.api.crateApiSimpleGetMousePos();
+void mouseMove({required double x, required double y}) =>
+    RustLib.instance.api.crateApiSimpleMouseMove(x: x, y: y);

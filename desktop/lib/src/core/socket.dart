@@ -1,3 +1,4 @@
+import 'package:protocol/protocol.dart';
 import 'package:server/src/core/mouse.dart';
 import 'dart:convert';
 
@@ -14,15 +15,16 @@ class SocketInterpreter {
 
   //TODO: Implementar protocolo
   interpretEvents(dynamic data) {
-    data = jsonDecode(data);
+    final protocol = Protocol.fromJson(jsonDecode(data));
 
     // print(mouse.coordinates);
 
-    if (data['event'] == "MouseMove") {
-      double x = data["data"]["x"];
-      double y = data["data"]["y"];
-      mouse.move(x, y);
-      print(mouse.coordinates);
+    switch (protocol.event) {
+      case ProtocolEvents.mouseMove:
+        double x = protocol.data["x"];
+        double y = protocol.data["y"];
+        return mouse.move(x, y);
+      default:
     }
   }
 }

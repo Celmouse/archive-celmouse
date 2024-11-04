@@ -5,6 +5,9 @@ class BaseMouse {
 }
 
 class BaseMouseMoviment {
-  move(double x, double y) => moveMouse(x: x, y: y);
-  (int, int) get getPosition => getMousePos();
+  move(double x, double y) => mouseMove(x: x, y: y);
+  // (int, int) get getPosition => getMousePos();
+  // click(int value) => mouseClick(value: value);
+  // press(int value) => mousePress(value: value);
+  // release(int value) => mouseRelease(value: value);
 }
