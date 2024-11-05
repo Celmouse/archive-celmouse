@@ -4,4 +4,8 @@ packages:
   - mobile
   - desktop
   - packages/**
-  - plugins/**
+  - plugins/mouse/**
+  # - plugins/**
+
+scripts:
+  clean: melos clean && melos bootstrap

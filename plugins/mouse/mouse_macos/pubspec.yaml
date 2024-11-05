@@ -1,0 +1,29 @@
+name: mouse_macos
+description: "A new Flutter FFI plugin project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.5.3
+  flutter: ">=3.3.0"
+
+flutter:
+  plugin:
+    implements: mouse
+    platforms:
+      macos:
+        pluginClass: MousePlugin
+        fileName: mouse_macos.dart
+        dartPluginClass: MouseMacOS
+        ffiPlugin: true
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  ffi: ^2.1.0
+  ffigen: ^11.0.0
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0

@@ -1,0 +1,28 @@
+name: mouse
+description: "A new Flutter plugin project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.5.3
+  flutter: ">=3.3.0"
+
+flutter:
+  plugin:
+    platforms:
+      macos:
+        default_package: mouse_macos
+      # TODO: Implement other platforms following same example (url_launcher)
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+  mouse_macos:
+    path: ../mouse_macos
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
