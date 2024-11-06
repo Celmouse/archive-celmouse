@@ -16,13 +16,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late int sumResult;
-  late Future<int> sumAsyncResult;
 
   @override
   void initState() {
     super.initState();
-    sumResult = mouse_macos.sum(1, 2);
-    sumAsyncResult = mouse_macos.sumAsync(3, 4);
+     mouse_macos.MouseMacOS().move(1, 2);
   }
 
   @override
@@ -52,18 +50,7 @@ class _MyAppState extends State<MyApp> {
                   textAlign: TextAlign.center,
                 ),
                 spacerSmall,
-                FutureBuilder<int>(
-                  future: sumAsyncResult,
-                  builder: (BuildContext context, AsyncSnapshot<int> value) {
-                    final displayValue =
-                        (value.hasData) ? value.data : 'loading';
-                    return Text(
-                      'await sumAsync(3, 4) = $displayValue',
-                      style: textStyle,
-                      textAlign: TextAlign.center,
-                    );
-                  },
-                ),
+                
               ],
             ),
           ),

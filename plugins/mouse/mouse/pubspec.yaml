@@ -17,7 +17,9 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
+    
+  mouse_platform_interface:
+    path: ../mouse_platform_interface
 
   mouse_macos:
     path: ../mouse_macos

@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:mouse/mouse.dart';
+import 'package:mouse/mouse.dart' as plugin;
 
 const yMultiplier = 42;
 const xMultiplier = 54;
@@ -9,7 +9,7 @@ var sensitivity = 1;
 class Mouse {
   MousePosition _position = MousePosition(0, 0);
 
-  final moviment = BaseMouseMoviment();
+  final moviment = plugin.Mouse();
 
   void move(double x, double y) {
     // position = MousePosition(

@@ -12,7 +12,7 @@ flutter:
     implements: mouse
     platforms:
       macos:
-        pluginClass: MousePlugin
+        # pluginClass: MousePlugin
         fileName: mouse_macos.dart
         dartPluginClass: MouseMacOS
         ffiPlugin: true
@@ -20,6 +20,8 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
+  mouse_platform_interface:
+    path: ../mouse_platform_interface
 
 dev_dependencies:
   ffi: ^2.1.0

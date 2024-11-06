@@ -1,14 +1,6 @@
-// You have generated a new plugin project without specifying the `--platforms`
-// flag. A plugin project with no platform support was generated. To add a
-// platform, run `flutter create -t plugin --platforms <platforms> .` under the
-// same directory. You can also find a detailed instruction on how to add
-// platforms in the `pubspec.yaml` at
-// https://flutter.dev/to/pubspec-plugin-platforms.
-
-import 'mouse_platform_interface.dart';
+import 'package:mouse_platform_interface/mouse_platform_interface.dart';
 
 class Mouse {
-  Future<String?> getPlatformVersion() {
-    return MousePlatform.instance.getPlatformVersion();
-  }
+  void move(double x, double y) => MousePlatform.instance.move(x, y);
+  void moveTo(double x, double y) => MousePlatform.instance.moveTo(x, y);
 }
