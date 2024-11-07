@@ -15,6 +15,8 @@ class SocketInterpreter {
     //TODO: trazer os requisitos para conectar o socket para cá;
   }
 
+  DateTime? lastRequestTimestemp;
+
   interpretEvents(dynamic data) {
     final protocol = Protocol.fromJson(jsonDecode(data));
 
@@ -46,6 +48,19 @@ class SocketInterpreter {
         break;
       case ProtocolEvents.mouseButtonReleased:
         final data = MouseButtonProtocolData.fromJson(protocol.data);
+        if (lastRequestTimestemp != null &&
+            lastRequestTimestemp!
+                    .difference(
+                      protocol.timestamp,
+                    )
+                    .inMilliseconds >
+                500) {
+                  //TODO: Testar
+          print("Tempo excedido");
+          return;
+        }
+        lastRequestTimestemp = protocol.timestamp;
+
         mouse.releaseButton(data.type.toMousePluginButton());
         break;
       default:

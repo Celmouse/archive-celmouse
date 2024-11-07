@@ -10,8 +10,8 @@ class Protocol with _$Protocol {
   )
   const factory Protocol({
     required ProtocolEvents event,
+    required DateTime timestamp,
     required dynamic data,
-    required int timestamp,
   }) = _Protocol;
 
   factory Protocol.fromJson(Map<String, Object?> json) =>
@@ -57,21 +57,10 @@ enum ProtocolEvents {
 enum ClickType {
   @JsonValue("left")
   left,
-  @JsonValue("middle")
-  middle,
   @JsonValue("right")
-  right;
-
-  String toJson() {
-    switch (this) {
-      case ClickType.left:
-        return "left";
-      case ClickType.right:
-        return "right";
-      case ClickType.middle:
-        return "middle";
-    }
-  }
+  right,
+  @JsonValue("center")
+  center;
 }
 
 class ScrollDirections {

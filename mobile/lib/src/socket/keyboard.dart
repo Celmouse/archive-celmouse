@@ -18,7 +18,7 @@ class KeyboardControl {
         Protocol(
           event: event,
           data: data,
-          timestamp: DateTime.timestamp().microsecondsSinceEpoch,
+          timestamp: DateTime.timestamp(),
         ).toJson(),
       ));
 }
