@@ -132,7 +132,7 @@ class MouseMovement {
   }
 
   _sendScrollMovement(double x, double y) {
-    String direction = "";
+    ScrollDirections direction;
 
     if (x.abs() > y.abs()) {
       direction =
@@ -144,6 +144,8 @@ class MouseMovement {
           ((getIt.get<MouseConfigs>().invertedScrollY ? 1 : -1) * y.sign < 0)
               ? ScrollDirections.down
               : ScrollDirections.up;
+    } else {
+      return;
     }
 
     mouse.scroll(direction);

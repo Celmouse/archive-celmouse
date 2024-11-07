@@ -111,3 +111,32 @@ FFI_PLUGIN_EXPORT void mouseReleaseButton(int button)
   CGEventPost(kCGHIDEventTap, mouseUp);
   CFRelease(mouseUp);
 }
+
+FFI_PLUGIN_EXPORT void performDoubleClick(void)
+{
+  // Obtém a posição atual do mouse
+  CGPoint mouseLocation = CGEventGetLocation(CGEventCreate(NULL));
+
+  // Cria o evento de clique duplo
+  CGEventRef mouseDoubleClick = CGEventCreateMouseEvent(
+      NULL, kCGEventLeftMouseDown, mouseLocation, 0);
+  CGEventSetIntegerValueField(mouseDoubleClick, kCGMouseEventClickState, 2);
+  CGEventPost(kCGHIDEventTap, mouseDoubleClick);
+
+  CFRelease(mouseDoubleClick);
+
+  // Cria o evento de soltar
+  CGEventRef mouseUp = CGEventCreateMouseEvent(
+      NULL, kCGEventLeftMouseUp, mouseLocation, 0);
+  CGEventPost(kCGHIDEventTap, mouseUp);
+
+  CFRelease(mouseUp);
+}
+
+FFI_PLUGIN_EXPORT void mouseScroll(int x, int y, int amount)
+{
+  CGEventRef scroll = CGEventCreateScrollWheelEvent(
+      NULL, kCGScrollEventUnitPixel, 2, y * amount, x * amount);
+  CGEventPost(kCGHIDEventTap, scroll);
+  CFRelease(scroll);
+}

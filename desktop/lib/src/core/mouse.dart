@@ -17,6 +17,7 @@ class Mouse {
   final mouse = plugin.Mouse();
 
   double _sensitivity = 1;
+  int _scrollSensitivity = 3;
 
   Mouse() {
     const mobileSensitivityStartValue = 5.0;
@@ -31,10 +32,17 @@ class Mouse {
     );
   }
 
+  void scroll(int x, int y) {
+    if (x.abs() > preventJump || y.abs() > preventJump) return;
+    mouse.scroll(x, y, _scrollSensitivity);
+  }
+
   get screenSize => mouse.getScreenSize();
 
   set sensitivity(double value) => _sensitivity =
       pow(defaultSensValue, value).toDouble() - defaultSensAdjustmentValue;
+
+  set scrollSensitivity(int value) => _scrollSensitivity = value;
 
   Future<void> click(plugin.MouseButton button) async {
     debugPrint("Click");
@@ -44,9 +52,7 @@ class Mouse {
 
   Future<void> doubleClick(plugin.MouseButton button) async {
     debugPrint("Double Click");
-    click(button);
-    await Future.delayed(const Duration(milliseconds: 100));
-    click(button);
+    mouse.doubleClick();
   }
 
   void pressButton(plugin.MouseButton button) {

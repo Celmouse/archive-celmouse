@@ -30,6 +30,7 @@ class MouseButtonProtocolData with _$MouseButtonProtocolData {
 
 @freezed
 class MouseMovementProtocolData with _$MouseMovementProtocolData {
+  //TODO: Talvez possa implementar o movimento do scroll aqui
   const factory MouseMovementProtocolData({
     required double x,
     required double y,
@@ -37,6 +38,16 @@ class MouseMovementProtocolData with _$MouseMovementProtocolData {
 
   factory MouseMovementProtocolData.fromJson(Map<String, Object?> json) =>
       _$MouseMovementProtocolDataFromJson(json);
+}
+
+@freezed
+class MouseScrollProtocolData with _$MouseScrollProtocolData {
+  const factory MouseScrollProtocolData({
+    required ScrollDirections direction,
+  }) = _MouseScrollProtocolData;
+
+  factory MouseScrollProtocolData.fromJson(Map<String, Object?> json) =>
+      _$MouseScrollProtocolDataFromJson(json);
 }
 
 enum ProtocolEvents {
@@ -63,9 +74,28 @@ enum ClickType {
   center;
 }
 
-class ScrollDirections {
-  static const right = "right";
-  static const left = "left";
-  static const up = "up";
-  static const down = "down";
+enum ScrollDirections {
+  up("up"), // -y
+  left("left"), // -x
+  right("right"), // +x
+  down("down"); // +y
+
+  const ScrollDirections(this.value);
+
+  final String value;
+}
+
+extension EScrollDirection on MouseScrollProtocolData {
+  (int x, int y) fromProtocolData() {
+    switch (direction) {
+      case ScrollDirections.left:
+        return (-1, 0);
+      case ScrollDirections.up:
+        return (0, -1);
+      case ScrollDirections.right:
+        return (1, 0);
+      case ScrollDirections.down:
+        return (0, 1);
+    }
+  }
 }

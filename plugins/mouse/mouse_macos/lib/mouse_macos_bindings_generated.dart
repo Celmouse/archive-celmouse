@@ -95,6 +95,33 @@ class MouseMacosBindings {
           'mouseReleaseButton');
   late final _mouseReleaseButton =
       _mouseReleaseButtonPtr.asFunction<void Function(int)>();
+
+  void performDoubleClick() {
+    return _performDoubleClick();
+  }
+
+  late final _performDoubleClickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('performDoubleClick');
+  late final _performDoubleClick =
+      _performDoubleClickPtr.asFunction<void Function()>();
+
+  void mouseScroll(
+    int x,
+    int y,
+    int amount,
+  ) {
+    return _mouseScroll(
+      x,
+      y,
+      amount,
+    );
+  }
+
+  late final _mouseScrollPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Int, ffi.Int)>>(
+          'mouseScroll');
+  late final _mouseScroll =
+      _mouseScrollPtr.asFunction<void Function(int, int, int)>();
 }
 
 /// Estrutura para armazenar a largura e altura da tela

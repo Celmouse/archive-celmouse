@@ -29,10 +29,15 @@ class SocketInterpreter {
 
         return mouse.move(x, y);
       case ProtocolEvents.changeSensitivity:
-        print(protocol.data);
-        // print(protocol.timestamp);
-        // mouse.sensitivity = protocol.data;
+        mouse.sensitivity = protocol.data;
         break;
+      case ProtocolEvents.changeScrollSensitivity:
+        mouse.scrollSensitivity = protocol.data;
+        break;
+      case ProtocolEvents.mouseScroll:
+        final data = MouseScrollProtocolData.fromJson(protocol.data);
+        final (x, y) = data.fromProtocolData();
+        mouse.scroll(x, y);
 
       case ProtocolEvents.mouseClick:
         final data = MouseButtonProtocolData.fromJson(protocol.data);
@@ -55,7 +60,7 @@ class SocketInterpreter {
                     )
                     .inMilliseconds >
                 500) {
-                  //TODO: Testar
+          //TODO: Testar
           print("Tempo excedido");
           return;
         }

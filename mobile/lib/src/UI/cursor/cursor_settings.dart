@@ -177,7 +177,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     getIt.get<MouseConfigs>().scrollSensitivity =
                         amount.round();
                   });
-                  mouse.changeScrollSensitivity(amount);
+                  mouse.changeScrollSensitivity(amount.round());
                 },
               ),
               Text(

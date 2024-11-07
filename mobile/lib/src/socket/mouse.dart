@@ -51,17 +51,18 @@ class MouseControl {
     );
   }
 
-  void scroll(String direction) {
-    _send(event: ProtocolEvents.mouseScroll, data: {
-      "direction": direction,
-    });
+  void scroll(ScrollDirections direction) {
+    _send(
+      event: ProtocolEvents.mouseScroll,
+      data: MouseScrollProtocolData(direction: direction),
+    );
   }
 
   void changeSensitivity(num amount) {
     _send(event: ProtocolEvents.changeSensitivity, data: amount);
   }
 
-  void changeScrollSensitivity(num amount) {
+  void changeScrollSensitivity(int amount) {
     _send(event: ProtocolEvents.changeScrollSensitivity, data: amount);
   }
 

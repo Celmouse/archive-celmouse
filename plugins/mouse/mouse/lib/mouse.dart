@@ -9,7 +9,15 @@ class Mouse {
 
   void pressButton(MouseButton button) =>
       MousePlatform.instance.pressButton(button);
-  
+
   void releaseButton(MouseButton button) =>
       MousePlatform.instance.releaseButton(button);
+
+  void doubleClick() => MousePlatform.instance.doubleClick();
+  
+  void scroll(int x, int y, int amount) => MousePlatform.instance.scroll(
+        x,
+        y,
+        amount,
+      );
 }

@@ -9,6 +9,9 @@ abstract class MouseMovement {
 
   void pressButton(MouseButton button);
   void releaseButton(MouseButton button);
+  void doubleClick();
+
+  void scroll(int x, int y, int amount);
 }
 
 abstract class MousePlatform extends PlatformInterface
@@ -57,6 +60,16 @@ abstract class MousePlatform extends PlatformInterface
 
   @override
   void releaseButton(MouseButton button) {
+    throw UnimplementedError('Implementar o metodo');
+  }
+
+  @override
+  void doubleClick() {
+    throw UnimplementedError('Implementar o metodo');
+  }
+
+  @override
+  void scroll(int x, int y, int amount) {
     throw UnimplementedError('Implementar o metodo');
   }
 }

@@ -27,6 +27,12 @@ class MouseMacOS extends MousePlatform {
   @override
   void releaseButton(MouseButton button) =>
       _bindings.mouseReleaseButton(button.value);
+
+  @override
+  void doubleClick() => _bindings.performDoubleClick();
+
+  @override
+  void scroll(int x, int y, int amount) => _bindings.mouseScroll(x, y, amount);
 }
 
 const String _libName = 'mouse_macos';
