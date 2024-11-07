@@ -11,10 +11,32 @@ class Protocol with _$Protocol {
   const factory Protocol({
     required ProtocolEvents event,
     required dynamic data,
+    required int timestamp,
   }) = _Protocol;
 
   factory Protocol.fromJson(Map<String, Object?> json) =>
       _$ProtocolFromJson(json);
+}
+
+@freezed
+class MouseButtonProtocolData with _$MouseButtonProtocolData {
+  const factory MouseButtonProtocolData({
+    required ClickType type,
+  }) = _MouseButtonProtocolData;
+
+  factory MouseButtonProtocolData.fromJson(Map<String, Object?> json) =>
+      _$MouseButtonProtocolDataFromJson(json);
+}
+
+@freezed
+class MouseMovementProtocolData with _$MouseMovementProtocolData {
+  const factory MouseMovementProtocolData({
+    required double x,
+    required double y,
+  }) = _MouseMovementProtocolData;
+
+  factory MouseMovementProtocolData.fromJson(Map<String, Object?> json) =>
+      _$MouseMovementProtocolDataFromJson(json);
 }
 
 enum ProtocolEvents {
@@ -33,13 +55,23 @@ enum ProtocolEvents {
 }
 
 enum ClickType {
-  left("left"),
-  middle("middle"),
-  right("right");
+  @JsonValue("left")
+  left,
+  @JsonValue("middle")
+  middle,
+  @JsonValue("right")
+  right;
 
-  const ClickType(this.type);
-
-  final String type;
+  String toJson() {
+    switch (this) {
+      case ClickType.left:
+        return "left";
+      case ClickType.right:
+        return "right";
+      case ClickType.middle:
+        return "middle";
+    }
+  }
 }
 
 class ScrollDirections {

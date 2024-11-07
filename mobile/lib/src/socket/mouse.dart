@@ -12,62 +12,71 @@ class MouseControl {
   ///
   /// ( "right", "left", "middle" )
   void click(ClickType type) {
-    final data = Protocol(event: ProtocolEvents.mouseClick, data: type.type);
-    _send(data);
+    _send(
+      event: ProtocolEvents.mouseClick,
+      data: MouseButtonProtocolData(type: type),
+    );
   }
 
   void press(ClickType type) {
-    final data =
-        Protocol(event: ProtocolEvents.mouseButtonPressed, data: type.type);
-    _send(data);
+    _send(
+      event: ProtocolEvents.mouseButtonPressed,
+      data: MouseButtonProtocolData(type: type),
+    );
   }
 
   void release(ClickType type) {
-    final data =
-        Protocol(event: ProtocolEvents.mouseButtonReleased, data: type.type);
-    _send(data);
+    _send(
+      event: ProtocolEvents.mouseButtonReleased,
+      data: MouseButtonProtocolData(type: type),
+    );
   }
 
   void doubleClick(ClickType type) {
-    final data =
-        Protocol(event: ProtocolEvents.mouseDoubleClick, data: type.type);
-    _send(data);
+    _send(
+      event: ProtocolEvents.mouseDoubleClick,
+      data: MouseButtonProtocolData(type: type),
+    );
   }
 
   void center() {
-    const data = Protocol(event: ProtocolEvents.mouseCenter, data: null);
-    _send(data);
+    _send(event: ProtocolEvents.mouseCenter, data: null);
   }
 
   void move(double x, double y) {
     if (x == 0 && y == 0) return;
-    final data =
-        Protocol(event: ProtocolEvents.mouseMove, data: {"x": x, "y": y});
-    print(data.toJson());
-    _send(data);
+    _send(
+      event: ProtocolEvents.mouseMove,
+      data: MouseMovementProtocolData(x: x, y: y),
+    );
   }
 
   void scroll(String direction) {
-    final data = Protocol(event: ProtocolEvents.mouseScroll, data: {
+    _send(event: ProtocolEvents.mouseScroll, data: {
       "direction": direction,
     });
-    _send(data);
   }
 
   void changeSensitivity(num amount) {
-    final data =
-        Protocol(event: ProtocolEvents.changeSensitivity, data: amount);
-    _send(data);
+    _send(event: ProtocolEvents.changeSensitivity, data: amount);
   }
 
   void changeScrollSensitivity(num amount) {
-    final data =
-        Protocol(event: ProtocolEvents.changeScrollSensitivity, data: amount);
-    _send(data);
+    _send(event: ProtocolEvents.changeScrollSensitivity, data: amount);
   }
 
   /// Send the protocol data formated as Json to the WebSocket
-  _send(Protocol data) => channel.sink.add(jsonEncode(data.toJson()));
+  _send({
+    required ProtocolEvents event,
+    required dynamic data,
+  }) =>
+      channel.sink.add(jsonEncode(
+        Protocol(
+          event: event,
+          data: data,
+          timestamp: DateTime.timestamp().microsecondsSinceEpoch,
+        ).toJson(),
+      ));
 }
 
 enum DoubleClickDelayOptions {

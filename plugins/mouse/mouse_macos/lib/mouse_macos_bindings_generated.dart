@@ -27,19 +27,81 @@ class MouseMacosBindings {
           lookup)
       : _lookup = lookup;
 
-  void mouse_move(
-    double a,
-    double b,
+  void mouseMove(
+    double x,
+    double y,
   ) {
-    return _mouse_move(
-      a,
-      b,
+    return _mouseMove(
+      x,
+      y,
     );
   }
 
-  late final _mouse_movePtr =
+  late final _mouseMovePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
-          'mouse_move');
-  late final _mouse_move =
-      _mouse_movePtr.asFunction<void Function(double, double)>();
+          'mouseMove');
+  late final _mouseMove =
+      _mouseMovePtr.asFunction<void Function(double, double)>();
+
+  void mouseMoveTo(
+    double x,
+    double y,
+  ) {
+    return _mouseMoveTo(
+      x,
+      y,
+    );
+  }
+
+  late final _mouseMoveToPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
+          'mouseMoveTo');
+  late final _mouseMoveTo =
+      _mouseMoveToPtr.asFunction<void Function(double, double)>();
+
+  ScreenSize getScreenSize() {
+    return _getScreenSize();
+  }
+
+  late final _getScreenSizePtr =
+      _lookup<ffi.NativeFunction<ScreenSize Function()>>('getScreenSize');
+  late final _getScreenSize =
+      _getScreenSizePtr.asFunction<ScreenSize Function()>();
+
+  void mousePressButton(
+    int button,
+  ) {
+    return _mousePressButton(
+      button,
+    );
+  }
+
+  late final _mousePressButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
+          'mousePressButton');
+  late final _mousePressButton =
+      _mousePressButtonPtr.asFunction<void Function(int)>();
+
+  void mouseReleaseButton(
+    int button,
+  ) {
+    return _mouseReleaseButton(
+      button,
+    );
+  }
+
+  late final _mouseReleaseButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
+          'mouseReleaseButton');
+  late final _mouseReleaseButton =
+      _mouseReleaseButtonPtr.asFunction<void Function(int)>();
+}
+
+/// Estrutura para armazenar a largura e altura da tela
+final class ScreenSize extends ffi.Struct {
+  @ffi.Int()
+  external int width;
+
+  @ffi.Int()
+  external int height;
 }

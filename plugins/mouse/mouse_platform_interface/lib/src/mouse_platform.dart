@@ -1,8 +1,14 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'types.dart';
+
 abstract class MouseMovement {
   void move(double x, double y);
   void moveTo(double x, double y);
+  (int, int) getScreenSize();
+
+  void pressButton(MouseButton button);
+  void releaseButton(MouseButton button);
 }
 
 abstract class MousePlatform extends PlatformInterface
@@ -31,11 +37,26 @@ abstract class MousePlatform extends PlatformInterface
 
   @override
   void move(double x, double y) {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError('Implementar o metodo');
   }
 
   @override
   void moveTo(double x, double y) {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError('Implementar o metodo');
+  }
+
+  @override
+  (int x, int y) getScreenSize() {
+    throw UnimplementedError('Implementar o metodo');
+  }
+
+  @override
+  void pressButton(MouseButton button) {
+    throw UnimplementedError('Implementar o metodo');
+  }
+
+  @override
+  void releaseButton(MouseButton button) {
+    throw UnimplementedError('Implementar o metodo');
   }
 }

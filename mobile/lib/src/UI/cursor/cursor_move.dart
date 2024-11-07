@@ -143,7 +143,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
         centerTitle: true,
         actions: [
           const Visibility(
-            visible: false,
+            visible: kDebugMode,
             child: IconButton(
               onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
               icon: Icon(
