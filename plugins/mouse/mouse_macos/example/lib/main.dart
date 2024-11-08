@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:mouse_macos/mouse_macos.dart' as mouse_macos;
 

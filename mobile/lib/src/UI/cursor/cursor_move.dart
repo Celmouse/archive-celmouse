@@ -12,7 +12,6 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../socket/mouse.dart';
 import 'package:protocol/protocol.dart';
 
-
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
@@ -277,7 +276,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                                 getIt.get<MouseConfigs>().dragStartDelayMS,
                           ),
                           () {
-                            mouse.press(ClickType.left);
+                            showDeactivatedFeatureWarning();
+                            //TODO: Fix press
+                            // mouse.press(ClickType.left);
                           },
                         );
                         setState(() {
@@ -427,6 +428,19 @@ class _MoveMousePageState extends State<MoveMousePage> {
             //   ),
             // ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void showDeactivatedFeatureWarning() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.yellow[600],
+        content: const Text(
+          "Hold and Release was deactivated in this version due to game mode prep!",
         ),
       ),
     );
