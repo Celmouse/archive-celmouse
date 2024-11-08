@@ -68,34 +68,6 @@ class MouseMacosBindings {
   late final _getScreenSize =
       _getScreenSizePtr.asFunction<ScreenSize Function()>();
 
-  void mousePressButton(
-    int button,
-  ) {
-    return _mousePressButton(
-      button,
-    );
-  }
-
-  late final _mousePressButtonPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
-          'mousePressButton');
-  late final _mousePressButton =
-      _mousePressButtonPtr.asFunction<void Function(int)>();
-
-  void mouseReleaseButton(
-    int button,
-  ) {
-    return _mouseReleaseButton(
-      button,
-    );
-  }
-
-  late final _mouseReleaseButtonPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
-          'mouseReleaseButton');
-  late final _mouseReleaseButton =
-      _mouseReleaseButtonPtr.asFunction<void Function(int)>();
-
   void performDoubleClick() {
     return _performDoubleClick();
   }
@@ -122,6 +94,37 @@ class MouseMacosBindings {
           'mouseScroll');
   late final _mouseScroll =
       _mouseScrollPtr.asFunction<void Function(int, int, int)>();
+
+  void mouseClick(
+    int button,
+  ) {
+    return _mouseClick(
+      button,
+    );
+  }
+
+  late final _mouseClickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('mouseClick');
+  late final _mouseClick = _mouseClickPtr.asFunction<void Function(int)>();
+
+  void mouseHoldLeftButton() {
+    return _mouseHoldLeftButton();
+  }
+
+  late final _mouseHoldLeftButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('mouseHoldLeftButton');
+  late final _mouseHoldLeftButton =
+      _mouseHoldLeftButtonPtr.asFunction<void Function()>();
+
+  void mouseReleaseLeftButton() {
+    return _mouseReleaseLeftButton();
+  }
+
+  late final _mouseReleaseLeftButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>(
+          'mouseReleaseLeftButton');
+  late final _mouseReleaseLeftButton =
+      _mouseReleaseLeftButtonPtr.asFunction<void Function()>();
 }
 
 /// Estrutura para armazenar a largura e altura da tela

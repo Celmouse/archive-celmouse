@@ -9,8 +9,8 @@ enum MouseButton {
   };
   */
   left(0),
-  right(1),
-  middle(2);
+  right(1);
+  // middle(2);
 
   const MouseButton(this.value);
   final int value;

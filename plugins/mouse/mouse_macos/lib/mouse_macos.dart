@@ -21,12 +21,13 @@ class MouseMacOS extends MousePlatform {
   }
 
   @override
-  void pressButton(MouseButton button) =>
-      _bindings.mousePressButton(button.value);
+  void holdLeftButton() => _bindings.mouseHoldLeftButton();
 
   @override
-  void releaseButton(MouseButton button) =>
-      _bindings.mouseReleaseButton(button.value);
+  void releaseLeftButton() => _bindings.mouseReleaseLeftButton();
+
+  @override
+  void click(MouseButton button) => _bindings.mouseClick(button.value);
 
   @override
   void doubleClick() => _bindings.performDoubleClick();
