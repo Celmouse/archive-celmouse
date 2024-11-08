@@ -385,12 +385,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
                           color: isCursorMovingEnabled
-                              ? Colors.green
-                              : Colors.grey,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.green),
+                              ? Colors.green[200]
+                              : Colors.green,
                         ),
                       ),
                     ),
@@ -408,12 +404,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         height: size.height * 0.13,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
-                          color:
-                              isScrollingEnabled ? Colors.purple : Colors.grey,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.purple),
+                          color: isScrollingEnabled
+                              ? Colors.purple[200]
+                              : Colors.purple,
                         ),
                       ),
                     ),
