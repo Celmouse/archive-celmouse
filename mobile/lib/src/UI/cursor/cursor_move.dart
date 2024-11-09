@@ -7,11 +7,11 @@ import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../socket/mouse.dart';
 import 'package:protocol/protocol.dart';
-
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -277,7 +277,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                                 getIt.get<MouseConfigs>().dragStartDelayMS,
                           ),
                           () {
-                            mouse.press(ClickType.left);
+                            showDeactivatedFeatureWarning();
+                            //TODO: Fix press
+                            // mouse.press(ClickType.left);
                           },
                         );
                         setState(() {
@@ -384,12 +386,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
                           color: isCursorMovingEnabled
-                              ? Colors.green
-                              : Colors.grey,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.green),
+                              ? Colors.green[200]
+                              : Colors.green,
                         ),
                       ),
                     ),
@@ -407,12 +405,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         height: size.height * 0.13,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(24),
-                          color:
-                              isScrollingEnabled ? Colors.purple : Colors.grey,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.purple),
+                          color: isScrollingEnabled
+                              ? Colors.purple[200]
+                              : Colors.purple,
                         ),
                       ),
                     ),
@@ -430,6 +425,28 @@ class _MoveMousePageState extends State<MoveMousePage> {
         ),
       ),
     );
+  }
+
+  void showDeactivatedFeatureWarning() {
+    Fluttertoast.showToast(
+        msg: "Hold and Release was deactivated in this version due to game mode prep!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.yellow[600],
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     showCloseIcon: true,
+    //     behavior: SnackBarBehavior.floating,
+    //     backgroundColor: Colors.yellow[600],
+    //     content: const Text(
+    //       "Hold and Release was deactivated in this version due to game mode prep!",
+    //     ),
+    //   ),
+    // );
   }
 }
 
