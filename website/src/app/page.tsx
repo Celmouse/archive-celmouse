@@ -32,7 +32,7 @@ export default function Page() {
         <div className="px-4 md:px-6 flex flex-col items-center space-y-4 text-center">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-              Control Your Mouse with Your Phone
+              Control your mouse with your Phone
             </h1>
             <div className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
               <p>Use your phone&apos;s gyroscope to control your computer&apos;s mouse.</p>
