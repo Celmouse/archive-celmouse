@@ -36,7 +36,7 @@ export default function Page() {
             </h1>
             <div className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
               <p>Use your phone&apos;s gyroscope to control your computer&apos;s mouse.</p>
-              <p>Perfect for presentations, gaming, and more.</p>
+              <p>Perfect for presentations, gaming and more.</p>
             </div>
           </div>
           <div className="space-x-4 flex items-center" >
