@@ -1,8 +1,10 @@
 import 'package:controller/src/UI/components/support_button.dart';
 import 'package:controller/src/UI/cursor/cursor_move.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../utils/launch_site.dart';
 import 'connect_qr_code.dart';
 import '../../core/connect.dart';
 
@@ -51,12 +53,12 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text("Erro de conexão, IP incorreto, tente outro"),
+          content: const Text("Failed to connect, try again"),
           backgroundColor: Theme.of(context).colorScheme.error,
         ));
       } else {
         setState(() {
-          connError = "Erro de conexão, IP incorreto...";
+          connError = "Failed to connect, try another IP";
         });
       }
     } finally {
@@ -70,6 +72,41 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.info),
+          onPressed: () async {
+            PackageInfo packageInfo = await PackageInfo.fromPlatform();
+            String version = packageInfo.version;
+
+            if (!context.mounted) return;
+            showDialog(
+                builder: (context) => AlertDialog(
+                      icon: Image.asset(
+                        "assets/icon_32x32@2x.png",
+                        height: 52,
+                        width: 52,
+                      ),
+                      title: const Text("Celmouse"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text("© 2024 Celmouse Ltda."),
+                          const SizedBox(height: 4),
+                          Text("Version: $version"),
+                          TextButton(
+                            onPressed: () => launchSite(),
+                            child: const Text(
+                              "Visit Website",
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ],
+                      ),
+                     
+                    ),
+                context: context);
+          },
+        ),
         title: const Text('Conectar'),
         centerTitle: true,
         actions: [
@@ -99,7 +136,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                   dense: true,
                   tilePadding: EdgeInsets.zero,
                   title: const Text(
-                    "How to find my computer's local IP?",
+                    "How to use this app?",
                   ),
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   childrenPadding: const EdgeInsets.only(bottom: 16),
