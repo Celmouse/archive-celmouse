@@ -97,7 +97,7 @@ FFI_PLUGIN_EXPORT void mouseClick(int button)
   CFRelease(mouseDown);
   CFRelease(mouseUp);
 }
-
+/*
 FFI_PLUGIN_EXPORT void mouseHoldLeftButton(void)
 {
   // Obtém a posição atual do mouse
@@ -118,3 +118,4 @@ FFI_PLUGIN_EXPORT void mouseReleaseLeftButton(void)
   CGEventPost(kCGHIDEventTap, mouseUp);
   CFRelease(mouseUp);
 }
+*/

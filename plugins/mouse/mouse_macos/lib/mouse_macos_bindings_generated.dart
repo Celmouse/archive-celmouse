@@ -41,7 +41,7 @@ class MouseMacosBindings {
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
           'mouseMove');
   late final _mouseMove =
-      _mouseMovePtr.asFunction<void Function(double, double)>();
+      _mouseMovePtr.asFunction<void Function(double, double)>(isLeaf: true);
 
   void mouseMoveTo(
     double x,
@@ -57,7 +57,7 @@ class MouseMacosBindings {
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
           'mouseMoveTo');
   late final _mouseMoveTo =
-      _mouseMoveToPtr.asFunction<void Function(double, double)>();
+      _mouseMoveToPtr.asFunction<void Function(double, double)>(isLeaf: true);
 
   ScreenSize getScreenSize() {
     return _getScreenSize();
@@ -66,7 +66,7 @@ class MouseMacosBindings {
   late final _getScreenSizePtr =
       _lookup<ffi.NativeFunction<ScreenSize Function()>>('getScreenSize');
   late final _getScreenSize =
-      _getScreenSizePtr.asFunction<ScreenSize Function()>();
+      _getScreenSizePtr.asFunction<ScreenSize Function()>(isLeaf: true);
 
   void performDoubleClick() {
     return _performDoubleClick();
@@ -75,7 +75,7 @@ class MouseMacosBindings {
   late final _performDoubleClickPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('performDoubleClick');
   late final _performDoubleClick =
-      _performDoubleClickPtr.asFunction<void Function()>();
+      _performDoubleClickPtr.asFunction<void Function()>(isLeaf: true);
 
   void mouseScroll(
     int x,
@@ -93,7 +93,7 @@ class MouseMacosBindings {
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Int, ffi.Int)>>(
           'mouseScroll');
   late final _mouseScroll =
-      _mouseScrollPtr.asFunction<void Function(int, int, int)>();
+      _mouseScrollPtr.asFunction<void Function(int, int, int)>(isLeaf: true);
 
   void mouseClick(
     int button,
@@ -105,7 +105,8 @@ class MouseMacosBindings {
 
   late final _mouseClickPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('mouseClick');
-  late final _mouseClick = _mouseClickPtr.asFunction<void Function(int)>();
+  late final _mouseClick =
+      _mouseClickPtr.asFunction<void Function(int)>(isLeaf: true);
 
   void mouseHoldLeftButton() {
     return _mouseHoldLeftButton();
@@ -114,7 +115,7 @@ class MouseMacosBindings {
   late final _mouseHoldLeftButtonPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('mouseHoldLeftButton');
   late final _mouseHoldLeftButton =
-      _mouseHoldLeftButtonPtr.asFunction<void Function()>();
+      _mouseHoldLeftButtonPtr.asFunction<void Function()>(isLeaf: true);
 
   void mouseReleaseLeftButton() {
     return _mouseReleaseLeftButton();
@@ -124,7 +125,7 @@ class MouseMacosBindings {
       _lookup<ffi.NativeFunction<ffi.Void Function()>>(
           'mouseReleaseLeftButton');
   late final _mouseReleaseLeftButton =
-      _mouseReleaseLeftButtonPtr.asFunction<void Function()>();
+      _mouseReleaseLeftButtonPtr.asFunction<void Function()>(isLeaf: true);
 }
 
 /// Estrutura para armazenar a largura e altura da tela
