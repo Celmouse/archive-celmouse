@@ -7,6 +7,7 @@ import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../socket/mouse.dart';
@@ -427,16 +428,25 @@ class _MoveMousePageState extends State<MoveMousePage> {
   }
 
   void showDeactivatedFeatureWarning() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        showCloseIcon: true,
-        behavior: SnackBarBehavior.floating,
+    Fluttertoast.showToast(
+        msg: "Hold and Release was deactivated in this version due to game mode prep!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
         backgroundColor: Colors.yellow[600],
-        content: const Text(
-          "Hold and Release was deactivated in this version due to game mode prep!",
-        ),
-      ),
+        textColor: Colors.white,
+        fontSize: 16.0
     );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     showCloseIcon: true,
+    //     behavior: SnackBarBehavior.floating,
+    //     backgroundColor: Colors.yellow[600],
+    //     content: const Text(
+    //       "Hold and Release was deactivated in this version due to game mode prep!",
+    //     ),
+    //   ),
+    // );
   }
 }
 

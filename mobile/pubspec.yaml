@@ -48,6 +48,7 @@ dependencies:
 
   protocol:
     path: ../packages/protocol
+  fluttertoast: ^8.2.8
 
 
 dev_dependencies:
