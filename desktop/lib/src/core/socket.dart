@@ -47,26 +47,13 @@ class SocketInterpreter {
         final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.doubleClick(data.type.toMousePluginButton());
         break;
-      case ProtocolEvents.mouseButtonPressed:
-        final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.pressButton(data.type.toMousePluginButton());
+      case ProtocolEvents.mouseButtonHold:
+        // final data = MouseButtonProtocolData.fromJson(protocol.data);
+        mouse.holdLeftButton();
         break;
       case ProtocolEvents.mouseButtonReleased:
-        final data = MouseButtonProtocolData.fromJson(protocol.data);
-        if (lastRequestTimestemp != null &&
-            lastRequestTimestemp!
-                    .difference(
-                      protocol.timestamp,
-                    )
-                    .inMilliseconds >
-                500) {
-          //TODO: Testar
-          print("Tempo excedido");
-          return;
-        }
-        lastRequestTimestemp = protocol.timestamp;
-
-        mouse.releaseButton(data.type.toMousePluginButton());
+        // final data = MouseButtonProtocolData.fromJson(protocol.data);
+        mouse.releaseLeftButton();
         break;
       default:
     }

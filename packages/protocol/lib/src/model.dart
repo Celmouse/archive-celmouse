@@ -61,7 +61,7 @@ enum ProtocolEvents {
   // Clicks
   mouseClick,
   mouseDoubleClick,
-  mouseButtonPressed,
+  mouseButtonHold,
   mouseButtonReleased,
 }
 

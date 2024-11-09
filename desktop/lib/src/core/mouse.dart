@@ -46,8 +46,7 @@ class Mouse {
 
   Future<void> click(plugin.MouseButton button) async {
     debugPrint("Click");
-    mouse.pressButton(button);
-    mouse.releaseButton(button);
+    mouse.click(button);
   }
 
   Future<void> doubleClick(plugin.MouseButton button) async {
@@ -55,13 +54,13 @@ class Mouse {
     mouse.doubleClick();
   }
 
-  void pressButton(plugin.MouseButton button) {
+  void holdLeftButton() {
     debugPrint("Press");
-    mouse.pressButton(button);
+    mouse.holdLeftButton();
   }
 
-  void releaseButton(plugin.MouseButton button) {
+  void releaseLeftButton() {
     debugPrint("Release");
-    mouse.releaseButton(button);
+    mouse.releaseLeftButton();
   }
 }

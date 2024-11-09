@@ -8,9 +8,6 @@ class MouseControl {
 
   MouseControl(this.channel);
 
-  /// Send simple click events.
-  ///
-  /// ( "right", "left", "middle" )
   void click(ClickType type) {
     _send(
       event: ProtocolEvents.mouseClick,
@@ -20,7 +17,7 @@ class MouseControl {
 
   void press(ClickType type) {
     _send(
-      event: ProtocolEvents.mouseButtonPressed,
+      event: ProtocolEvents.mouseButtonHold,
       data: MouseButtonProtocolData(type: type),
     );
   }
