@@ -1,4 +1,5 @@
 import 'package:controller/src/UI/connect/connect_qr_code.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum ConnectionType {
@@ -157,6 +158,6 @@ class CardItem {
     required this.description,
     required this.color,
     required this.type,
-    this.isAvailable = false,
+    this.isAvailable = kDebugMode,
   });
 }
