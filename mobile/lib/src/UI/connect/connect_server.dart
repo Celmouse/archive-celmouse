@@ -1,4 +1,5 @@
 import 'package:controller/src/UI/components/support_button.dart';
+import 'package:controller/src/UI/connect/connection_menu.dart';
 import 'package:controller/src/UI/cursor/cursor_move.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -102,7 +103,6 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                           ),
                         ],
                       ),
-                     
                     ),
                 context: context);
           },
@@ -140,29 +140,34 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                   ),
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   childrenPadding: const EdgeInsets.only(bottom: 16),
+                  expandedAlignment: Alignment.centerLeft,
                   children: [
-                    'Donwload the Desktop App.',
-                    'On Windows: Launch the Power Shell',
-                    'Type the command: ipconfig getifaddr en0',
-                    'On Linux: Launch the terminal',
-                    'Type the command: ifconfig en0',
-                    'On MacOS: Launch the terminal',
-                    'Type the command: ipconfig getifaddr en0',
-                    "The IP usually is 4x 1 to 3 digits separated by dots.",
-                    "Looks like: 192.168.0.100"
-                  ]
-                      .asMap()
-                      .map((i, v) {
-                        return MapEntry(i, Text('${i + 1}: $v'));
-                      })
-                      .values
-                      .toList(),
+                    const Text("1. Check if your phone supports gyroscope."),
+                    GestureDetector(
+                      onTap: () => launchSite(),
+                      child: const Text(
+                        '2. Download the HUB.',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.blue,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    const Text("3. Connect to the HUB."),
+                    const Text("4. Start moving you pointer."),
+                  ],
                 ),
                 TextField(
                   controller: ipController,
                   onSubmitted: (_) => connect(),
                   decoration: const InputDecoration(
-                    labelText: 'Type the Desktop App IP',
+                    labelText: 'Type the HUB IP',
+                    hintText: "168.192.0.1",
+                    hintStyle: TextStyle(
+                      color: Colors.white12,
+                    ),
                   ),
                 ),
                 Visibility(
@@ -185,6 +190,17 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                     ),
                   ),
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ConnectionMenuPage(),
+                      ),
+                    );
+                  },
+                  child: const Text("Try another way"),
+                )
               ]
                   .map((e) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
