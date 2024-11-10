@@ -190,16 +190,19 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ConnectionMenuPage(),
-                      ),
-                    );
-                  },
-                  child: const Text("Try another way"),
+                Visibility(
+                  visible: false,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ConnectionMenuPage(),
+                        ),
+                      );
+                    },
+                    child: const Text("Try another way"),
+                  ),
                 )
               ]
                   .map((e) => Padding(
