@@ -1,39 +1,34 @@
 import 'dart:ffi';
 import 'mouse_macos_bindings_generated.dart';
 
-import 'package:mouse_platform_interface/mouse_platform_interface.dart';
+import 'package:mouse_platform_interface/mouse_platform_interface.dart' as i;
 
-class MouseMacOS extends MousePlatform {
+
+class MouseMacOS extends i.MousePlatform {
   static void registerWith() {
-    MousePlatform.instance = MouseMacOS();
+    i.MousePlatform.instance = MouseMacOS();
   }
 
   @override
-  void move(double x, double y) => _bindings.mouseMove(x, y);
+  void move(double x, double y) => _bindings.MouseMove(x, y);
 
   @override
-  void moveTo(double x, double y) => _bindings.mouseMoveTo(x, y);
+  void moveTo(double x, double y) => _bindings.MouseMoveTo(x, y);
 
   @override
-  (int x, int y) getScreenSize() {
-    final size = _bindings.getScreenSize();
-    return (size.width, size.height);
-  }
+  void holdLeftButton() => _bindings.MouseHoldLeftButton();
 
   @override
-  void holdLeftButton() => _bindings.mouseHoldLeftButton();
+  void releaseLeftButton() => _bindings.MouseReleaseLeftButton();
 
   @override
-  void releaseLeftButton() => _bindings.mouseReleaseLeftButton();
+  void click(i.MouseButton button) => _bindings.MouseClick(button.value);
 
   @override
-  void click(MouseButton button) => _bindings.mouseClick(button.value);
+  void doubleClick() => _bindings.DoubleClick();
 
   @override
-  void doubleClick() => _bindings.performDoubleClick();
-
-  @override
-  void scroll(int x, int y, int amount) => _bindings.mouseScroll(x, y, amount);
+  void scroll(int x, int y, int amount) => _bindings.MouseScroll(x, y, amount);
 }
 
 const String _libName = 'mouse_macos';
