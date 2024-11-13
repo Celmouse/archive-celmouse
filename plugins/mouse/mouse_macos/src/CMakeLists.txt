@@ -6,11 +6,13 @@ cmake_minimum_required(VERSION 3.10)
 project(mouse_macos_library VERSION 0.0.1 LANGUAGES C)
 
 add_library(mouse_macos SHARED
-  "src/mouse_macos.c"
+  "mouse_macos.c"
 )
 
+# add_subdirectory(third_party/robot-cpp)
+
 set_target_properties(mouse_macos PROPERTIES
-  PUBLIC_HEADER src/mouse_macos.h
+  PUBLIC_HEADER mouse_macos.h
   OUTPUT_NAME "mouse_macos"
 )
 
