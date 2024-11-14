@@ -48,7 +48,7 @@ export default function Page() {
                                         <CardDescription>Download Celmouse for Linux</CardDescription>
                                     </CardHeader>
                                     <CardContent className="flex justify-center">
-                                        <Button asChild disabled><Link href={downloadUrls.linux}>Download for Linux</Link></Button>
+                                        <Button asChild disabled>{/*<Link href={downloadUrls.linux}>Download for Linux</Link>*/}</Button>
                                     </CardContent>
                                 </Card>
                             </TabsContent>
