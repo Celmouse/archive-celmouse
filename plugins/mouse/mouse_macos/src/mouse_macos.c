@@ -34,15 +34,12 @@ FFI_PLUGIN_EXPORT void DoubleClick(void)
       NULL, kCGEventLeftMouseDown, currentPos, 0);
   CGEventSetIntegerValueField(mouseDoubleClick, kCGMouseEventClickState, 2);
   CGEventPost(kCGHIDEventTap, mouseDoubleClick);
-
   CFRelease(mouseDoubleClick);
 
   // Cria o evento de soltar
   CGEventRef mouseUp = CGEventCreateMouseEvent(
       NULL, kCGEventLeftMouseUp, currentPos, 0);
   CGEventPost(kCGHIDEventTap, mouseUp);
-
-  CFRelease(mouseDoubleClick);
   CFRelease(mouseUp);
 }
 

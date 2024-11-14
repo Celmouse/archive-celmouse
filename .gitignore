@@ -29,3 +29,4 @@ melos_celmouse.iml
 **/**/melos_**.iml
 *.g.dart
 *.freezed.dart
+/builds
