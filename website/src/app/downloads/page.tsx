@@ -37,8 +37,7 @@ export default function Page() {
                                         <CardDescription>Download Celmouse for Mac</CardDescription>
                                     </CardHeader>
                                     <CardContent className="flex flex-col justify-start items-start space-y-4">
-                                        <Button asChild><Link href={downloadUrls.macOS}>Download for Apple Mac Intel Chip</Link></Button>
-                                        <Button asChild><Link href={downloadUrls.macOSm1}>Download for Apple Mac Sillicon Chip</Link></Button>
+                                        <Button asChild><Link href={downloadUrls.macOS}>Download for MacOS</Link></Button>
                                     </CardContent>
                                 </Card>
                             </TabsContent>
@@ -49,7 +48,7 @@ export default function Page() {
                                         <CardDescription>Download Celmouse for Linux</CardDescription>
                                     </CardHeader>
                                     <CardContent className="flex justify-center">
-                                        <Button asChild><Link href={downloadUrls.linux}>Download for Linux</Link></Button>
+                                        <Button asChild disabled><Link href={downloadUrls.linux}>Download for Linux</Link></Button>
                                     </CardContent>
                                 </Card>
                             </TabsContent>

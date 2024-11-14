@@ -1,23 +1,89 @@
 #include "mouse_windows.h"
 
-// A very short-lived native function.
-//
-// For very short-lived functions, it is fine to call them on the main isolate.
-// They will block the Dart execution while running the native function, so
-// only do this for native functions which are guaranteed to be short-lived.
-FFI_PLUGIN_EXPORT int sum(int a, int b) { return a + b; }
+void MouseMove(float x, float y) {
+  POINT p;
+  if (GetCursorPos(&p)) {
+    SetCursorPos(p.x + (int)x, p.y + (int)y);
+  }
+}
 
-// A longer-lived native function, which occupies the thread calling it.
-//
-// Do not call these kind of native functions in the main isolate. They will
-// block Dart execution. This will cause dropped frames in Flutter applications.
-// Instead, call these native functions on a separate isolate.
-FFI_PLUGIN_EXPORT int sum_long_running(int a, int b) {
-  // Simulate work.
-#if _WIN32
-  Sleep(5000);
-#else
-  usleep(5000 * 1000);
-#endif
-  return a + b;
+void MouseMoveTo(float x, float y) {
+  SetCursorPos((int)x, (int)y);
+}
+
+void DoubleClick(void) {
+  INPUT inputs[2] = {0};
+
+  // First click
+  inputs[0].type = INPUT_MOUSE;
+  inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+
+  inputs[1].type = INPUT_MOUSE;
+  inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+  SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+
+  // Small delay
+  Sleep(100);
+
+  // Second click
+  inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+  inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+  SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+}
+
+void MouseScroll(int x, int y, int amount) {
+  INPUT input = {0};
+  input.type = INPUT_MOUSE;
+
+  if (y != 0) {
+    input.mi.dwFlags = MOUSEEVENTF_WHEEL;
+    input.mi.mouseData = amount * y;
+  } else if (x != 0) {
+    input.mi.dwFlags = MOUSEEVENTF_HWHEEL;
+    input.mi.mouseData = amount * x;
+  }
+
+  SendInput(1, &input, sizeof(INPUT));
+}
+
+void MouseClick(MouseButton button) {
+  INPUT inputs[2] = {0};
+
+  inputs[0].type = INPUT_MOUSE;
+  inputs[1].type = INPUT_MOUSE;
+
+  switch (button) {
+    case kMouseButtonLeft:
+      inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+      inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+      break;
+    case kMouseButtonRight:
+      inputs[0].mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
+      inputs[1].mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+      break;
+    case kMouseButtonMiddle:
+      inputs[0].mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
+      inputs[1].mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
+      break;
+  }
+
+  SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
+}
+
+void MouseHoldLeftButton(void) {
+  INPUT input = {0};
+  input.type = INPUT_MOUSE;
+  input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+
+  SendInput(1, &input, sizeof(INPUT));
+}
+
+void MouseReleaseLeftButton(void) {
+  INPUT input = {0};
+  input.type = INPUT_MOUSE;
+  input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+
+  SendInput(1, &input, sizeof(INPUT));
 }

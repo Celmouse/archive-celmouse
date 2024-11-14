@@ -1,68 +1,37 @@
 #include "mouse_macos.h"
+
 #include <ApplicationServices/ApplicationServices.h>
 
-FFI_PLUGIN_EXPORT void mouseScroll(int x, int y, int amount)
+CGPoint getCurrentMousePosition(void)
 {
-  CGEventRef scroll = CGEventCreateScrollWheelEvent(
-      NULL, kCGScrollEventUnitPixel, 2, y * amount, x * amount);
-  CGEventPost(kCGHIDEventTap, scroll);
-  CFRelease(scroll);
+  CGEventRef event = CGEventCreate(NULL);
+  CGPoint cursor = CGEventGetLocation(event);
+  CFRelease(event);
+  return cursor;
 }
-
-FFI_PLUGIN_EXPORT void mouseMove(float x, float y)
+FFI_PLUGIN_EXPORT void MouseMove(float x, float y)
 {
-  // Obter posição atual do mouse
-  CGEventRef currentPositionEvent = CGEventCreate(NULL);
-  CGPoint currentPos = CGEventGetLocation(currentPositionEvent);
-  CFRelease(currentPositionEvent);
-  mouseMoveTo(currentPos.x + x, currentPos.y + y);
-
-  // Nova posição com deslocamento
+  CGPoint currentPos = getCurrentMousePosition();
   CGPoint newPos = CGPointMake(currentPos.x + x, currentPos.y + y);
-
-  // Criar evento de movimento para a nova posição
-  CGEventRef move = CGEventCreateMouseEvent(
-      NULL, kCGEventMouseMoved, newPos, kCGMouseButtonLeft);
+  CGEventRef move = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, newPos, kCGMouseButtonLeft);
   CGEventPost(kCGHIDEventTap, move);
   CFRelease(move);
 }
 
-FFI_PLUGIN_EXPORT void mouseMoveTo(float x, float y)
+FFI_PLUGIN_EXPORT void MouseMoveTo(float x, float y)
 {
-  CGPoint newPos = CGPointMake(x, y);
-
-  CGEventRef moveEvent = CGEventCreateMouseEvent(
-      NULL,
-      kCGEventMouseMoved,
-      newPos,
-      kCGEventLeftMouseDown);
-
-  CGEventPost(kCGHIDEventTap, moveEvent);
-  CFRelease(moveEvent);
+  CGEventRef move = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, CGPointMake(x, y), kCGMouseButtonLeft);
+  CGEventPost(kCGHIDEventTap, move);
+  CFRelease(move);
 }
 
-FFI_PLUGIN_EXPORT ScreenSize getScreenSize(void)
+FFI_PLUGIN_EXPORT void DoubleClick(void)
 {
-  ScreenSize screenSize;
-
-  // Obtenha a tela principal
-  CGDirectDisplayID displayId = CGMainDisplayID();
-
-  // Obtenha a largura e a altura da tela principal
-  screenSize.width = (int)CGDisplayPixelsWide(displayId);
-  screenSize.height = (int)CGDisplayPixelsHigh(displayId);
-
-  return screenSize;
-}
-
-FFI_PLUGIN_EXPORT void performDoubleClick(void)
-{
-  // Obtém a posição atual do mouse
-  CGPoint mouseLocation = CGEventGetLocation(CGEventCreate(NULL));
+  CGPoint currentPos = getCurrentMousePosition();
 
   // Cria o evento de clique duplo
   CGEventRef mouseDoubleClick = CGEventCreateMouseEvent(
-      NULL, kCGEventLeftMouseDown, mouseLocation, 0);
+      NULL, kCGEventLeftMouseDown, currentPos, 0);
   CGEventSetIntegerValueField(mouseDoubleClick, kCGMouseEventClickState, 2);
   CGEventPost(kCGHIDEventTap, mouseDoubleClick);
 
@@ -70,51 +39,62 @@ FFI_PLUGIN_EXPORT void performDoubleClick(void)
 
   // Cria o evento de soltar
   CGEventRef mouseUp = CGEventCreateMouseEvent(
-      NULL, kCGEventLeftMouseUp, mouseLocation, 0);
+      NULL, kCGEventLeftMouseUp, currentPos, 0);
   CGEventPost(kCGHIDEventTap, mouseUp);
 
+  CFRelease(mouseDoubleClick);
   CFRelease(mouseUp);
 }
 
-FFI_PLUGIN_EXPORT void mouseClick(int button)
+FFI_PLUGIN_EXPORT void MouseScroll(int x, int y, int amount)
 {
-  CGPoint mouseLocation = CGEventGetLocation(CGEventCreate(NULL));
-
-  int downEvent = button == 0 ? kCGEventLeftMouseDown : kCGEventRightMouseDown;
-  int upEvent = button == 0 ? kCGEventLeftMouseUp : kCGEventRightMouseUp;
-
-  // Cria o evento de clique para pressionar o botão do mouse
-  CGEventRef mouseDown = CGEventCreateMouseEvent(
-      NULL, downEvent, mouseLocation, button);
-  CGEventPost(kCGHIDEventTap, mouseDown);
-
-  // Cria o evento de clique para soltar o botão do mouse
-  CGEventRef mouseUp = CGEventCreateMouseEvent(
-      NULL, upEvent, mouseLocation, button);
-  CGEventPost(kCGHIDEventTap, mouseUp);
-
-  // Libera os eventos
-  CFRelease(mouseDown);
-  CFRelease(mouseUp);
+  CGEventRef scroll = CGEventCreateScrollWheelEvent(NULL, kCGScrollEventUnitPixel, 2, y * amount, x * amount);
+  CGEventPost(kCGHIDEventTap, scroll);
+  CFRelease(scroll);
 }
 
-FFI_PLUGIN_EXPORT void mouseHoldLeftButton(void)
+FFI_PLUGIN_EXPORT void MouseClick(MouseButton button)
 {
-  // Obtém a posição atual do mouse
-  CGPoint currentPos = CGEventGetLocation(CGEventCreate(NULL));
+  CGEventType downEvent, upEvent;
+  switch (button)
+  {
+  case kMouseButtonLeft:
+    downEvent = kCGEventLeftMouseDown;
+    upEvent = kCGEventLeftMouseUp;
+    break;
+  case kMouseButtonRight:
+    downEvent = kCGEventRightMouseDown;
+    upEvent = kCGEventRightMouseUp;
+    break;
+  case kMouseButtonMiddle:
+    downEvent = kCGEventOtherMouseDown;
+    upEvent = kCGEventOtherMouseUp;
+    break;
+  default:
+    return;
+  }
 
-  // Cria e envia os eventos de clique
-  CGEventRef mouseDown = NSLeftMouseDragged(NULL, kCGEventLeftMouseDragged, currentPos, 0);
-  CGEventPost(kCGHIDEventTap, mouseDown);
-  CFRelease(mouseDown);
+  CGPoint currentPos = getCurrentMousePosition();
+  CGEventRef click_down = CGEventCreateMouseEvent(NULL, downEvent, currentPos, button);
+  CGEventRef click_up = CGEventCreateMouseEvent(NULL, upEvent, currentPos, button);
+
+  CGEventPost(kCGHIDEventTap, click_down);
+  CGEventPost(kCGHIDEventTap, click_up);
+
+  CFRelease(click_down);
+  CFRelease(click_up);
 }
 
-FFI_PLUGIN_EXPORT void mouseReleaseLeftButton(void)
+FFI_PLUGIN_EXPORT void MouseHoldLeftButton(void)
 {
-  // Obtém a posição atual do mouse
-  CGPoint currentPos = CGEventGetLocation(CGEventCreate(NULL));
+  CGEventRef hold = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, getCurrentMousePosition(), kCGMouseButtonLeft);
+  CGEventPost(kCGHIDEventTap, hold);
+  CFRelease(hold);
+}
 
-  CGEventRef mouseUp = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, currentPos, 0);
-  CGEventPost(kCGHIDEventTap, mouseUp);
-  CFRelease(mouseUp);
+FFI_PLUGIN_EXPORT void MouseReleaseLeftButton(void)
+{
+  CGEventRef release = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, getCurrentMousePosition(), kCGMouseButtonLeft);
+  CGEventPost(kCGHIDEventTap, release);
+  CFRelease(release);
 }

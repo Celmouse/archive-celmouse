@@ -21,7 +21,9 @@ class Mouse {
 
   Mouse() {
     const mobileSensitivityStartValue = 5.0;
+    const mobileScrollSensitivityStartValue = 3;
     sensitivity = mobileSensitivityStartValue;
+    scrollSensitivity = mobileScrollSensitivityStartValue;
   }
 
   void move(double x, double y) {
@@ -42,7 +44,7 @@ class Mouse {
   set sensitivity(double value) => _sensitivity =
       pow(defaultSensValue, value).toDouble() - defaultSensAdjustmentValue;
 
-  set scrollSensitivity(int value) => _scrollSensitivity = value;
+  set scrollSensitivity(int value) => _scrollSensitivity = value * 4;
 
   Future<void> click(plugin.MouseButton button) async {
     debugPrint("Click");

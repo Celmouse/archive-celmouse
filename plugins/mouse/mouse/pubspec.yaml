@@ -12,6 +12,8 @@ flutter:
     platforms:
       macos:
         default_package: mouse_macos
+      windows:
+        default_package: mouse_windows
       # TODO: Implement other platforms following same example (url_launcher)
 
 dependencies:
@@ -23,6 +25,9 @@ dependencies:
 
   mouse_macos:
     path: ../mouse_macos
+  
+  mouse_windows:
+    path: ../mouse_windows
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,8 @@ add_library(mouse_macos SHARED
   "mouse_macos.c"
 )
 
+# add_subdirectory(third_party/robot-cpp)
+
 set_target_properties(mouse_macos PROPERTIES
   PUBLIC_HEADER mouse_macos.h
   OUTPUT_NAME "mouse_macos"

@@ -13,6 +13,7 @@
         "__locale": "cpp",
         "locale": "cpp",
         "__bit_reference": "c",
-        "ios": "c"
+        "ios": "c",
+        "mouse_windows.h": "c"
     }
 }

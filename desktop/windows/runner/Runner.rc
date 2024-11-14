@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.celmouse" "\0"
-            VALUE "FileDescription", "server" "\0"
+            VALUE "CompanyName", "com.celmouse.desktop" "\0"
+            VALUE "FileDescription", "Celmouse" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "server" "\0"
+            VALUE "InternalName", "Celmouse" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.celmouse. All rights reserved." "\0"
-            VALUE "OriginalFilename", "server.exe" "\0"
-            VALUE "ProductName", "server" "\0"
+            VALUE "OriginalFilename", "Celmouse.exe" "\0"
+            VALUE "ProductName", "Celmouse" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

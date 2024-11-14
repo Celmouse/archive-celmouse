@@ -1,30 +1,73 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#if _WIN32
 #include <windows.h>
-#else
-#include <pthread.h>
-#include <unistd.h>
-#endif
 
-#if _WIN32
 #define FFI_PLUGIN_EXPORT __declspec(dllexport)
-#else
-#define FFI_PLUGIN_EXPORT
-#endif
 
-// A very short-lived native function.
-//
-// For very short-lived functions, it is fine to call them on the main isolate.
-// They will block the Dart execution while running the native function, so
-// only do this for native functions which are guaranteed to be short-lived.
-FFI_PLUGIN_EXPORT int sum(int a, int b);
+// Estrutura para armazenar a largura e altura da tela
+typedef enum
+{
+    kMouseButtonLeft = 0,
+    kMouseButtonRight = 1,
+    kMouseButtonMiddle
+} MouseButton;
 
-// A longer lived native function, which occupies the thread calling it.
-//
-// Do not call these kind of native functions in the main isolate. They will
-// block Dart execution. This will cause dropped frames in Flutter applications.
-// Instead, call these native functions on a separate isolate.
-FFI_PLUGIN_EXPORT int sum_long_running(int a, int b);
+/**
+ * @brief Moves the mouse smooth adding x and y accordingly to the current mouse position.
+ *
+ * If the mouse is in (500, 500) mouseMove(1,1) will move the mouse to (501, 501)
+ * This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+ *
+ * @param x The x-value to add to the move current coordinates.
+ * @param y The y-cvalue to add to the move current coordinates.
+ */
+FFI_PLUGIN_EXPORT void MouseMove(float x, float y);
+
+/**
+ * @brief This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+ *
+ * This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+ *
+ * @param x The x-coordinate to move the mouse cursor to.
+ * @param y The y-coordinate to move the mouse cursor to.
+ */
+FFI_PLUGIN_EXPORT void MouseMoveTo(float x, float y);
+
+/**
+ * @brief This function performs a double click.
+ *
+ * This function performs a double click with the left mouse button.
+ */
+FFI_PLUGIN_EXPORT void DoubleClick(void);
+
+/**
+ * @brief This function scrolls the mouse wheel.
+ *
+ * This function scrolls the mouse wheel by a specific pixels amount.
+ *
+ * @param x The x-value to scroll the mouse wheel.
+ * @param y The y-value to scroll the mouse wheel.
+ * @param amount The amount of scrolling to perform.
+ */
+FFI_PLUGIN_EXPORT void MouseScroll(int x, int y, int amount);
+
+/**
+ * @brief This function performs a mouse click.
+ *
+ * This function performs a mouse click with the given button.
+ *
+ * @param button The button to click.
+ */
+FFI_PLUGIN_EXPORT void MouseClick(MouseButton button);
+
+/**
+ * @brief This function holds the left mouse button.
+ *
+ * This function holds the left mouse button.
+ */
+FFI_PLUGIN_EXPORT void MouseHoldLeftButton(void);
+
+/**
+ * @brief This function releases the left mouse button.
+ *
+ * This function releases the left mouse button.
+ */
+FFI_PLUGIN_EXPORT void MouseReleaseLeftButton(void);

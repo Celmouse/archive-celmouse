@@ -27,111 +27,135 @@ class MouseMacosBindings {
           lookup)
       : _lookup = lookup;
 
-  void mouseMove(
+  /// @brief Moves the mouse smooth adding x and y accordingly to the current mouse position.
+  ///
+  /// If the mouse is in (500, 500) mouseMove(1,1) will move the mouse to (501, 501)
+  /// This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+  ///
+  /// @param x The x-value to add to the move current coordinates.
+  /// @param y The y-cvalue to add to the move current coordinates.
+  void MouseMove(
     double x,
     double y,
   ) {
-    return _mouseMove(
+    return _MouseMove(
       x,
       y,
     );
   }
 
-  late final _mouseMovePtr =
+  late final _MouseMovePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
-          'mouseMove');
-  late final _mouseMove =
-      _mouseMovePtr.asFunction<void Function(double, double)>();
+          'MouseMove');
+  late final _MouseMove =
+      _MouseMovePtr.asFunction<void Function(double, double)>(isLeaf: true);
 
-  void mouseMoveTo(
+  /// @brief This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+  ///
+  /// This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+  ///
+  /// @param x The x-coordinate to move the mouse cursor to.
+  /// @param y The y-coordinate to move the mouse cursor to.
+  void MouseMoveTo(
     double x,
     double y,
   ) {
-    return _mouseMoveTo(
+    return _MouseMoveTo(
       x,
       y,
     );
   }
 
-  late final _mouseMoveToPtr =
+  late final _MouseMoveToPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
-          'mouseMoveTo');
-  late final _mouseMoveTo =
-      _mouseMoveToPtr.asFunction<void Function(double, double)>();
+          'MouseMoveTo');
+  late final _MouseMoveTo =
+      _MouseMoveToPtr.asFunction<void Function(double, double)>(isLeaf: true);
 
-  ScreenSize getScreenSize() {
-    return _getScreenSize();
+  /// @brief This function performs a double click.
+  ///
+  /// This function performs a double click with the left mouse button.
+  void DoubleClick() {
+    return _DoubleClick();
   }
 
-  late final _getScreenSizePtr =
-      _lookup<ffi.NativeFunction<ScreenSize Function()>>('getScreenSize');
-  late final _getScreenSize =
-      _getScreenSizePtr.asFunction<ScreenSize Function()>();
+  late final _DoubleClickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('DoubleClick');
+  late final _DoubleClick =
+      _DoubleClickPtr.asFunction<void Function()>(isLeaf: true);
 
-  void performDoubleClick() {
-    return _performDoubleClick();
-  }
-
-  late final _performDoubleClickPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('performDoubleClick');
-  late final _performDoubleClick =
-      _performDoubleClickPtr.asFunction<void Function()>();
-
-  void mouseScroll(
+  /// @brief This function scrolls the mouse wheel.
+  ///
+  /// This function scrolls the mouse wheel by a specific pixels amount.
+  ///
+  /// @param x The x-value to scroll the mouse wheel.
+  /// @param y The y-value to scroll the mouse wheel.
+  /// @param amount The amount of scrolling to perform.
+  void MouseScroll(
     int x,
     int y,
     int amount,
   ) {
-    return _mouseScroll(
+    return _MouseScroll(
       x,
       y,
       amount,
     );
   }
 
-  late final _mouseScrollPtr =
+  late final _MouseScrollPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Int, ffi.Int)>>(
-          'mouseScroll');
-  late final _mouseScroll =
-      _mouseScrollPtr.asFunction<void Function(int, int, int)>();
+          'MouseScroll');
+  late final _MouseScroll =
+      _MouseScrollPtr.asFunction<void Function(int, int, int)>(isLeaf: true);
 
-  void mouseClick(
+  /// @brief This function performs a mouse click.
+  ///
+  /// This function performs a mouse click with the given button.
+  ///
+  /// @param button The button to click.
+  void MouseClick(
     int button,
   ) {
-    return _mouseClick(
+    return _MouseClick(
       button,
     );
   }
 
-  late final _mouseClickPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>('mouseClick');
-  late final _mouseClick = _mouseClickPtr.asFunction<void Function(int)>();
+  late final _MouseClickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>('MouseClick');
+  late final _MouseClick =
+      _MouseClickPtr.asFunction<void Function(int)>(isLeaf: true);
 
-  void mouseHoldLeftButton() {
-    return _mouseHoldLeftButton();
+  /// @brief This function holds the left mouse button.
+  ///
+  /// This function holds the left mouse button.
+  void MouseHoldLeftButton() {
+    return _MouseHoldLeftButton();
   }
 
-  late final _mouseHoldLeftButtonPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('mouseHoldLeftButton');
-  late final _mouseHoldLeftButton =
-      _mouseHoldLeftButtonPtr.asFunction<void Function()>();
+  late final _MouseHoldLeftButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('MouseHoldLeftButton');
+  late final _MouseHoldLeftButton =
+      _MouseHoldLeftButtonPtr.asFunction<void Function()>(isLeaf: true);
 
-  void mouseReleaseLeftButton() {
-    return _mouseReleaseLeftButton();
+  /// @brief This function releases the left mouse button.
+  ///
+  /// This function releases the left mouse button.
+  void MouseReleaseLeftButton() {
+    return _MouseReleaseLeftButton();
   }
 
-  late final _mouseReleaseLeftButtonPtr =
+  late final _MouseReleaseLeftButtonPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function()>>(
-          'mouseReleaseLeftButton');
-  late final _mouseReleaseLeftButton =
-      _mouseReleaseLeftButtonPtr.asFunction<void Function()>();
+          'MouseReleaseLeftButton');
+  late final _MouseReleaseLeftButton =
+      _MouseReleaseLeftButtonPtr.asFunction<void Function()>(isLeaf: true);
 }
 
 /// Estrutura para armazenar a largura e altura da tela
-final class ScreenSize extends ffi.Struct {
-  @ffi.Int()
-  external int width;
-
-  @ffi.Int()
-  external int height;
+abstract class MouseButton {
+  static const int kMouseButtonLeft = 0;
+  static const int kMouseButtonRight = 1;
+  static const int kMouseButtonMiddle = 2;
 }
