@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import '../../configs/mouse_settings.dart';
 import '../../socket/mouse.dart';
 import 'package:protocol/protocol.dart';
 
@@ -48,8 +49,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    if (!getIt.isRegistered<MouseConfigs>()) {
-      getIt.registerSingleton<MouseConfigs>(MouseConfigs());
+    if (!getIt.isRegistered<MouseSettings>()) {
+      getIt.registerSingleton<MouseSettings>(MouseSettings.fromJson({}));
     }
 
     mouse = MouseControl(widget.channel);
@@ -108,7 +109,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
     setState(() {
       isScrollingEnabled = false;
       isCursorMovingEnabled = tmpCursorMovingEnabled &&
-          getIt.get<MouseConfigs>().keepMovingAfterScroll;
+          getIt.get<MouseSettings>().keepMovingAfterScroll;
     });
     if (isCursorMovingEnabled) {
       movement.startMouseMovement();
@@ -181,7 +182,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   builder: (context) {
                     return CursorSettingsPage(
                       channel: widget.channel,
-                      configs: getIt.get<MouseConfigs>(),
+                      configs: getIt.get<MouseSettings>(),
                     );
                   },
                 ),
@@ -273,12 +274,14 @@ class _MoveMousePageState extends State<MoveMousePage> {
                       onTapDown: (_) {
                         leftClickTimer = Timer(
                           Duration(
-                            milliseconds:
-                                getIt.get<MouseConfigs>().dragStartDelayMS,
+                            milliseconds: getIt
+                                .get<MouseSettings>()
+                                .dragStartDelayMS
+                                .duration,
                           ),
                           () {
                             showDeactivatedFeatureWarning();
-                            //TODO: Fix press
+                            // TODO: Fix press
                             // mouse.press(ClickType.left);
                           },
                         );
@@ -303,8 +306,10 @@ class _MoveMousePageState extends State<MoveMousePage> {
                         leftClickTimer.cancel();
                         doubleClickTimer = Timer(
                           Duration(
-                            milliseconds:
-                                getIt.get<MouseConfigs>().doubleClickDelayMS,
+                            milliseconds: getIt
+                                .get<MouseSettings>()
+                                .doubleClickDelayMS
+                                .duration,
                           ),
                           () {},
                         );
@@ -429,14 +434,14 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   void showDeactivatedFeatureWarning() {
     Fluttertoast.showToast(
-        msg: "Hold and Release was deactivated in this version due to game mode prep!",
+        msg:
+            "Hold and Release was deactivated in this version due to game mode prep!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.TOP,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.yellow[600],
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
     // ScaffoldMessenger.of(context).showSnackBar(
     //   SnackBar(
     //     showCloseIcon: true,

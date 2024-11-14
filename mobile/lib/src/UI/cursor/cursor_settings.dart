@@ -4,8 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../configs/mouse_settings.dart';
 import 'help_walkthrough.dart';
 
+/// Page where you can change the cursor settings
+///
+/// Inverter eixos do ponteiro
+/// Inverter eixos do scroll
+/// Alterar sensibilidade do ponteiro
+/// Alterar sensibilidade do scroll
+///
+/// Velocidade do duplo clique
+/// Reduzir vibração
+/// Atraso para pressionar e segurar
 class CursorSettingsPage extends StatefulWidget {
   const CursorSettingsPage({
     super.key,
@@ -13,7 +24,7 @@ class CursorSettingsPage extends StatefulWidget {
     required this.configs,
   });
 
-  final MouseConfigs configs;
+  final MouseSettings configs;
   final WebSocketChannel channel;
 
   @override
@@ -66,10 +77,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: getIt.get<MouseConfigs>().invertedPointerY,
+                value: getIt.get<MouseSettings>().invertedPointerY,
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().invertedPointerY = value;
+                    getIt.get<MouseSettings>().invertedPointerY = value;
                   });
                 },
               ),
@@ -80,10 +91,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: getIt.get<MouseConfigs>().invertedPointerX,
+                value: getIt.get<MouseSettings>().invertedPointerX,
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().invertedPointerX = value;
+                    getIt.get<MouseSettings>().invertedPointerX = value;
                   });
                 },
               ),
@@ -96,14 +107,14 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
               ),
               Slider(
-                label: getIt.get<MouseConfigs>().sensitivity.toString(),
-                value: getIt.get<MouseConfigs>().sensitivity.toDouble(),
+                label: getIt.get<MouseSettings>().sensitivity.toString(),
+                value: getIt.get<MouseSettings>().sensitivity.toDouble(),
                 min: 1,
                 divisions: 9,
                 max: 10,
                 onChanged: (amount) {
                   setState(() {
-                    getIt.get<MouseConfigs>().sensitivity = amount.round();
+                    getIt.get<MouseSettings>().sensitivity = amount.round();
                   });
                   mouse.changeSensitivity(amount);
                 },
@@ -115,10 +126,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: getIt.get<MouseConfigs>().keepMovingAfterScroll,
+                value: getIt.get<MouseSettings>().keepMovingAfterScroll,
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().keepMovingAfterScroll = value;
+                    getIt.get<MouseSettings>().keepMovingAfterScroll = value;
                   });
                 },
               ),
@@ -137,10 +148,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: getIt.get<MouseConfigs>().invertedScrollY,
+                value: getIt.get<MouseSettings>().invertedScrollY,
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().invertedScrollY = value;
+                    getIt.get<MouseSettings>().invertedScrollY = value;
                   });
                 },
               ),
@@ -151,10 +162,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                value: getIt.get<MouseConfigs>().invertedScrollX,
+                value: getIt.get<MouseSettings>().invertedScrollX,
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().invertedScrollX = value;
+                    getIt.get<MouseSettings>().invertedScrollX = value;
                   });
                 },
               ),
@@ -167,14 +178,14 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
               ),
               Slider(
-                label: getIt.get<MouseConfigs>().scrollSensitivity.toString(),
-                value: getIt.get<MouseConfigs>().scrollSensitivity.toDouble(),
+                label: getIt.get<MouseSettings>().scrollSensitivity.toString(),
+                value: getIt.get<MouseSettings>().scrollSensitivity.toDouble(),
                 min: 1,
                 divisions: 9,
                 max: 10,
                 onChanged: (amount) {
                   setState(() {
-                    getIt.get<MouseConfigs>().scrollSensitivity =
+                    getIt.get<MouseSettings>().scrollSensitivity =
                         amount.round();
                   });
                   mouse.changeScrollSensitivity(amount.round());
@@ -200,7 +211,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                 ),
                 alignment: Alignment.center,
                 isExpanded: true,
-                value: getIt.get<MouseConfigs>().doubleClickDelayMS,
+                value: getIt.get<MouseSettings>().doubleClickDelayMS,
                 items: DoubleClickDelayOptions.values
                     .map((o) => DropdownMenuItem(
                           alignment: Alignment.center,
@@ -216,8 +227,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     .toList(),
                 onChanged: (value) {
                   setState(() {
-                    getIt.get<MouseConfigs>().doubleClickDelayMS =
-                        value ?? DoubleClickDelayOptions.standard.duration;
+                    getIt.get<MouseSettings>().doubleClickDelayMS =
+                        DoubleClickDelayOptions.values.firstWhere(
+                      (v) => v.duration == value,
+                    );
                   });
                 },
               ),
@@ -242,11 +255,11 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     ),
                     alignment: Alignment.center,
                     isExpanded: true,
-                    value: getIt.get<MouseConfigs>().threshhold,
+                    value: getIt.get<MouseSettings>().vibrationThreshold.value,
                     items: ReduceVibrationOptions.values
                         .map((o) => DropdownMenuItem(
                               alignment: Alignment.center,
-                              value: o.threshhold,
+                              value: o.value,
                               child: Text(
                                 o.text,
                                 style: Theme.of(context)
@@ -258,8 +271,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         .toList(),
                     onChanged: (value) {
                       setState(() {
-                        getIt.get<MouseConfigs>().threshhold =
-                            value ?? ReduceVibrationOptions.standard.threshhold;
+                        getIt.get<MouseSettings>().vibrationThreshold =
+                            ReduceVibrationOptions.values.firstWhere(
+                          (v) => v.value == value,
+                        );
                       });
                     },
                   ),
@@ -277,7 +292,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     ),
                     alignment: Alignment.center,
                     isExpanded: true,
-                    value: getIt.get<MouseConfigs>().dragStartDelayMS,
+                    value: getIt.get<MouseSettings>().dragStartDelayMS,
                     items: DragStartDelayOptions.values
                         .map((o) => DropdownMenuItem(
                               alignment: Alignment.center,
@@ -293,8 +308,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                         .toList(),
                     onChanged: (value) {
                       setState(() {
-                        getIt.get<MouseConfigs>().dragStartDelayMS =
-                            value ?? DragStartDelayOptions.standard.duration;
+                        getIt.get<MouseSettings>().dragStartDelayMS =
+                            DragStartDelayOptions.values.firstWhere(
+                          (v) => v.duration == value,
+                        );
                       });
                     },
                   ),

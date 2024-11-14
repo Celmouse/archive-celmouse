@@ -50,6 +50,8 @@ dependencies:
     path: ../packages/protocol
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.1
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
 
 
 dev_dependencies:
@@ -63,6 +65,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
   icons_launcher: ^3.0.0
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
 
 
 # flutter_launcher_icons:

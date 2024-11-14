@@ -4,6 +4,7 @@ import 'package:controller/getit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import '../configs/mouse_settings.dart';
 import '../socket/mouse.dart';
 import 'package:vector_math/vector_math.dart' as math;
 import 'package:protocol/protocol.dart';
@@ -49,11 +50,11 @@ class MouseMovement {
             event.timestamp,
           );
 
-          if (x.abs() <= MouseConfigs.scrollThreshholdX) {
+          if (x.abs() <= MouseSettings.scrollThreshholdX) {
             x = 0;
           }
 
-          if (y.abs() <= MouseConfigs.scrollThreshholdY) {
+          if (y.abs() <= MouseSettings.scrollThreshholdY) {
             y = 0;
           }
 
@@ -85,7 +86,7 @@ class MouseMovement {
             event.timestamp,
           );
 
-          final threshold = getIt.get<MouseConfigs>().threshhold;
+          final threshold = getIt.get<MouseSettings>().vibrationThreshold.value;
 
           if (x.abs() <= threshold) {
             x = 0;
@@ -95,8 +96,8 @@ class MouseMovement {
             y = 0;
           }
 
-          final invertedX = getIt.get<MouseConfigs>().invertedPointerX ? -1 : 1;
-          final invertedY = getIt.get<MouseConfigs>().invertedPointerY ? -1 : 1;
+          final invertedX = getIt.get<MouseSettings>().invertedPointerX ? -1 : 1;
+          final invertedY = getIt.get<MouseSettings>().invertedPointerY ? -1 : 1;
 
           mouse.move(
             invertedX * x,
@@ -136,12 +137,12 @@ class MouseMovement {
 
     if (x.abs() > y.abs()) {
       direction =
-          ((getIt.get<MouseConfigs>().invertedScrollX ? 1 : -1) * x.sign < 0)
+          ((getIt.get<MouseSettings>().invertedScrollX ? 1 : -1) * x.sign < 0)
               ? ScrollDirections.left
               : ScrollDirections.right;
     } else if ((x.abs() < y.abs())) {
       direction =
-          ((getIt.get<MouseConfigs>().invertedScrollY ? 1 : -1) * y.sign < 0)
+          ((getIt.get<MouseSettings>().invertedScrollY ? 1 : -1) * y.sign < 0)
               ? ScrollDirections.down
               : ScrollDirections.up;
     } else {
