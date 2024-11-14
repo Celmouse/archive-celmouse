@@ -4,6 +4,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react"
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MenuIcon } from "lucide-react";
 
 
 const geistSans = localFont({
@@ -49,21 +52,48 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex flex-col min-h-screen">
-          <header className="px-4 lg:px-6 h-14 flex items-center">
+          <header className="px-4 lg:px-6 h-14 flex items-center justify-between">
             <a className="flex items-center justify-center" href="/">
               <Image width={32} height={32} src={"/logo.svg"} alt="Logo" />
               <span className="ml-2 text-2xl font-bold">Celmouse</span>
             </a>
-            <nav className="ml-auto flex gap-4 sm:gap-6">
-              <a className="text-sm font-medium hover:underline underline-offset-4" href="/downloads">
-                Download
-              </a>
-              <a className="text-sm font-medium hover:underline underline-offset-4" href="#features">
-                Features
-              </a>
-              <a className="text-sm font-medium hover:underline underline-offset-4" href="https://api.whatsapp.com/send?phone=5533997312898">
-                Contact
-              </a>
+            <nav>
+              <ul className="hidden md:flex ml-auto gap-4 sm:gap-6">
+                <li>
+                  <a className="text-sm font-medium hover:underline underline-offset-4" href="/downloads">
+                    Download
+                  </a>
+                </li>
+                <li>
+                  <a className="text-sm font-medium hover:underline underline-offset-4" href="#features">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a className="text-sm font-medium hover:underline underline-offset-4" href="https://api.whatsapp.com/send?phone=5533997312898">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="md:hidden">
+                  <Button variant="outline" size="icon">
+                    <MenuIcon className="h-[1.2rem] w-[1.2rem]" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <a href="/downloads">Download</a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <a href="#features">Features</a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <a href="https://api.whatsapp.com/send?phone=5533997312898">Contact</a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
           </header>
 
