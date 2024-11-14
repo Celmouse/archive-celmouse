@@ -39,7 +39,7 @@ export default function Page() {
               <p>Perfect for presentations, gaming and more.</p>
             </div>
           </div>
-          <div className="space-x-4 flex items-center" >
+          <div className="space-x-4 flex " >
             <DownloadButton />
             <Button variant="outline"><Link href="#features" >Learn More</Link></Button>
           </div>
