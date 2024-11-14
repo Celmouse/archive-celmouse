@@ -1,4 +1,3 @@
-#include <windows.h>
 #include "mouse_windows.h"
 
 void MouseMove(float x, float y) {
@@ -13,7 +12,7 @@ void MouseMoveTo(float x, float y) {
 }
 
 void DoubleClick(void) {
-  INPUT inputs[4] = {0};
+  INPUT inputs[2] = {0};
 
   // First click
   inputs[0].type = INPUT_MOUSE;
@@ -22,12 +21,14 @@ void DoubleClick(void) {
   inputs[1].type = INPUT_MOUSE;
   inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
 
-  // Second click
-  inputs[2].type = INPUT_MOUSE;
-  inputs[2].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+  SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
 
-  inputs[3].type = INPUT_MOUSE;
-  inputs[3].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+  // Small delay
+  Sleep(100);
+
+  // Second click
+  inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+  inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
 
   SendInput(ARRAYSIZE(inputs), inputs, sizeof(INPUT));
 }
@@ -35,8 +36,14 @@ void DoubleClick(void) {
 void MouseScroll(int x, int y, int amount) {
   INPUT input = {0};
   input.type = INPUT_MOUSE;
-  input.mi.dwFlags = MOUSEEVENTF_WHEEL;
-  input.mi.mouseData = amount;
+
+  if (y != 0) {
+    input.mi.dwFlags = MOUSEEVENTF_WHEEL;
+    input.mi.mouseData = amount * y;
+  } else if (x != 0) {
+    input.mi.dwFlags = MOUSEEVENTF_HWHEEL;
+    input.mi.mouseData = amount * x;
+  }
 
   SendInput(1, &input, sizeof(INPUT));
 }

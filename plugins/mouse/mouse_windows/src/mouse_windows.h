@@ -1,4 +1,6 @@
-#define FFI_PLUGIN_EXPORT
+#include <windows.h>
+
+#define FFI_PLUGIN_EXPORT __declspec(dllexport)
 
 // Estrutura para armazenar a largura e altura da tela
 typedef enum

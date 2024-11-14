@@ -27,43 +27,135 @@ class MouseWindowsBindings {
           lookup)
       : _lookup = lookup;
 
-  /// A very short-lived native function.
+  /// @brief Moves the mouse smooth adding x and y accordingly to the current mouse position.
   ///
-  /// For very short-lived functions, it is fine to call them on the main isolate.
-  /// They will block the Dart execution while running the native function, so
-  /// only do this for native functions which are guaranteed to be short-lived.
-  int sum(
-    int a,
-    int b,
+  /// If the mouse is in (500, 500) mouseMove(1,1) will move the mouse to (501, 501)
+  /// This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+  ///
+  /// @param x The x-value to add to the move current coordinates.
+  /// @param y The y-cvalue to add to the move current coordinates.
+  void MouseMove(
+    double x,
+    double y,
   ) {
-    return _sum(
-      a,
-      b,
+    return _MouseMove(
+      x,
+      y,
     );
   }
 
-  late final _sumPtr =
-      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Int, ffi.Int)>>('sum');
-  late final _sum = _sumPtr.asFunction<int Function(int, int)>();
+  late final _MouseMovePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
+          'MouseMove');
+  late final _MouseMove =
+      _MouseMovePtr.asFunction<void Function(double, double)>(isLeaf: true);
 
-  /// A longer lived native function, which occupies the thread calling it.
+  /// @brief This function moves the mouse cursor to the given (x, y) coordinates on the screen.
   ///
-  /// Do not call these kind of native functions in the main isolate. They will
-  /// block Dart execution. This will cause dropped frames in Flutter applications.
-  /// Instead, call these native functions on a separate isolate.
-  int sum_long_running(
-    int a,
-    int b,
+  /// This function moves the mouse cursor to the given (x, y) coordinates on the screen.
+  ///
+  /// @param x The x-coordinate to move the mouse cursor to.
+  /// @param y The y-coordinate to move the mouse cursor to.
+  void MouseMoveTo(
+    double x,
+    double y,
   ) {
-    return _sum_long_running(
-      a,
-      b,
+    return _MouseMoveTo(
+      x,
+      y,
     );
   }
 
-  late final _sum_long_runningPtr =
-      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Int, ffi.Int)>>(
-          'sum_long_running');
-  late final _sum_long_running =
-      _sum_long_runningPtr.asFunction<int Function(int, int)>();
+  late final _MouseMoveToPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Float, ffi.Float)>>(
+          'MouseMoveTo');
+  late final _MouseMoveTo =
+      _MouseMoveToPtr.asFunction<void Function(double, double)>(isLeaf: true);
+
+  /// @brief This function performs a double click.
+  ///
+  /// This function performs a double click with the left mouse button.
+  void DoubleClick() {
+    return _DoubleClick();
+  }
+
+  late final _DoubleClickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('DoubleClick');
+  late final _DoubleClick =
+      _DoubleClickPtr.asFunction<void Function()>(isLeaf: true);
+
+  /// @brief This function scrolls the mouse wheel.
+  ///
+  /// This function scrolls the mouse wheel by a specific pixels amount.
+  ///
+  /// @param x The x-value to scroll the mouse wheel.
+  /// @param y The y-value to scroll the mouse wheel.
+  /// @param amount The amount of scrolling to perform.
+  void MouseScroll(
+    int x,
+    int y,
+    int amount,
+  ) {
+    return _MouseScroll(
+      x,
+      y,
+      amount,
+    );
+  }
+
+  late final _MouseScrollPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Int, ffi.Int)>>(
+          'MouseScroll');
+  late final _MouseScroll =
+      _MouseScrollPtr.asFunction<void Function(int, int, int)>(isLeaf: true);
+
+  /// @brief This function performs a mouse click.
+  ///
+  /// This function performs a mouse click with the given button.
+  ///
+  /// @param button The button to click.
+  void MouseClick(
+    int button,
+  ) {
+    return _MouseClick(
+      button,
+    );
+  }
+
+  late final _MouseClickPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int32)>>('MouseClick');
+  late final _MouseClick =
+      _MouseClickPtr.asFunction<void Function(int)>(isLeaf: true);
+
+  /// @brief This function holds the left mouse button.
+  ///
+  /// This function holds the left mouse button.
+  void MouseHoldLeftButton() {
+    return _MouseHoldLeftButton();
+  }
+
+  late final _MouseHoldLeftButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('MouseHoldLeftButton');
+  late final _MouseHoldLeftButton =
+      _MouseHoldLeftButtonPtr.asFunction<void Function()>(isLeaf: true);
+
+  /// @brief This function releases the left mouse button.
+  ///
+  /// This function releases the left mouse button.
+  void MouseReleaseLeftButton() {
+    return _MouseReleaseLeftButton();
+  }
+
+  late final _MouseReleaseLeftButtonPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>(
+          'MouseReleaseLeftButton');
+  late final _MouseReleaseLeftButton =
+      _MouseReleaseLeftButtonPtr.asFunction<void Function()>(isLeaf: true);
+}
+
+/// Estrutura para armazenar a largura e altura da tela
+abstract class MouseButton {
+  static const int kMouseButtonLeft = 0;
+  static const int kMouseButtonRight = 1;
+  static const int kMouseButtonMiddle = 2;
 }
