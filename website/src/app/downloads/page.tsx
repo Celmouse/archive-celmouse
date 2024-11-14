@@ -45,7 +45,7 @@ export default function Page() {
                                 <Card>
                                     <CardHeader>
                                         <CardTitle>Linux Download</CardTitle>
-                                        <CardDescription>Download Celmouse for Linux</CardDescription>
+                                        <CardDescription>Download Celmouse for Linux is not yet available and is being tested. If you want to be in the testers list, please contact us.</CardDescription>
                                     </CardHeader>
                                     <CardContent className="flex justify-center">
                                         <Button asChild disabled>{/*<Link href={downloadUrls.linux}>Download for Linux</Link>*/}</Button>
