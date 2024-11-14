@@ -34,9 +34,9 @@ class Mouse {
     );
   }
 
-  void scroll(int x, int y) {
+  void scroll(int x, int y, [int? sense]) {
     if (x.abs() > preventJump || y.abs() > preventJump) return;
-    mouse.scroll(x, y, _scrollSensitivity);
+    mouse.scroll(x, y, sense ?? _scrollSensitivity);
   }
 
   get screenSize => mouse.getScreenSize();
