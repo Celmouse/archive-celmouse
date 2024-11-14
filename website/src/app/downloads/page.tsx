@@ -36,8 +36,10 @@ export default function Page() {
                                         <CardTitle>Apple MacOS Download</CardTitle>
                                         <CardDescription>Download Celmouse for Mac</CardDescription>
                                     </CardHeader>
-                                    <CardContent className="flex justify-center">
+                                    <CardContent className="flex flex-col justify-center items-center">
                                         <Button asChild><Link href={downloadUrls.macOS}>Download for Apple</Link></Button>
+                                        <p>or</p>
+                                        <Link href={downloadUrls.macAppStore} style={{ textDecoration: 'underline' }}>App Store</Link>
                                     </CardContent>
                                 </Card>
                             </TabsContent>

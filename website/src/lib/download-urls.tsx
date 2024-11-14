@@ -6,6 +6,7 @@ export const downloadUrls = {
   win: `https://celmouse-us.s3.us-east-1.amazonaws.com/Celmouse.zip`,
   linux: `https://celmouse-us.s3.us-east-1.amazonaws.com/Celmouse-${linuxServerVersion}.AppImage`,
   macOS: `https://celmouse-us.s3.us-east-1.amazonaws.com/Celmouse.app.zip`,
+  macAppStore: `https://apps.apple.com/br/app/celmouse-hub/id6737917745?l=en-GB&mt=12`,
   android: "https://play.google.com/store/apps/details?id=com.gyromouse.app",
   ios: "https://apps.apple.com/br/app/gyromouse/id6736866466",
 }
