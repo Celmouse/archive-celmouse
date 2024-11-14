@@ -3,7 +3,6 @@ import 'mouse_macos_bindings_generated.dart';
 
 import 'package:mouse_platform_interface/mouse_platform_interface.dart' as i;
 
-
 class MouseMacOS extends i.MousePlatform {
   static void registerWith() {
     i.MousePlatform.instance = MouseMacOS();
@@ -16,10 +15,16 @@ class MouseMacOS extends i.MousePlatform {
   void moveTo(double x, double y) => _bindings.MouseMoveTo(x, y);
 
   @override
-  void holdLeftButton() => _bindings.MouseHoldLeftButton();
+  void holdLeftButton() {
+    return;
+    _bindings.MouseHoldLeftButton();
+  }
 
   @override
-  void releaseLeftButton() => _bindings.MouseReleaseLeftButton();
+  void releaseLeftButton() {
+    return;
+    _bindings.MouseReleaseLeftButton();
+  }
 
   @override
   void click(i.MouseButton button) => _bindings.MouseClick(button.value);
