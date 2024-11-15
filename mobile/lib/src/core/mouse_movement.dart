@@ -98,11 +98,7 @@ class MouseMovement {
 
           final invertedX = getIt.get<MouseSettings>().invertedPointerX ? -1 : 1;
           final invertedY = getIt.get<MouseSettings>().invertedPointerY ? -1 : 1;
-
-          mouse.move(
-            invertedX * x,
-            invertedY * y,
-          );
+          mouse.move(invertedX * x, invertedY * y);
         },
         cancelOnError: true,
         onError: (err, stack) {
@@ -132,6 +128,7 @@ class MouseMovement {
     return (x, y);
   }
 
+  @Deprecated('Use sendScrollMovement instead')
   _sendScrollMovement(double x, double y) {
     ScrollDirections direction;
 
@@ -148,8 +145,23 @@ class MouseMovement {
     } else {
       return;
     }
+    mouse.performScroll(direction);
+    // Daqui pra cima é tudo deprecated
 
-    mouse.scroll(direction);
+    // Preciso enviar de uma forma que não pode quebrar.
+    sendScrollMovement(x, y);
+  }
+
+  /// Envia o movimento do scroll com base nas coordenadas, enviando apenas 1 eixo
+  sendScrollMovement(double x, double y) {
+    final sensitivity = getIt.get<MouseSettings>().scrollSensitivity;
+    if (x.abs() > y.abs()) {
+      y = 0;
+    } else {
+      x = 0;
+    }
+
+    mouse.scroll(x / (x.abs()) * sensitivity, y / (y.abs()) * sensitivity);
   }
 }
 

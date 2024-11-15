@@ -11,11 +11,10 @@ class MouseSettingsPersistence {
     await prefs.setString(_key, jsonEncode(settings.toJson()));
   }
 
-  Future<MouseSettings?> loadSettings() async {
+  Future<MouseSettings> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final json = prefs.getString(_key);
     if (json == null) return MouseSettings();
     return MouseSettings.fromJson(jsonDecode(json));
   }
-
 }

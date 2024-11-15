@@ -47,10 +47,13 @@ class MouseSettings with _$MouseSettings {
   /// The threshold value for reducing the shaking of the scroll
   static const double scrollThreshholdX = 0.15;
   static const double scrollThreshholdY = 0.15;
+
   /// Same as samplingPeriod, trying to reduce the input lag could cause communication noises (milliseconds)
   static const int inputLag = 15;
 
-
+  @JsonSerializable(
+    createToJson: true,
+  )
   factory MouseSettings({
     @Default(ReduceVibrationOptions.standard)
     ReduceVibrationOptions vibrationThreshold,

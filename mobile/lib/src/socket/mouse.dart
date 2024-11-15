@@ -48,13 +48,22 @@ class MouseControl {
     );
   }
 
-  void scroll(ScrollDirections direction) {
+  void scroll(double x, double y) {
+    _send(
+      event: ProtocolEvents.mouseScroll,
+      data: MouseMovementProtocolData(x: x, y: y),
+    );
+  }
+
+  @Deprecated('Use scroll instead')
+  void performScroll(ScrollDirections direction) {
     _send(
       event: ProtocolEvents.mouseScroll,
       data: MouseScrollProtocolData(direction: direction),
     );
   }
 
+  //TODO: Posso remover esses carinhas aqui
   void changeSensitivity(num amount) {
     _send(event: ProtocolEvents.changeSensitivity, data: amount);
   }

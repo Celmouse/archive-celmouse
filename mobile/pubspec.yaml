@@ -2,7 +2,7 @@ name: controller
 description: "You have all the control in your hands"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.2.1+8
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ">=3.4.3 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,15 +31,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_native_splash: ^2.4.1
-  
+
   sensors_plus: ^6.0.1
   web_socket_channel: ^3.0.1
-  
+
   vector_math: ^2.1.4
   mobile_scanner: ^6.0.1
   get_it: ^8.0.0
@@ -50,10 +49,12 @@ dependencies:
     path: ../packages/protocol
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.1
+
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   shared_preferences: ^2.3.3
-
+  # Ver necessidade desse carinha
+  socket_io_client: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -70,14 +71,12 @@ dev_dependencies:
   freezed: ^2.5.7
   json_serializable: ^6.8.0
 
-
 # flutter_launcher_icons:
 #   android: "ic_launcher"
 #   ios: true
 #   image_path: "assets/icon.png"
 #   remove_alpha_ios: true
 #   min_sdk_android: 21
-
 
 icons_launcher:
   image_path: "assets/icon_512x512@2x.png"
@@ -90,7 +89,6 @@ icons_launcher:
 # dart run flutter_native_splash:create
 flutter_native_splash:
   color: "#42a5f5"
-
 
 # flutter_launcher_icons:
 #   image_path: "assets/icon.png"
@@ -105,7 +103,6 @@ flutter_native_splash:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
