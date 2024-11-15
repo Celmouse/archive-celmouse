@@ -1,30 +1,28 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef MOUSE_LINUX_H
+#define MOUSE_LINUX_H
 
-#if _WIN32
-#include <windows.h>
-#else
-#include <pthread.h>
-#include <unistd.h>
+#include <stdbool.h>
+#include <X11/Xlib.h>
+
+// Define the FFI export macro if not already defined
+#ifndef FFI_PLUGIN_EXPORT
+#define FFI_PLUGIN_EXPORT __attribute__((visibility("default"))) extern
 #endif
 
-#if _WIN32
-#define FFI_PLUGIN_EXPORT __declspec(dllexport)
-#else
-#define FFI_PLUGIN_EXPORT
-#endif
+// Mouse button enumeration
+typedef enum {
+    kMouseButtonLeft = 1,
+    kMouseButtonRight = 3,
+    kMouseButtonMiddle = 2
+} MouseButton;
 
-// A very short-lived native function.
-//
-// For very short-lived functions, it is fine to call them on the main isolate.
-// They will block the Dart execution while running the native function, so
-// only do this for native functions which are guaranteed to be short-lived.
-FFI_PLUGIN_EXPORT int sum(int a, int b);
+// Function declarations
+FFI_PLUGIN_EXPORT void MouseMove(float x, float y);
+FFI_PLUGIN_EXPORT void MouseMoveTo(float x, float y);
+FFI_PLUGIN_EXPORT void DoubleClick(void);
+FFI_PLUGIN_EXPORT void MouseScroll(int x, int y, int amount);
+FFI_PLUGIN_EXPORT void MouseClick(MouseButton button);
+FFI_PLUGIN_EXPORT void MouseHoldLeftButton(void);
+FFI_PLUGIN_EXPORT void MouseReleaseLeftButton(void);
 
-// A longer lived native function, which occupies the thread calling it.
-//
-// Do not call these kind of native functions in the main isolate. They will
-// block Dart execution. This will cause dropped frames in Flutter applications.
-// Instead, call these native functions on a separate isolate.
-FFI_PLUGIN_EXPORT int sum_long_running(int a, int b);
+#endif // MOUSE_LINUX_H
