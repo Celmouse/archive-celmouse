@@ -4,10 +4,27 @@ import 'package:mouse/mouse.dart' as plugin;
 import 'dart:math';
 
 /// Multiplicadores para tornar a movimentação viável
+/// [yMultiplier] representa o tamanho da tela no eixo vertical.
+/// [xMultiplier] representa o tamanho da tela no eixo horizontal.
 const yMultiplier = 42;
 const xMultiplier = 54;
 
+@Deprecated(
+  '''Sensitivity should be passed as a parameter from app.
+       Will be removed on version 3.0 so the mobile App can have all 
+       control over Settings''',
+)
 const defaultSensValue = 1.15;
+@Deprecated(
+  '''Sensitivity should be passed as a parameter from app.
+       Will be removed on version 3.0 so the mobile App can have all 
+       control over Settings''',
+)
+@Deprecated(
+  '''Sensitivity should be passed as a parameter from app.
+       Will be removed on version 3.0 so the mobile App can have all 
+       control over Settings''',
+)
 const defaultSensAdjustmentValue = 0.5;
 
 /// Valor de x e y que podem fazer um salto para fora da tela
@@ -16,7 +33,13 @@ const preventJump = 50;
 class Mouse {
   final mouse = plugin.Mouse();
 
+  @Deprecated(
+    '''Sensitivity should be passed as a parameter from app.
+       Will be removed on version 3.0 so the mobile App can have all 
+       control over Settings''',
+  )
   double _sensitivity = 1;
+
   @Deprecated(
     '''Sensitivity should be passed as a parameter from app.
        Will be removed on version 3.0 so the mobile App can have all 
