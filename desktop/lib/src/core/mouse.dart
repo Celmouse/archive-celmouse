@@ -17,6 +17,11 @@ class Mouse {
   final mouse = plugin.Mouse();
 
   double _sensitivity = 1;
+  @Deprecated(
+    '''Sensitivity should be passed as a parameter from app.
+       Will be removed on version 3.0 so the mobile App can have all 
+       control over Settings''',
+  )
   int _scrollSensitivity = 3;
 
   Mouse() {
