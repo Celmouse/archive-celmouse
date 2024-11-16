@@ -7,6 +7,15 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MenuIcon } from "lucide-react";
+import Head from "next/head";
+import Link from "next/link";
+
+// Font files can be colocated inside of `app`
+const myFont = localFont({
+  src: './logo_font.otf',
+  display: 'swap',
+
+})
 
 
 const geistSans = localFont({
@@ -48,15 +57,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+      </Head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={myFont.className}
       >
         <div className="flex flex-col min-h-screen">
           <header className="px-4 lg:px-6 h-14 flex items-center justify-between">
-            <a className="flex items-center justify-center" href="/">
-              <Image width={32} height={32} src={"/logo.svg"} alt="Logo" />
-              <span className="ml-2 text-2xl font-bold">Celmouse</span>
-            </a>
+            <Link href="/">
+              <Image height={48} width={250}  src={"/named_logo.svg"} alt="Logo" />
+              {/* <span className="text-3xl">Celmouse</span> */}
+            </Link>
             <nav>
               <ul className="hidden md:flex ml-auto gap-4 sm:gap-6">
                 <li>
