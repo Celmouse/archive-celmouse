@@ -53,7 +53,7 @@ export default function RootLayout({
         <div className="flex flex-col min-h-screen">
           <header className="px-4 lg:px-6 h-14 flex items-center justify-between">
             <Link href="/">
-              <Image height={48} width={250}  src={"/named_logo.svg"} alt="Logo" />
+              <Image height={30} width={180}  src={"/named_logo.png"} alt="Logo" />
               {/* <span className="text-3xl">Celmouse</span> */}
             </Link>
             <nav>
