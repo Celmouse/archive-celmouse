@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:controller/getit.dart';
-import 'package:controller/src/core/mouse_movement.dart';
-import 'package:controller/src/UI/cursor/cursor_settings.dart';
+import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
+import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/UI/keyboard/keyboard_type.dart';
 import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/foundation.dart';
@@ -10,8 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import '../../configs/mouse_settings.dart';
-import '../../socket/mouse.dart';
+import '../data/mouse_settings_model.dart';
+import '../../socket_mouse.dart';
 import 'package:protocol/protocol.dart';
 
 class MoveMousePage extends StatefulWidget {

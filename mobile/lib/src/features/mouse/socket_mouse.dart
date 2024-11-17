@@ -63,11 +63,15 @@ class MouseControl {
     );
   }
 
-  //TODO: Posso remover esses carinhas aqui
+  // TODO: Enviar a sensilibidade do cursor junto com o movimento
+  // Multiplicando os valores de x e y pela sensibilidade
+  // Lembrar de evitar quebrar o app com versões inconsistentes
+  @Deprecated("Sensibilidade do cursor será definida pelo app e será enviada já inclusa no movimento")
   void changeSensitivity(num amount) {
     _send(event: ProtocolEvents.changeSensitivity, data: amount);
   }
 
+  @Deprecated("Sensibilidade do cursor será definida pelo app e será enviada já inclusa no movimento")
   void changeScrollSensitivity(int amount) {
     _send(event: ProtocolEvents.changeScrollSensitivity, data: amount);
   }

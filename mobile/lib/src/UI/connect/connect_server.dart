@@ -1,6 +1,6 @@
 import 'package:controller/src/UI/components/support_button.dart';
 import 'package:controller/src/UI/connect/connection_menu.dart';
-import 'package:controller/src/UI/cursor/cursor_move.dart';
+import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';

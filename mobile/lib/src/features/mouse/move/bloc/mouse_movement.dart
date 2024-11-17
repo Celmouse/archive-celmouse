@@ -4,8 +4,8 @@ import 'package:controller/getit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-import '../configs/mouse_settings.dart';
-import '../socket/mouse.dart';
+import '../data/mouse_settings_model.dart';
+import '../../socket_mouse.dart';
 import 'package:vector_math/vector_math.dart' as math;
 import 'package:protocol/protocol.dart';
 
@@ -58,12 +58,9 @@ class MouseMovement {
             y = 0;
           }
 
+          sendScrollMovement(x, y);
+          //TODO: Remover na versão 3.0
           _sendScrollMovement(x, y);
-
-          // print('Cursor Scroll');
-          // print("X: $x");
-          // print("Y: $y");
-          // print("\n####\n####\n");
         },
         cancelOnError: true,
         onError: (err, stack) {
@@ -99,6 +96,7 @@ class MouseMovement {
           final invertedX = getIt.get<MouseSettings>().invertedPointerX ? -1 : 1;
           final invertedY = getIt.get<MouseSettings>().invertedPointerY ? -1 : 1;
           mouse.move(invertedX * x, invertedY * y);
+          
         },
         cancelOnError: true,
         onError: (err, stack) {
@@ -149,7 +147,7 @@ class MouseMovement {
     // Daqui pra cima é tudo deprecated
 
     // Preciso enviar de uma forma que não pode quebrar.
-    sendScrollMovement(x, y);
+    
   }
 
   /// Envia o movimento do scroll com base nas coordenadas, enviando apenas 1 eixo

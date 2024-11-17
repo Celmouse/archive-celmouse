@@ -1,6 +1,6 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/services/mouse_settings_persistence.dart';
-import 'mouse_settings.dart';
+import '../features/mouse/move/data/mouse_settings_model.dart';
 
 class GlobalConfigs {
   Future<void> init() async {

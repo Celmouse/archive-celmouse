@@ -1,11 +1,11 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/socket/mouse.dart';
+import 'package:controller/src/features/mouse/socket_mouse.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../../configs/mouse_settings.dart';
-import 'help_walkthrough.dart';
+import '../data/mouse_settings_model.dart';
+import '../../../../UI/cursor/help_walkthrough.dart';
 
 /// Page where you can change the cursor settings
 ///
@@ -188,7 +188,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     getIt.get<MouseSettings>().scrollSensitivity =
                         amount.round();
                   });
-                  mouse.changeScrollSensitivity(amount.round());
+                  // mouse.changeScrollSensitivity(amount.round());
                 },
               ),
               Text(

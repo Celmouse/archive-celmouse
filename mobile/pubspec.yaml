@@ -38,23 +38,21 @@ dependencies:
 
   sensors_plus: ^6.0.1
   web_socket_channel: ^3.0.1
-
+  # socket_io_client: ^3.0.1
   vector_math: ^2.1.4
   mobile_scanner: ^6.0.1
   get_it: ^8.0.0
   url_launcher: ^6.3.1
   toggle_switch: ^2.3.0
-
-  protocol:
-    path: ../packages/protocol
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.1
 
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   shared_preferences: ^2.3.3
-  # Ver necessidade desse carinha
-  socket_io_client: ^3.0.1
+
+  protocol:
+    path: ../packages/protocol
 
 dev_dependencies:
   flutter_test:
