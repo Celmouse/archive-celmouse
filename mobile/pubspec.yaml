@@ -85,7 +85,7 @@ icons_launcher:
       enable: true
     ios:
       enable: true
-      # image_path: "assets/dark_logo.png"
+      # image_path: "assets/logo.png"
       # dark_path: "assets/dark_logo.png"
       # tinted_path: "assets/tinted_logo.png"
 
