@@ -1,5 +1,5 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/services/mouse_settings_persistence.dart';
+import 'package:controller/src/features/mouse/move/data/mouse_settings_persistence.dart';
 import '../features/mouse/move/data/mouse_settings_model.dart';
 
 class GlobalConfigs {

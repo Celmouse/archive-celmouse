@@ -4,7 +4,7 @@ import 'package:controller/src/features/mouse/move/data/mouse_settings_model.dar
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MouseSettingsPersistence {
-  static const String _key = 'current_mouse_settings';
+  static const String _key = 'current_mouse_move_settings';
 
   Future<void> saveSettings(MouseSettings settings) async {
     final prefs = await SharedPreferences.getInstance();
