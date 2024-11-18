@@ -74,7 +74,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.info),
+          icon: const Icon(Icons.info_outline),
           onPressed: () async {
             PackageInfo packageInfo = await PackageInfo.fromPlatform();
             String version = packageInfo.version;
@@ -94,6 +94,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                           const Text("© 2024 Celmouse Ltda."),
                           const SizedBox(height: 4),
                           Text("Version: $version"),
+                          const Text("HUB Min Version: 2.1.0"),
                           TextButton(
                             onPressed: () => launchSite(),
                             child: const Text(
