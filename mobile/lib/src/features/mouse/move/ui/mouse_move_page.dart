@@ -14,6 +14,8 @@ import '../data/mouse_settings_model.dart';
 import '../../socket_mouse.dart';
 import 'package:protocol/protocol.dart';
 
+import '../data/mouse_settings_persistence.dart';
+
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
@@ -49,9 +51,11 @@ class _MoveMousePageState extends State<MoveMousePage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    if (!getIt.isRegistered<MouseSettings>()) {
-      getIt.registerSingleton<MouseSettings>(MouseSettings.fromJson({}));
-    }
+
+    // TODO: Adicionar sistema de loading enquanto configura
+    MouseSettingsPersistence.loadSettings().then((settings) {
+      getIt.registerSingleton<MouseSettings>(settings);
+    });
 
     mouse = MouseControl(widget.channel);
     keyboard = KeyboardControl(widget.channel);
@@ -182,7 +186,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
                   builder: (context) {
                     return CursorSettingsPage(
                       channel: widget.channel,
-                      configs: getIt.get<MouseSettings>(),
                     );
                   },
                 ),
