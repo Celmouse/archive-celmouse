@@ -2,7 +2,7 @@ name: controller
 description: "You have all the control in your hands"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.2.1+8
+version: 1.2.3+10
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ">=3.4.3 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,26 +31,28 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_native_splash: ^2.4.1
-  
+
   sensors_plus: ^6.0.1
   web_socket_channel: ^3.0.1
-  
+  # socket_io_client: ^3.0.1
   vector_math: ^2.1.4
   mobile_scanner: ^6.0.1
   get_it: ^8.0.0
   url_launcher: ^6.3.1
   toggle_switch: ^2.3.0
-
-  protocol:
-    path: ../packages/protocol
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.1
 
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+  shared_preferences: ^2.3.3
+
+  protocol:
+    path: ../packages/protocol
 
 dev_dependencies:
   flutter_test:
@@ -63,7 +65,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
   icons_launcher: ^3.0.0
-
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
 
 # flutter_launcher_icons:
 #   android: "ic_launcher"
@@ -72,19 +76,21 @@ dev_dependencies:
 #   remove_alpha_ios: true
 #   min_sdk_android: 21
 
-
 icons_launcher:
-  image_path: "assets/icon_512x512@2x.png"
+  image_path: "assets/dark_logo.png"
   platforms:
     android:
       enable: true
     ios:
-      enable: false
+      enable: true
+      # image_path: "assets/logo.png"
+      # dark_path: "assets/dark_logo.png"
+      # tinted_path: "assets/tinted_logo.png"
+
 
 # dart run flutter_native_splash:create
 flutter_native_splash:
   color: "#42a5f5"
-
 
 # flutter_launcher_icons:
 #   image_path: "assets/icon.png"
@@ -99,7 +105,6 @@ flutter_native_splash:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
