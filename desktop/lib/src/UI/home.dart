@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard/keyboard.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:server/src/core/mouse.dart';
 import 'package:server/src/core/socket.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:server/src/core/mouse.dart';
-// import 'package:server/src/core/socket.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -47,7 +48,9 @@ class _HomeState extends State<Home> {
         socket = s;
       });
       await DesktopWindow.setWindowSize(const Size(250, 150), animate: true);
+
       print('Servidor em ws://${server.address.address}:7771');
+
       socket?.listen(interpreter.interpretEvents, onDone: () async {
         setState(() {
           socket = null;
@@ -60,6 +63,19 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Visibility(
+        visible: kDebugMode,
+        child: FloatingActionButton(
+          onPressed: () {
+            // launchUrl(Uri.parse("https://celmouse.com"));
+            Timer(const Duration(seconds: 1), () {
+              print('Tickou');
+              Keyboard().pressKey(6);
+            });
+          },
+          child: const Icon(Icons.info),
+        ),
+      ),
       appBar: AppBar(
         title: Text(
           "Celmouse",

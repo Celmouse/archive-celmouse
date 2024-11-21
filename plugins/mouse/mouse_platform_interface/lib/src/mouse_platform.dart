@@ -1,20 +1,7 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'interface.dart';
 import 'types.dart';
-
-abstract class MouseMovement {
-  void move(double x, double y);
-  void moveTo(double x, double y);
-  (int, int) getScreenSize();
-
-  void click(MouseButton button);
-  void holdLeftButton();
-  void releaseLeftButton();
-
-  void doubleClick();
-
-  void scroll(int x, int y, int amount);
-}
 
 abstract class MousePlatform extends PlatformInterface
     implements MouseMovement {
@@ -38,6 +25,10 @@ abstract class MousePlatform extends PlatformInterface
   static set instance(MousePlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
+  }
+
+  Future<String?> getPlatformVersion() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
   @override
