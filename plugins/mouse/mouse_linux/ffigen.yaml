@@ -17,3 +17,7 @@ preamble: |
 comments:
   style: any
   length: full
+functions:
+  leaf:
+    include: 
+      - '.*'

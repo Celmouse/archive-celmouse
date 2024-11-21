@@ -1,0 +1,23 @@
+# Run with `dart run ffigen --config ffigen.yaml`.
+name: KeyboardMacosBindings
+description: |
+  Bindings for `src/keyboard_macos.h`.
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+output: 'lib/generated/bindings.dart'
+headers:
+  entry-points:
+    - 'src/keyboard_macos.h'
+  include-directives:
+    - 'src/keyboard_macos.h'
+preamble: |
+  // ignore_for_file: always_specify_types
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: non_constant_identifier_names
+comments:
+  style: any
+  length: full
+functions:
+  leaf:
+    include: 
+      - '.*'
