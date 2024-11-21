@@ -5,7 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../core/connect.dart';
-import '../cursor/cursor_move.dart';
+import '../../features/mouse/move/ui/mouse_move_page.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
   const ConnectFromQrCodePage({super.key});
