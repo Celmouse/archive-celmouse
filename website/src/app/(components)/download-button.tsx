@@ -30,7 +30,7 @@ export function DownloadButton() {
     return (
         <div>
             {os === 'Windows' && <Button asChild><Link href={downloadUrls.win}>Download for {os}</Link></Button>}
-            {os === 'Mac' && <div><Button asChild><Link href={downloadUrls.macOS}>Download for {os}</Link></Button><p>or</p><Link href={downloadUrls.macAppStore} style={{ textDecoration: 'underline' }}>App Store</Link></div>}
+            {os === 'Mac' && <Button asChild><Link href={downloadUrls.macOS}>Download for {os}</Link></Button>}
             {/* {os === 'Linux' && <Button asChild disabled><Link href={downloadUrls.linux}>Download for {os}</Link></Button>} */}
             {os === 'Linux' && <Button asChild><Link href="/downloads">Download</Link></Button>}
             {os === 'Android' && <Button asChild><Link href={downloadUrls.android}>Download for {os}</Link></Button>}

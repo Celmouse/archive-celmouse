@@ -38,8 +38,6 @@ export default function Page() {
                                     </CardHeader>
                                     <CardContent className="flex flex-col justify-center items-center">
                                         <Button asChild><Link href={downloadUrls.macOS}>Download for Apple</Link></Button>
-                                        <p>or</p>
-                                        <Link href={downloadUrls.macAppStore} style={{ textDecoration: 'underline' }}>App Store</Link>
                                     </CardContent>
                                 </Card>
                             </TabsContent>
