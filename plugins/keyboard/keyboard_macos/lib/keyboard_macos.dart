@@ -3,23 +3,27 @@ import 'generated/bindings.dart';
 import 'package:keyboard_platform_interface/keyboard_platform_interface.dart'
     as i;
 
+import 'src/keys.dart';
+
 class KeyboardMacOS extends i.KeyboardPlatform {
   static void registerWith() {
     i.KeyboardPlatform.instance = KeyboardMacOS();
   }
 
   @override
-  void pressKey(int key) {
-    // final k = KeyCode.fromChar(key)?.code;
-    // if (k == null) return;
-    _bindings.pressKeyboardKey(key);
+  void pressKey(String key) {
+    assert(key.length == 1);
+    final k = KeyCode.fromChar(key)?.code;
+    if (k == null) return;
+    _bindings.pressKeyboardKey(k);
   }
 
   @override
-  void releaseKey(int key) {
-    // final k = KeyCode.fromChar(key)?.code;
-    // if (k == null) return;
-    _bindings.releaseKeyboardKey(key);
+  void releaseKey(String key) {
+    assert(key.length == 1);
+    final k = KeyCode.fromChar(key)?.code;
+    if (k == null) return;
+    _bindings.releaseKeyboardKey(k);
   }
 
   @override

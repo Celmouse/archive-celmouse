@@ -34,8 +34,8 @@ abstract class KeyboardPlatform extends PlatformInterface
   }
 
   @override
-  void pressKey(int key);
+  void pressKey(String key);
 
   @override
-  void releaseKey(int key);
+  void releaseKey(String key);
 }

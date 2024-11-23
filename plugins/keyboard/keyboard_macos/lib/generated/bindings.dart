@@ -27,6 +27,9 @@ class KeyboardMacosBindings {
           lookup)
       : _lookup = lookup;
 
+  /// Sends a key press event to the system.
+  ///
+  /// @param keyCode The key code of the key to press.
   void pressKeyboardKey(
     int key,
   ) {

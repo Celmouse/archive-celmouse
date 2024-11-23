@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
             //   // keyboard_macos.releaseKey("z");
             // }
             _isPressed = !_isPressed;
-          keyboard_macos.KeyboardMacOS().pressKey(0x00);
+          keyboard_macos.KeyboardMacOS().pressKey('a');
           });
         }),
         body: SingleChildScrollView(

@@ -1,4 +1,4 @@
 abstract class KeyboardInterface {
-  void pressKey(int key);
-  void releaseKey(int key);
+  void pressKey(String key);
+  void releaseKey(String key);
 }

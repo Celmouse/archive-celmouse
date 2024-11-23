@@ -1,9 +1,8 @@
 #include "keyboard_macos.h"
-#include <stdio.h>
 
 #include <ApplicationServices/ApplicationServices.h>
 
-void pressKeyboardKey(char key)
+FFI_PLUGIN_EXPORT void pressKeyboardKey(char key)
 {
   // Cria os eventos de pressionar e soltar a tecla
   CGEventRef keyDown = CGEventCreateKeyboardEvent(NULL, key, true);
@@ -13,7 +12,7 @@ void pressKeyboardKey(char key)
   CFRelease(keyDown);
 }
 
-void releaseKeyboardKey(int key)
+FFI_PLUGIN_EXPORT void releaseKeyboardKey(int key)
 {
   CGEventRef keyUp = CGEventCreateKeyboardEvent(NULL, key, false);
   // Envia o evento de soltar a tecla
