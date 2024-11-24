@@ -63,19 +63,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Visibility(
-        visible: kDebugMode,
-        child: FloatingActionButton(
-          onPressed: () {
-            // launchUrl(Uri.parse("https://celmouse.com"));
-            Timer(const Duration(seconds: 1), () {
-              print('Tickou');
-              Keyboard().pressKey(6);
-            });
-          },
-          child: const Icon(Icons.info),
-        ),
-      ),
       appBar: AppBar(
         title: Text(
           "Celmouse",
