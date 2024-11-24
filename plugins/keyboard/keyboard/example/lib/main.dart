@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // initPlatformState();
-    Keyboard().pressKey(6);
+    Keyboard().pressKey('6');
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
