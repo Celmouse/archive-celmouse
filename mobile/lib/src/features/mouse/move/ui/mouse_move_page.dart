@@ -1,20 +1,20 @@
-import 'dart:async';
 import 'package:controller/getit.dart';
 import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
+import 'package:controller/src/features/mouse/move/ui/components/move_button.dart';
+import 'package:controller/src/features/mouse/move/ui/components/right_button.dart';
+import 'package:controller/src/features/mouse/move/ui/components/scroll_button.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/UI/keyboard/keyboard_type.dart';
-import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../data/mouse_settings_model.dart';
 import '../../socket_mouse.dart';
-import 'package:protocol/protocol.dart';
 
 import '../data/mouse_settings_persistence.dart';
+import 'components/left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -43,10 +43,12 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   late final MouseControl mouse;
   late final MouseMovement movement;
-  late final KeyboardControl keyboard;
+  // late final KeyboardControl keyboard;
 
   @override
   void initState() {
+    super.initState();
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -58,7 +60,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
     });
 
     mouse = MouseControl(widget.channel);
-    keyboard = KeyboardControl(widget.channel);
+    // keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
 
     widget.channel.stream.listen((_) {}, onDone: () {
@@ -74,54 +76,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
         );
       }
     });
-    super.initState();
   }
-
-  /// Enable the mouse movement and center the cursor
-  void enableMouseMovement() {
-    setState(() {
-      isCursorMovingEnabled = true;
-    });
-
-    // mouse.center();
-    movement.startMouseMovement();
-  }
-
-  void disableMouseMovement() {
-    setState(() {
-      isCursorMovingEnabled = false;
-    });
-
-    movement.stopMouseMovement();
-  }
-
-  enableScrolling() {
-    tmpCursorMovingEnabled = isCursorMovingEnabled;
-
-    setState(() {
-      isScrollingEnabled = true;
-      isCursorMovingEnabled = false;
-    });
-
-    movement.stopMouseMovement();
-    movement.startScrollMovement();
-  }
-
-  bool tmpCursorMovingEnabled = false;
-
-  disableScrolling() {
-    setState(() {
-      isScrollingEnabled = false;
-      isCursorMovingEnabled = tmpCursorMovingEnabled &&
-          getIt.get<MouseSettings>().keepMovingAfterScroll;
-    });
-    if (isCursorMovingEnabled) {
-      movement.startMouseMovement();
-    }
-    movement.stopScrollMovement();
-  }
-
-  Timer? doubleClickDelay;
 
   @override
   void dispose() {
@@ -129,18 +84,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
     super.dispose();
   }
 
-  int leftClickPressTimestamp = DateTime.now().millisecondsSinceEpoch;
-  int leftClickReleaseTimestamp = DateTime.now().millisecondsSinceEpoch;
-
-  int pressedTimeDiff = 1000;
-  int releasedTimeDiff = 1000;
-
-  late Timer leftClickTimer;
-  Timer? doubleClickTimer;
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -268,193 +213,40 @@ class _MoveMousePageState extends State<MoveMousePage> {
             Flexible(
               flex: 2,
               child: SizedBox(
-                // height: double.infinity,
                 width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTapDown: (_) {
-                        leftClickTimer = Timer(
-                          Duration(
-                            milliseconds: getIt
-                                .get<MouseSettings>()
-                                .dragStartDelayMS
-                                .duration,
-                          ),
-                          () {
-                            showDeactivatedFeatureWarning();
-                            // TODO: Fix press
-                            // mouse.press(ClickType.left);
-                          },
-                        );
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.leftClick;
-                        });
-                      },
-                      onTapUp: (_) {
-                        if (!leftClickTimer.isActive) {
-                          mouse.release(ClickType.left);
-                        } else {
-                          bool shouldDoubleClick = doubleClickTimer != null &&
-                              doubleClickTimer!.isActive;
-
-                          if (shouldDoubleClick) {
-                            mouse.doubleClick(ClickType.left);
-                          } else {
-                            mouse.click(ClickType.left);
-                            doubleClickTimer?.cancel();
-                          }
-                        }
-                        leftClickTimer.cancel();
-                        doubleClickTimer = Timer(
-                          Duration(
-                            milliseconds: getIt
-                                .get<MouseSettings>()
-                                .doubleClickDelayMS
-                                .duration,
-                          ),
-                          () {},
-                        );
-
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.none;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          ),
-                          color:
-                              cursorKeysPressed == CursorKeysPressed.leftClick
-                                  ? Colors.red[200]
-                                  : Colors.red,
-                        ),
-                        width: size.width / 2 - 20,
-                        height: size.height * 0.3,
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.red),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTapDown: (_) {
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.rightClick;
-                        });
-                        mouse.click(ClickType.right);
-                      },
-                      onTapUp: (_) {
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.none;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                          color:
-                              cursorKeysPressed == CursorKeysPressed.rightClick
-                                  ? Colors.blue[200]
-                                  : Colors.blue,
-                        ),
-                        height: size.height * 0.3,
-                        width: size.width / 2 - 20,
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.blue),
-                        ),
-                      ),
-                    ),
+                    LeftMouseButton(mouse: mouse),
+                    RightMouseButton(mouse: mouse)
                   ],
                 ),
               ),
             ),
             const Divider(),
-
-            /// Mouse movement
             Flexible(
               flex: 2,
               child: Row(
                 children: [
                   Flexible(
                     flex: 8,
-                    child: GestureDetector(
-                      onTap: isCursorMovingEnabled
-                          ? disableMouseMovement
-                          : enableMouseMovement,
-                      child: Container(
-                        width: double.infinity,
-                        height: size.height * 0.13,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          color: isCursorMovingEnabled
-                              ? Colors.green[200]
-                              : Colors.green,
-                        ),
-                      ),
-                    ),
+                    child: MoveMouseButton(movement: movement),
                   ),
                   const SizedBox(
                     width: 12,
                   ),
                   Flexible(
                     flex: 3,
-                    child: GestureDetector(
-                      onTapDown: (_) => enableScrolling(),
-                      onTapUp: (_) => disableScrolling(),
-                      child: Container(
-                        width: double.infinity,
-                        height: size.height * 0.13,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          color: isScrollingEnabled
-                              ? Colors.purple[200]
-                              : Colors.purple,
-                        ),
-                      ),
-                    ),
+                    child: ScrollMouseButton(movement: movement),
                   ),
                 ],
               ),
             ),
-            // const Flexible(
-            //   flex: 1,
-            //   child: SizedBox(
-            //     height: 0,
-            //   ),
-            // ),
+         
           ],
         ),
       ),
     );
-  }
-
-  void showDeactivatedFeatureWarning() {
-    Fluttertoast.showToast(
-        msg:
-            "Hold and Release was deactivated in this version due to game mode prep!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.yellow[600],
-        textColor: Colors.white,
-        fontSize: 16.0);
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     showCloseIcon: true,
-    //     behavior: SnackBarBehavior.floating,
-    //     backgroundColor: Colors.yellow[600],
-    //     content: const Text(
-    //       "Hold and Release was deactivated in this version due to game mode prep!",
-    //     ),
-    //   ),
-    // );
   }
 }
 

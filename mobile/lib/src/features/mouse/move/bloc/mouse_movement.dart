@@ -30,9 +30,17 @@ class MouseMovement {
     moveGyroscopeSubscription = null;
   }
 
+
+  bool isMovementPaused = false;
+  /// When user starts scrolling the movement will be paused
+  pauseMouseMovement(){
+    isMovementPaused = true;
+  }
+
   stopScrollMovement() {
     scrollGyroscopeSubscription?.cancel();
     scrollGyroscopeSubscription = null;
+    isMovementPaused = false;
   }
 
   startScrollMovement() {
@@ -77,6 +85,9 @@ class MouseMovement {
         (
           GyroscopeEvent event,
         ) {
+          if(isMovementPaused){
+            return;
+          }
           var (x, y) = _tranformGyroscopeCoordinates(
             event.z * -1,
             event.x * -1,
