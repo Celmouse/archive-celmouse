@@ -1,6 +1,6 @@
-import 'package:controller/src/UI/connect/connect_server.dart';
+import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
-
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,9 +24,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ConnectToServerPage(),
+      // home: const ConnectToServerPage(),
       // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
-      // home:  Container(color: Colors.red,),
+      home: MoveMousePage(
+        channel: WebSocketChannel.connect(
+          Uri.parse('ws://192.168.1.10:7771'),
+        ),
+      ),
     );
   }
 }

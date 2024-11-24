@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:controller/getit.dart';
 import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
+import 'package:controller/src/features/mouse/move/ui/components/right_button.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/UI/keyboard/keyboard_type.dart';
 import 'package:controller/src/socket/keyboard.dart';
@@ -15,6 +16,7 @@ import '../../socket_mouse.dart';
 import 'package:protocol/protocol.dart';
 
 import '../data/mouse_settings_persistence.dart';
+import 'components/left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -268,109 +270,16 @@ class _MoveMousePageState extends State<MoveMousePage> {
             Flexible(
               flex: 2,
               child: SizedBox(
-                // height: double.infinity,
                 width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTapDown: (_) {
-                        leftClickTimer = Timer(
-                          Duration(
-                            milliseconds: getIt
-                                .get<MouseSettings>()
-                                .dragStartDelayMS
-                                .duration,
-                          ),
-                          () {
-                            showDeactivatedFeatureWarning();
-                            // TODO: Fix press
-                            // mouse.press(ClickType.left);
-                          },
-                        );
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.leftClick;
-                        });
-                      },
-                      onTapUp: (_) {
-                        if (!leftClickTimer.isActive) {
-                          mouse.release(ClickType.left);
-                        } else {
-                          bool shouldDoubleClick = doubleClickTimer != null &&
-                              doubleClickTimer!.isActive;
-
-                          if (shouldDoubleClick) {
-                            mouse.doubleClick(ClickType.left);
-                          } else {
-                            mouse.click(ClickType.left);
-                            doubleClickTimer?.cancel();
-                          }
-                        }
-                        leftClickTimer.cancel();
-                        doubleClickTimer = Timer(
-                          Duration(
-                            milliseconds: getIt
-                                .get<MouseSettings>()
-                                .doubleClickDelayMS
-                                .duration,
-                          ),
-                          () {},
-                        );
-
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.none;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          ),
-                          color:
-                              cursorKeysPressed == CursorKeysPressed.leftClick
-                                  ? Colors.red[200]
-                                  : Colors.red,
-                        ),
-                        width: size.width / 2 - 20,
-                        height: size.height * 0.3,
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.red),
-                        ),
-                      ),
+                    LeftMouseButton(
+                      mouse: mouse,
                     ),
-                    GestureDetector(
-                      onTapDown: (_) {
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.rightClick;
-                        });
-                        mouse.click(ClickType.right);
-                      },
-                      onTapUp: (_) {
-                        setState(() {
-                          cursorKeysPressed = CursorKeysPressed.none;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                          color:
-                              cursorKeysPressed == CursorKeysPressed.rightClick
-                                  ? Colors.blue[200]
-                                  : Colors.blue,
-                        ),
-                        height: size.height * 0.3,
-                        width: size.width / 2 - 20,
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.circle, color: Colors.blue),
-                        ),
-                      ),
-                    ),
+                    RightMouseButton(
+                      mouse: mouse,
+                    )
                   ],
                 ),
               ),
@@ -433,28 +342,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
         ),
       ),
     );
-  }
-
-  void showDeactivatedFeatureWarning() {
-    Fluttertoast.showToast(
-        msg:
-            "Hold and Release was deactivated in this version due to game mode prep!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.yellow[600],
-        textColor: Colors.white,
-        fontSize: 16.0);
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     showCloseIcon: true,
-    //     behavior: SnackBarBehavior.floating,
-    //     backgroundColor: Colors.yellow[600],
-    //     content: const Text(
-    //       "Hold and Release was deactivated in this version due to game mode prep!",
-    //     ),
-    //   ),
-    // );
   }
 }
 
