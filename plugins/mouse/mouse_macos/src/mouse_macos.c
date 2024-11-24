@@ -95,8 +95,3 @@ FFI_PLUGIN_EXPORT void MouseReleaseLeftButton(void)
   CGEventPost(kCGHIDEventTap, release);
   CFRelease(release);
 }
-
-int main(){
-  DoubleClick();
-  return 0;
-}

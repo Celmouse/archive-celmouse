@@ -1,4 +1,5 @@
 enum KeyCode {
+  kVkSpace(0x31, ' '),
   kVkAnsiA(0x00, 'A'),
   kVkAnsiS(0x01, 'S'),
   kVkAnsiD(0x02, 'D'),
