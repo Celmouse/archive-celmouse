@@ -30,23 +30,31 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Native Packages'),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          Timer.periodic(const Duration(seconds: 1), (t) {
-            // print("zzz");
-            // if (_isPressed) {
-            // } else {
-            //   // keyboard_macos.releaseKey("z");
-            // }
+        floatingActionButton: FloatingActionButton(onPressed: () async {
+          var counter = 0;
+          const phrase = "Hello! World";
+          await Future.delayed(const Duration(seconds: 2));
+          Timer.periodic(const Duration(microseconds: 100), (t) {
+            if (counter >= phrase.length) {
+              t.cancel();
+              return;
+            }
+            var l = phrase[counter];
+            if (_isPressed) {
+              keyboard_macos.KeyboardMacOS().releaseKey(l);
+              counter++;
+            } else {
+              keyboard_macos.KeyboardMacOS().pressKey(l);
+            }
             _isPressed = !_isPressed;
-          keyboard_macos.KeyboardMacOS().pressKey('a');
           });
         }),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: Column(
+            child: const Column(
               children: [
-                const Text(
+                Text(
                   'This calls a native function through FFI that is shipped as source in the package. '
                   'The native code is built as part of the Flutter Runner build.',
                   style: textStyle,
