@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import '../../../keyboard/default/keyboard_page.dart';
 import '../data/mouse_settings_model.dart';
 import '../../socket_mouse.dart';
 
@@ -111,8 +112,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(
-                        channel: widget.channel,
+                      builder: (context) => KeyboardPage(
+                        //TODO: Implement channel
+                        // channel: widget.channel,
                       ),
                     ));
               },

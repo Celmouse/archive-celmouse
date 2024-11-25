@@ -25,13 +25,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ConnectToServerPage(),
+      // home: const ConnectToServerPage(),
       // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
-      // home: MoveMousePage(
-      //   channel: WebSocketChannel.connect(
-      //     Uri.parse('ws://192.168.1.10:7771'),
-      //   ),
-      // ),
+      home: MoveMousePage(
+        channel: WebSocketChannel.connect(
+          Uri.parse('ws://192.168.1.10:7771'),
+        ),
+      ),
     );
   }
 }
