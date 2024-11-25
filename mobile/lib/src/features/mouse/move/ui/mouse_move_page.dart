@@ -1,20 +1,24 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
-import 'package:controller/src/features/mouse/move/ui/components/move_button.dart';
-import 'package:controller/src/features/mouse/move/ui/components/right_button.dart';
-import 'package:controller/src/features/mouse/move/ui/components/scroll_button.dart';
-import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/UI/keyboard/keyboard_type.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import '../data/mouse_settings_model.dart';
+
 import '../../socket_mouse.dart';
 
+import '../data/mouse_settings_model.dart';
 import '../data/mouse_settings_persistence.dart';
+import '../bloc/mouse_movement.dart';
+
+import 'components/move_button.dart';
+import 'components/right_button.dart';
+import 'components/scroll_button.dart';
 import 'components/left_button.dart';
+
+import 'mouse_move_settings_page.dart';
+
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -63,6 +67,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
     // keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
 
+    movement.startAccelerometerMovement();
+
     widget.channel.stream.listen((_) {}, onDone: () {
       if (mounted) {
         Navigator.pop(context);
@@ -80,6 +86,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
 
   @override
   void dispose() {
+    movement.dispose();
     widget.channel.sink.close();
     super.dispose();
   }

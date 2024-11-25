@@ -23,17 +23,64 @@ class MouseMovement {
   DateTime? lastTimeGyroscopeMouseMovement;
 
   StreamSubscription? moveGyroscopeSubscription;
+  StreamSubscription? moveAccelerometerSubscription;
   StreamSubscription? scrollGyroscopeSubscription;
+
+  dispose() {
+    moveGyroscopeSubscription?.cancel();
+    moveAccelerometerSubscription?.cancel();
+    scrollGyroscopeSubscription?.cancel();
+  }
 
   stopMouseMovement() {
     moveGyroscopeSubscription?.cancel();
     moveGyroscopeSubscription = null;
   }
 
+  startAccelerometerMovement() {
+    // lastTimeGyroscopeMouseMovement = DateTime.now();
+    moveAccelerometerSubscription ??= userAccelerometerEventStream(
+      samplingPeriod: SensorInterval.gameInterval,
+    ).listen(
+        (
+          UserAccelerometerEvent event,
+        ) {
+          print(event);
+          if (isMovementPaused) {
+            return;
+          }
+          // var (x, y) = _tranformGyroscopeCoordinates(
+          //   event.x,
+          //   event.y,
+          //   event.timestamp,
+          // );
+
+          // final threshold = getIt.get<MouseSettings>().vibrationThreshold.value;
+
+          // if (x.abs() <= threshold) {
+          //   x = 0;
+          // }
+
+          // if (y.abs() <= threshold) {
+          //   y = 0;
+          // }
+
+          // final invertedX =
+          //     getIt.get<MouseSettings>().invertedPointerX ? -1 : 1;
+          // final invertedY =
+          //     getIt.get<MouseSettings>().invertedPointerY ? -1 : 1;
+          mouse.move(-1 * event.x / 30, event.z / 30);
+        },
+        cancelOnError: true,
+        onError: (err, stack) {
+          gyroscopeError.value = true;
+        });
+  }
 
   bool isMovementPaused = false;
+
   /// When user starts scrolling the movement will be paused
-  pauseMouseMovement(){
+  pauseMouseMovement() {
     isMovementPaused = true;
   }
 
@@ -85,7 +132,7 @@ class MouseMovement {
         (
           GyroscopeEvent event,
         ) {
-          if(isMovementPaused){
+          if (isMovementPaused) {
             return;
           }
           var (x, y) = _tranformGyroscopeCoordinates(
