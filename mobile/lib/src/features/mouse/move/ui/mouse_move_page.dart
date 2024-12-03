@@ -1,4 +1,5 @@
 import 'package:controller/getit.dart';
+import 'package:controller/src/features/gaming/a/page.dart';
 import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
 import 'package:controller/src/features/mouse/move/ui/components/move_button.dart';
 import 'package:controller/src/features/mouse/move/ui/components/right_button.dart';
@@ -35,15 +36,9 @@ enum CursorKeysPressed {
 
 class _MoveMousePageState extends State<MoveMousePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // bool isMicOn = false;
-  bool isScrollingEnabled = false;
-  bool isCursorMovingEnabled = false;
 
-  CursorKeysPressed cursorKeysPressed = CursorKeysPressed.none;
-
-  late final MouseControl mouse;
+  final MouseControl mouse = MouseControl();
   late final MouseMovement movement;
-  // late final KeyboardControl keyboard;
 
   @override
   void initState() {
@@ -54,14 +49,12 @@ class _MoveMousePageState extends State<MoveMousePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    // TODO: Adicionar sistema de loading enquanto configura
+    movement = MouseMovement(mouse: mouse);
+
+    // TODO: Find other way to load settings
     MouseSettingsPersistence.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
-
-    mouse = MouseControl();
-    // keyboard = KeyboardControl(widget.channel);
-    movement = MouseMovement(mouse: mouse);
   }
 
   @override
@@ -69,7 +62,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
     return Scaffold(
       key: scaffoldKey,
       endDrawer: const CursorSettingsPage(),
-      // endDrawerEnableOpenDragGesture: false,
       onEndDrawerChanged: (isOpened) {
         if (!isOpened) {
           MouseSettingsPersistence.saveSettings(getIt<MouseSettings>());
@@ -82,16 +74,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
         title: const Text('Mouse'),
         centerTitle: true,
         actions: [
-          const Visibility(
-            visible: kDebugMode,
-            child: IconButton(
-              onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
-              icon: Icon(
-                Icons.mic,
-                color: null, // isMicOn ? Colors.greenAccent : null,
-              ),
-            ),
-          ),
           Visibility(
             visible: kDebugMode,
             child: IconButton(
@@ -112,7 +94,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
           IconButton(
             onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
             icon: const Icon(Icons.settings),
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -148,9 +130,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
               ),
             ),
             const Row(
-              // crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Column(
@@ -178,7 +158,12 @@ class _MoveMousePageState extends State<MoveMousePage> {
             ),
             const Spacer(),
             ElevatedButton.icon(
-              onPressed: null,
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GameModeDefaultPage(),
+                ),
+              ),
               icon: const Icon(Icons.rocket),
               label: const Text('Game Mode'),
             ),
