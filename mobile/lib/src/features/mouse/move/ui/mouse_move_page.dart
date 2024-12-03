@@ -34,6 +34,7 @@ enum CursorKeysPressed {
 }
 
 class _MoveMousePageState extends State<MoveMousePage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   // bool isMicOn = false;
   bool isScrollingEnabled = false;
   bool isCursorMovingEnabled = false;
@@ -66,9 +67,17 @@ class _MoveMousePageState extends State<MoveMousePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: CursorSettingsPage(
-          // channel: widget.channel,
-          ),
+      key: scaffoldKey,
+      endDrawer: const CursorSettingsPage(),
+      // endDrawerEnableOpenDragGesture: false,
+      onEndDrawerChanged: (isOpened) {
+        if (!isOpened) {
+          MouseSettingsPersistence.saveSettings(getIt<MouseSettings>());
+        } else {
+          movement.stopMouseMovement();
+          movement.stopScrollMovement();
+        }
+      },
       appBar: AppBar(
         title: const Text('Mouse'),
         centerTitle: true,
@@ -92,8 +101,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(
-                          ),
+                      builder: (context) => KeyboardTyppingPage(),
                     ));
               },
               icon: const Icon(
@@ -102,20 +110,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
             ),
           ),
           IconButton(
-            onPressed: () {
-              movement.stopMouseMovement();
-              movement.stopScrollMovement();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return CursorSettingsPage(
-                        // channel: widget.channel,
-                        );
-                  },
-                ),
-              );
-            },
+            onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
             icon: const Icon(Icons.settings),
           )
         ],
