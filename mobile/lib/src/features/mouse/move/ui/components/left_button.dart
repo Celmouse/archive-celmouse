@@ -47,24 +47,24 @@ class _LeftMouseButtonState extends State<LeftMouseButton>
         setState(() {
           isPressed = true;
         });
-        leftClickTimer = Timer(
-          Duration(
-            milliseconds: getIt.get<MouseSettings>().dragStartDelayMS.duration,
-          ),
-          () {
-            showDeactivatedFeatureWarning();
-            // TODO: Fix press and hold
-            // mouse.press(ClickType.left);
-          },
-        );
+        // leftClickTimer = Timer(
+        //   Duration(
+        //     milliseconds: getIt.get<MouseSettings>().dragStartDelayMS.duration,
+        //   ),
+        //   () {
+        //     showDeactivatedFeatureWarning();
+        //     // TODO: Fix press and hold
+        //     // mouse.press(ClickType.left);
+        //   },
+        // );
       },
       onTapUp: (_) {
         setState(() {
           isPressed = false;
         });
-        if (!leftClickTimer.isActive) {
-          widget.mouse.release(ClickType.left);
-        } else {
+        // if (!leftClickTimer.isActive) {
+        //   widget.mouse.release(ClickType.left);
+        // } else {
           bool shouldDoubleClick =
               doubleClickTimer != null && doubleClickTimer!.isActive;
 
@@ -74,8 +74,8 @@ class _LeftMouseButtonState extends State<LeftMouseButton>
             click(ClickType.left);
             doubleClickTimer?.cancel();
           }
-        }
-        leftClickTimer.cancel();
+        // }
+        // leftClickTimer.cancel();
         doubleClickTimer = Timer(
           Duration(
             milliseconds:
