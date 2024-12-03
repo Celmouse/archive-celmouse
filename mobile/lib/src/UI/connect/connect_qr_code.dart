@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../../core/connect.dart';
 import '../../features/mouse/move/ui/mouse_move_page.dart';
 
@@ -26,22 +23,20 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
       _subscription?.pause();
     });
     try {
-      final WebSocketChannel? channel = await connectWS(value, (err) {
+      await connectWS(value, (err) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(err),
           backgroundColor: Theme.of(context).colorScheme.error,
         ));
       }, 2);
-      if (channel != null && mounted) {
+      if (mounted) {
         _subscription?.cancel();
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MoveMousePage(
-              channel: channel,
-            ),
+            builder: (context) => const MoveMousePage(),
           ),
         );
       }

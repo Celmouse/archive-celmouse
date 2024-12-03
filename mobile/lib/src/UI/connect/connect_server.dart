@@ -3,8 +3,6 @@ import 'package:controller/src/UI/connect/connection_menu.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../../utils/launch_site.dart';
 import 'connect_qr_code.dart';
 import '../../core/connect.dart';
@@ -17,8 +15,6 @@ class ConnectToServerPage extends StatefulWidget {
 }
 
 class _ConnectToServerPageState extends State<ConnectToServerPage> {
-  WebSocketChannel? channel;
-
   final TextEditingController ipController = TextEditingController();
 
   String connError = "";
@@ -35,19 +31,17 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
       isLoading = true;
     });
     try {
-      channel = await connectWS(ipController.text, (err) {
+      await connectWS(ipController.text, (err) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(err),
           backgroundColor: Theme.of(context).colorScheme.error,
         ));
       }).timeout(const Duration(seconds: 10));
-      if (channel != null && mounted) {
-        await Navigator.push(
+      if (mounted) {
+        Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MoveMousePage(
-              channel: channel!,
-            ),
+            builder: (context) => const MoveMousePage(),
           ),
         );
       }

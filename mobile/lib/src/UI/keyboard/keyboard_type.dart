@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../../socket/keyboard.dart';
 
 /*
@@ -53,17 +51,15 @@ import '../../socket/keyboard.dart';
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
     super.key,
-    required this.channel,
   });
 
-  final WebSocketChannel channel;
 
   @override
   State<KeyboardTyppingPage> createState() => _KeyboardTyppingPageState();
 }
 
 class _KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
-  late final keyboard = KeyboardControl(widget.channel);
+  late final keyboard = KeyboardControl();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,9 +1,6 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/features/mouse/socket_mouse.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../data/mouse_settings_model.dart';
 import '../../../../UI/cursor/help_walkthrough.dart';
 import '../data/mouse_settings_persistence.dart';
@@ -21,18 +18,16 @@ import '../data/mouse_settings_persistence.dart';
 class CursorSettingsPage extends StatefulWidget {
   const CursorSettingsPage({
     super.key,
-    required this.channel,
+    // required this.channel,
   });
 
-  final WebSocketChannel channel;
+  // final WebSocketChannel channel;
 
   @override
   State<CursorSettingsPage> createState() => _CursorSettingsPageState();
 }
 
 class _CursorSettingsPageState extends State<CursorSettingsPage> {
-  late final mouse = MouseControl(widget.channel);
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -121,7 +116,6 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     setState(() {
                       getIt.get<MouseSettings>().sensitivity = amount.round();
                     });
-                    mouse.changeSensitivity(amount);
                   },
                 ),
                 SwitchListTile(
@@ -138,7 +132,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     });
                   },
                 ),
-      
+
                 /// Scroll configurations
                 Text(
                   'Scroll',
@@ -183,8 +177,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                   ),
                 ),
                 Slider(
-                  label: getIt.get<MouseSettings>().scrollSensitivity.toString(),
-                  value: getIt.get<MouseSettings>().scrollSensitivity.toDouble(),
+                  label:
+                      getIt.get<MouseSettings>().scrollSensitivity.toString(),
+                  value:
+                      getIt.get<MouseSettings>().scrollSensitivity.toDouble(),
                   min: 1,
                   divisions: 9,
                   max: 10,
@@ -239,7 +235,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     });
                   },
                 ),
-      
+
                 ExpansionTile(
                   title: Text(
                     'Advanced options',
@@ -249,9 +245,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     ListTile(
                       title: Text(
                         'Reduce vibration:',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ),
                     DropdownButtonFormField(
@@ -260,7 +257,8 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                       ),
                       alignment: Alignment.center,
                       isExpanded: true,
-                      value: getIt.get<MouseSettings>().vibrationThreshold.value,
+                      value:
+                          getIt.get<MouseSettings>().vibrationThreshold.value,
                       items: ReduceVibrationOptions.values
                           .map((o) => DropdownMenuItem(
                                 alignment: Alignment.center,
@@ -286,9 +284,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     ListTile(
                       title: Text(
                         'Press and Hold delay:',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ),
                     DropdownButtonFormField(
@@ -297,7 +296,8 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                       ),
                       alignment: Alignment.center,
                       isExpanded: true,
-                      value: getIt.get<MouseSettings>().dragStartDelayMS.duration,
+                      value:
+                          getIt.get<MouseSettings>().dragStartDelayMS.duration,
                       items: DragStartDelayOptions.values
                           .map((o) => DropdownMenuItem(
                                 alignment: Alignment.center,
@@ -322,7 +322,7 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
                     ),
                   ],
                 ),
-      
+
                 /// Layout
                 Visibility(
                   visible: false,

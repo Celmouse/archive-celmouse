@@ -15,5 +15,6 @@
         "__bit_reference": "c",
         "ios": "c",
         "mouse_windows.h": "c"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/marceloviana/dev/gyromouse/plugins/keyboard/keyboard_macos/src"
 }

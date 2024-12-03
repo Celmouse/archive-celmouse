@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import '../data/mouse_settings_model.dart';
 import '../../socket_mouse.dart';
 
@@ -19,10 +18,10 @@ import 'components/left_button.dart';
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
-    required this.channel,
+    // required this.channel,
   });
 
-  final WebSocketChannel channel;
+  // final WebSocketChannel channel;
 
   @override
   State<MoveMousePage> createState() => _MoveMousePageState();
@@ -59,35 +58,17 @@ class _MoveMousePageState extends State<MoveMousePage> {
       getIt.registerSingleton<MouseSettings>(settings);
     });
 
-    mouse = MouseControl(widget.channel);
+    mouse = MouseControl();
     // keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
-
-    widget.channel.stream.listen((_) {}, onDone: () {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    }, onError: (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Connection Error: $e"),
-          ),
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    widget.channel.sink.close();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      endDrawer: CursorSettingsPage(
+          // channel: widget.channel,
+          ),
       appBar: AppBar(
         title: const Text('Mouse'),
         centerTitle: true,
@@ -112,8 +93,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => KeyboardTyppingPage(
-                        channel: widget.channel,
-                      ),
+                          ),
                     ));
               },
               icon: const Icon(
@@ -130,8 +110,8 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 MaterialPageRoute(
                   builder: (context) {
                     return CursorSettingsPage(
-                      channel: widget.channel,
-                    );
+                        // channel: widget.channel,
+                        );
                   },
                 ),
               );
@@ -242,7 +222,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 ],
               ),
             ),
-         
           ],
         ),
       ),
