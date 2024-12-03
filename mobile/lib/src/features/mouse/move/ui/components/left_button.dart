@@ -1,10 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:controller/getit.dart';
-import 'package:controller/src/features/mouse/socket_mouse.dart';
+import 'package:controller/src/features/mouse/move/bloc/mouse_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:protocol/protocol.dart';
+
+import 'package:controller/getit.dart';
+import 'package:controller/src/features/mouse/socket_mouse.dart';
 
 import '../../data/mouse_settings_model.dart';
 
@@ -12,19 +15,28 @@ class LeftMouseButton extends StatefulWidget {
   const LeftMouseButton({
     super.key,
     required this.mouse,
+    this.width,
+    this.height,
   });
 
   final MouseControl mouse;
+  final double? width;
+  final double? height;
 
   @override
   State<LeftMouseButton> createState() => _LeftMouseButtonState();
 }
 
-class _LeftMouseButtonState extends State<LeftMouseButton> {
-  bool isPressed = false;
-
+class _LeftMouseButtonState extends State<LeftMouseButton>
+    with MouseButton, ButtonClick, ButtonDoubleClick {
   late Timer leftClickTimer;
   Timer? doubleClickTimer;
+
+  @override
+  void initState() {
+    mouse = widget.mouse;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +69,9 @@ class _LeftMouseButtonState extends State<LeftMouseButton> {
               doubleClickTimer != null && doubleClickTimer!.isActive;
 
           if (shouldDoubleClick) {
-            widget.mouse.doubleClick(ClickType.left);
+            doubleClick(ClickType.left);
           } else {
-            widget.mouse.click(ClickType.left);
+            click(ClickType.left);
             doubleClickTimer?.cancel();
           }
         }
@@ -80,8 +92,8 @@ class _LeftMouseButtonState extends State<LeftMouseButton> {
           ),
           color: isPressed ? Colors.red[200] : Colors.red,
         ),
-        width: size.width / 2 - 20,
-        height: size.height * 0.3,
+        width: widget.width ?? size.width / 2 - 20,
+        height: widget.height ?? size.height * 0.3,
       ),
     );
   }

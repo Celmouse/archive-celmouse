@@ -4,8 +4,6 @@ import 'package:controller/src/core/socket.dart';
 import 'package:protocol/protocol.dart';
 
 class MouseControl {
-
-
   void click(ClickType type) {
     _send(
       event: ProtocolEvents.mouseClick,

@@ -1,3 +1,4 @@
+import 'package:controller/src/features/mouse/move/bloc/mouse_actions.dart';
 import 'package:controller/src/features/mouse/socket_mouse.dart';
 import 'package:flutter/material.dart';
 import 'package:protocol/protocol.dart';
@@ -14,8 +15,13 @@ class RightMouseButton extends StatefulWidget {
   State<RightMouseButton> createState() => _RightMouseButtonState();
 }
 
-class _RightMouseButtonState extends State<RightMouseButton> {
-  bool isPressed = false;
+class _RightMouseButtonState extends State<RightMouseButton>
+    with MouseButton, ButtonClick {
+  @override
+  void initState() {
+    mouse = widget.mouse;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class _RightMouseButtonState extends State<RightMouseButton> {
         setState(() {
           isPressed = true;
         });
-       widget. mouse.click(ClickType.right);
+        click(ClickType.right);
       },
       onTapUp: (_) {
         setState(() {
