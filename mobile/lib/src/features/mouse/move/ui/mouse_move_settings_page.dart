@@ -28,8 +28,6 @@ class CursorSettingsPage extends StatefulWidget {
 class _CursorSettingsPageState extends State<CursorSettingsPage> {
   @override
   Widget build(BuildContext context) {
-    //TODO: Add save on exit (Pop)
-    //  MouseSettingsPersistence.saveSettings(getIt<MouseSettings>());
     return Drawer(
       child: SafeArea(
           minimum: const EdgeInsets.only(
