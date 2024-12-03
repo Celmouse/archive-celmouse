@@ -1,7 +1,5 @@
 import 'package:controller/src/UI/connect/connect_server.dart';
-import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 void main() {
   runApp(const MyApp());

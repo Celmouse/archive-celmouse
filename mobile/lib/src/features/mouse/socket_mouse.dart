@@ -1,12 +1,10 @@
 import 'dart:convert';
 
+import 'package:controller/src/core/socket.dart';
 import 'package:protocol/protocol.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MouseControl {
-  final WebSocketChannel channel;
 
-  MouseControl(this.channel);
 
   void click(ClickType type) {
     _send(
@@ -81,7 +79,8 @@ class MouseControl {
     required ProtocolEvents event,
     required dynamic data,
   }) =>
-      channel.sink.add(jsonEncode(
+  //TODO: Cache this getSocket method to improve performance
+      SocketConnection().getSocketConnection().sink.add(jsonEncode(
         Protocol(
           event: event,
           data: data,

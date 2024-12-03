@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import '../data/mouse_settings_model.dart';
 import '../../socket_mouse.dart';
 
@@ -19,10 +18,10 @@ import 'components/left_button.dart';
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
-    required this.channel,
+    // required this.channel,
   });
 
-  final WebSocketChannel channel;
+  // final WebSocketChannel channel;
 
   @override
   State<MoveMousePage> createState() => _MoveMousePageState();
@@ -35,6 +34,7 @@ enum CursorKeysPressed {
 }
 
 class _MoveMousePageState extends State<MoveMousePage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   // bool isMicOn = false;
   bool isScrollingEnabled = false;
   bool isCursorMovingEnabled = false;
@@ -59,35 +59,25 @@ class _MoveMousePageState extends State<MoveMousePage> {
       getIt.registerSingleton<MouseSettings>(settings);
     });
 
-    mouse = MouseControl(widget.channel);
+    mouse = MouseControl();
     // keyboard = KeyboardControl(widget.channel);
     movement = MouseMovement(mouse: mouse);
-
-    widget.channel.stream.listen((_) {}, onDone: () {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    }, onError: (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Connection Error: $e"),
-          ),
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    widget.channel.sink.close();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      key: scaffoldKey,
+      endDrawer: const CursorSettingsPage(),
+      // endDrawerEnableOpenDragGesture: false,
+      onEndDrawerChanged: (isOpened) {
+        if (!isOpened) {
+          MouseSettingsPersistence.saveSettings(getIt<MouseSettings>());
+        } else {
+          movement.stopMouseMovement();
+          movement.stopScrollMovement();
+        }
+      },
       appBar: AppBar(
         title: const Text('Mouse'),
         centerTitle: true,
@@ -111,9 +101,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(
-                        channel: widget.channel,
-                      ),
+                      builder: (context) => KeyboardTyppingPage(),
                     ));
               },
               icon: const Icon(
@@ -122,20 +110,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
             ),
           ),
           IconButton(
-            onPressed: () {
-              movement.stopMouseMovement();
-              movement.stopScrollMovement();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return CursorSettingsPage(
-                      channel: widget.channel,
-                    );
-                  },
-                ),
-              );
-            },
+            onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
             icon: const Icon(Icons.settings),
           )
         ],
@@ -242,7 +217,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 ],
               ),
             ),
-         
           ],
         ),
       ),
