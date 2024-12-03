@@ -77,7 +77,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
             showDialog(
                 builder: (context) => AlertDialog(
                       icon: Image.asset(
-                        "assets/icon_32x32@2x.png",
+                        "assets/logo.png",
                         height: 52,
                         width: 52,
                       ),
