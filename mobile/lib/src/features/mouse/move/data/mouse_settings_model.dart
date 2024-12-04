@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../../../../configs/mouse_settings.freezed.dart';
-part '../../../../configs/mouse_settings.g.dart';
+part 'mouse_settings_model.freezed.dart';
+part 'mouse_settings_model.g.dart';
 
 enum DoubleClickDelayOptions {
   veryFast(100, "Very Fast"),
