@@ -53,6 +53,7 @@ class MouseScrollProtocolData with _$MouseScrollProtocolData {
 enum ProtocolEvents {
   // Keyboard
   keyPressed,
+  keyReleased,
   changeSensitivity,
   changeScrollSensitivity,
   // Movement

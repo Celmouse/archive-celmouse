@@ -1,10 +1,12 @@
+import 'package:controller/src/features/keyboard/bloc/keyboard_actions.dart';
+import 'package:controller/src/socket/keyboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BasicKeyboardKeyComponent extends StatefulWidget {
   const BasicKeyboardKeyComponent({
     super.key,
-    this.size = 72,
+    this.size = 80,
     required this.text,
   }) : assert(text.length == 1);
 
@@ -18,9 +20,13 @@ class BasicKeyboardKeyComponent extends StatefulWidget {
       _BasicKeyboardKeyComponentState();
 }
 
-class _BasicKeyboardKeyComponentState extends State<BasicKeyboardKeyComponent> {
-  bool isPressed = false;
-
+class _BasicKeyboardKeyComponentState extends State<BasicKeyboardKeyComponent>
+    with KeyboardButton, KeyboardButtonHoldAndRelease {
+      @override
+  void initState() {
+    keyboard = KeyboardControl();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -28,11 +34,13 @@ class _BasicKeyboardKeyComponentState extends State<BasicKeyboardKeyComponent> {
         setState(() {
           isPressed = true;
         });
+        press(widget.text);
       },
       onTapUp: (_) {
         setState(() {
           isPressed = false;
         });
+        release(widget.text);
       },
       child: Stack(
         alignment: Alignment.center,

@@ -71,7 +71,7 @@ class _KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
         child: Center(
           child: TextField(
             onSubmitted: (text) {
-              keyboard.type(text);
+              keyboard.press(text);
             },
             decoration: const InputDecoration(labelText: 'Usar teclado'),
           ),

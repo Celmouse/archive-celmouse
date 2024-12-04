@@ -1,3 +1,4 @@
+import 'package:controller/src/features/gaming/a/components/shot.dart';
 import 'package:controller/src/features/keyboard/ui/components/keycap.dart';
 import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
 import 'package:controller/src/features/mouse/move/ui/components/left_button.dart';
@@ -35,12 +36,18 @@ class _GameModeDefaultPageState extends State<GameModeDefaultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        minimum: EdgeInsets.symmetric(horizontal: 8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LeftMouseButton(
-              mouse: mouse,
-              height: 50,
-              width: 50,
+            Row(
+              children: [
+                Spacer(),
+                ShotButtonComponent(),
+              ],
+            ),
+            SizedBox(
+              height: 48,
             ),
             MovementControls(),
           ],

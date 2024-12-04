@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
       }
     });
 
-    final SocketInterpreter interpreter = SocketInterpreter(mouse: Mouse());
+    final SocketInterpreter interpreter = SocketInterpreter();
 
     await for (HttpRequest request in server) {
       final s = await WebSocketTransformer.upgrade(request);
