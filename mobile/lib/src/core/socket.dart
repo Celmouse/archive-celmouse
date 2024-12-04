@@ -3,9 +3,9 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketConnection {
   // Por 7771 is the default for now
-  createSocketConnection(String ip) {
+  createSocketConnection(String ip, int port) {
     final channel = WebSocketChannel.connect(
-      Uri.parse('ws://$ip:7771'),
+      Uri.parse('ws://$ip:$port'),
     );
     getIt.registerSingleton<WebSocketChannel>(channel);
   }

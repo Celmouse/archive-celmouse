@@ -23,7 +23,7 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
       _subscription?.pause();
     });
     try {
-      await connectWS(value, (err) {
+      await connectWS(value, 7771, (err) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(err),
