@@ -46,6 +46,8 @@ dependencies:
   toggle_switch: ^2.3.0
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.1
+  
+  ping_discover_network_forked: ^0.0.1
 
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
@@ -53,6 +55,8 @@ dependencies:
 
   protocol:
     path: ../packages/protocol
+  network_info_plus: ^6.1.1
+  dart_ping: ^9.0.1
 
 dev_dependencies:
   flutter_test:

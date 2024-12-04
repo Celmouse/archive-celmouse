@@ -1,11 +1,11 @@
 import 'package:controller/src/UI/components/support_button.dart';
-import 'package:controller/src/UI/connect/connection_menu.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../utils/launch_site.dart';
 import 'connect_qr_code.dart';
 import '../../core/connect.dart';
+import 'network_scanner.dart';
 
 class ConnectToServerPage extends StatefulWidget {
   const ConnectToServerPage({super.key});
@@ -16,19 +16,37 @@ class ConnectToServerPage extends StatefulWidget {
 
 class _ConnectToServerPageState extends State<ConnectToServerPage> {
   final TextEditingController ipController = TextEditingController();
-
   String connError = "";
+  bool isLoading = false;
+  bool isConnecting = false;
+  List<Map<String, String>> networkDevices = [];
 
   @override
   void initState() {
     super.initState();
+    _scanNetwork();
   }
 
-  bool isLoading = false;
+  void _scanNetwork() {
+    setState(() {
+      isLoading = true;
+    });
+
+    final stream = NetworkScanner.scanNetwork();
+    stream.listen((device) {
+      setState(() {
+        networkDevices.add(device);
+      });
+    }).onDone(() {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
 
   connect() async {
     setState(() {
-      isLoading = true;
+      isConnecting = true;
     });
     try {
       await connectWS(ipController.text, (err) {
@@ -58,7 +76,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
       }
     } finally {
       setState(() {
-        isLoading = false;
+        isConnecting = false;
       });
     }
   }
@@ -102,7 +120,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                 context: context);
           },
         ),
-        title: const Text('Conectar'),
+        title: const Text('Connect'),
         centerTitle: true,
         actions: [
           const SupportButtonComponent(),
@@ -121,11 +139,9 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 32),
-        child: Center(
-          child: Visibility(
-            visible: true,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          children: [
+            Column(
               children: [
                 ExpansionTile(
                   dense: true,
@@ -151,62 +167,137 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                       ),
                     ),
                     const Text("3. Connect to the HUB."),
-                    const Text("4. Start moving you pointer."),
+                    const Text("4. Start moving your pointer."),
                   ],
                 ),
-                TextField(
-                  controller: ipController,
-                  onSubmitted: (_) => connect(),
-                  decoration: const InputDecoration(
-                    labelText: 'Type the HUB IP',
-                    hintText: "168.192.0.1",
-                    hintStyle: TextStyle(
-                      color: Colors.white12,
-                    ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-                Visibility(
-                  visible: connError.isNotEmpty,
-                  child: Text(connError,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.error,
-                          )),
-                ),
-                ElevatedButton(
-                  onPressed: connect,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Center(
-                      child: isLoading
-                          ? const CircularProgressIndicator(
-                              strokeCap: StrokeCap.square,
-                            )
-                          : const Text('Connect'),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: false,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ConnectionMenuPage(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Connection Options',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      );
-                    },
-                    child: const Text("Try another way"),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.wifi),
+                          title: const Text('Discover Network Devices'),
+                          subtitle: const Text(
+                              'Automatically discover devices on your network'),
+                          onTap: () {
+                            setState(() {
+                              networkDevices.clear();
+                            });
+                            _scanNetwork();
+                          },
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.input),
+                          title: const Text('Enter HUB IP Manually'),
+                          subtitle: const Text(
+                              'Connect to the HUB using its IP address'),
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Enter HUB IP'),
+                                content: TextField(
+                                  controller: ipController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'HUB IP',
+                                    hintText: '192.168.0.1',
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      connect();
+                                    },
+                                    child: const Text('Connect'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.qr_code_scanner),
+                          title: const Text('Scan QR Code'),
+                          subtitle: const Text(
+                              'Scan a QR code to connect to the HUB'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ConnectFromQrCodePage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              ]
-                  .map((e) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: e,
-                      ))
-                  .toList(),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Available devices on your network:',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {
+                        networkDevices.clear();
+                      });
+                      _scanNetwork();
+                    },
+                    child: ListView.builder(
+                      itemCount: networkDevices.length,
+                      itemBuilder: (context, index) {
+                        final device = networkDevices[index];
+                        return ListTile(
+                          title: Text(device['ip'] ?? ''),
+                          subtitle: Text('Name: ${device['host']}'),
+                          onTap: () {
+                            setState(() {
+                              ipController.text = device['ip'] ?? '';
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
+            if (isLoading)
+              const Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: LinearProgressIndicator(),
+              ),
+          ],
         ),
       ),
     );
