@@ -7,8 +7,7 @@
         {
             "name": "mobile",
             "request": "launch",
-            "type": "dart",
-            "args": ["-d", "iphone"]
+            "type": "dart"
         },
         {
             "name": "mobile (profile mode)",

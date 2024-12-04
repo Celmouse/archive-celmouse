@@ -30,3 +30,5 @@ melos_celmouse.iml
 *.g.dart
 *.freezed.dart
 /builds
+mobile/ios/Podfile.lock
+mobile/.vscode/launch.json
