@@ -81,6 +81,45 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     }
   }
 
+
+
+
+   Future<void> scanNetwork() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final String? ip = await _getLocalIpAddress();
+      if (ip != null) {
+        final String subnet = ip.substring(0, ip.lastIndexOf('.'));
+        List<String> foundDevices = [];
+
+        // Define a range of common ports to scan
+        const List<int> ports = [80, 443, 22, 8080, 8443];
+
+        for (int port in ports) {
+          final stream = NetworkAnalyzer.discover2(subnet, port);
+
+          await for (final NetworkAddress addr in stream) {
+            if (addr.exists && !foundDevices.contains(addr.ip)) {
+              foundDevices.add(addr.ip);
+            }
+          }
+        }
+
+        setState(() {
+          devices = foundDevices;
+        });
+      }
+    } catch (e) {
+      print('Error scanning network: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
