@@ -1,4 +1,4 @@
-import 'package:controller/src/features/connect/input_ip/bloc/ip_connect_bloc.dart';
+import 'package:controller/src/features/connect/input_ip/ui/bloc/ip_connect_bloc.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

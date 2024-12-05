@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:controller/src/UI/components/support_button.dart';
-import 'package:controller/src/features/connect/input_ip/ui/enter_hub_ip_tile.dart';
+import 'package:controller/src/features/connect/input_ip/ui/pages/enter_hub_ip_tile.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -38,6 +38,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     setState(() {
       isLoading = true;
     });
+
 
     final stream = NetworkScanner.scanNetwork();
 
