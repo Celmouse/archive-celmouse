@@ -13,8 +13,13 @@ Future<void> connectWS(String ip, int port, Function(String) onError,
   }
 
   final socketConnection = SocketConnection();
-  socketConnection.createSocketConnection(ip, port);
 
+  // Check if there is an existing WebSocket connection and disconnect it
+  if (await socketConnection.isConnected()) {
+    socketConnection.disconnectSocket();
+  }
+
+  socketConnection.createSocketConnection(ip, port);
   try {
     await socketConnection.isConnected();
     return;
@@ -24,4 +29,11 @@ Future<void> connectWS(String ip, int port, Function(String) onError,
     onError("WebSocket error: $e");
   }
   return;
+}
+
+Future<void> disconnectWS() async {
+  final socketConnection = SocketConnection();
+  if (await socketConnection.isConnected()) {
+    socketConnection.disconnectSocket();
+  }
 }

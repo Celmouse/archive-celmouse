@@ -68,6 +68,13 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
     });
   }
 
+  void disconnect() {
+    disconnectWS();
+    setState(() {
+      connectionEstablished = false;
+    });
+  }
+
   void _scanAndConnect() async {
     setState(() {
       isLoading = true;
@@ -75,13 +82,13 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
 
     for (var device in availableDevices) {
       if (connectionEstablished) {
-        break; // Stop further connection attempts
+        // disconnect from the previous connection
+        disconnect();
       }
 
       final ip = device['ip']!;
       final port = int.parse(device['port']!);
-      // final host = device['host']!;
-      print("Connecting to $ip:$port");
+      // print("Connecting to $ip:$port");
 
       try {
         isWebSocketTry = true;
@@ -210,6 +217,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
           const SupportButtonComponent(),
           IconButton(
             onPressed: () {
+              disconnect();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -278,9 +286,10 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                           const Divider(),
                           ListTile(
                             leading: const Icon(Icons.wifi),
-                            title: const Text('Auto Connect to My Device'),
-                            subtitle: const Text(
-                                'Automatically connect to your device on the network'),
+                            title: const Text('Connect to My Device'),
+                            subtitle: isLoading
+                                ? const Text('Loading...')
+                                : const Text('Auto connect to the HUB'),
                             trailing: deviceFound
                                 ? const Icon(Icons.circle,
                                     color: Colors.green, size: 12)
@@ -304,6 +313,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                             subtitle: const Text(
                                 'Scan a QR code to connect to the HUB'),
                             onTap: () {
+                              disconnect();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -321,13 +331,6 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                 ],
               ),
             ),
-            if (isLoading)
-              const Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: LinearProgressIndicator(),
-              ),
           ],
         ),
       ),
