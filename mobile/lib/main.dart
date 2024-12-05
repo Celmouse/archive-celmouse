@@ -1,7 +1,10 @@
-import 'package:controller/src/UI/connect/connect_server.dart';
+import 'package:controller/src/features/connect/connect_page.dart';
 import 'package:flutter/material.dart';
+import 'package:controller/getit.dart'; // Import the getit.dart file
 
 void main() {
+  setup(); // Call the setup function to register dependencies
+
   runApp(const MyApp());
 }
 

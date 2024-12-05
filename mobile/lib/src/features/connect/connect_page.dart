@@ -1,13 +1,13 @@
 import 'dart:async';
-
 import 'package:controller/src/UI/components/support_button.dart';
+import 'package:controller/src/features/connect/input_ip/ui/enter_hub_ip_tile.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../utils/launch_site.dart';
-import 'connect_qr_code.dart';
+import '../../UI/connect/connect_qr_code.dart';
 import '../../core/connect.dart';
-import 'network_scanner.dart';
+import '../../core/network_scanner.dart';
 
 class ConnectToServerPage extends StatefulWidget {
   const ConnectToServerPage({super.key});
@@ -23,6 +23,8 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
   bool isConnecting = false;
   bool isWebSocketTry = false;
   bool connectionEstablished = false;
+  bool isGrantedAccess = false;
+  bool deviceFound = false; // Add this state variable
   StreamSubscription<Map<String, String>>? _subscription;
   List<Map<String, String>> availableDevices = [];
 
@@ -53,6 +55,8 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
 
       setState(() {
         availableDevices.add({'ip': ip, 'port': port.toString(), 'host': host});
+        deviceFound = true; // Set deviceFound to true when a device is found
+        isLoading = false; // Stop the progress bar when a device is found
       });
     });
 
@@ -127,6 +131,9 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
       }).timeout(const Duration(seconds: 10));
       if (mounted) {
         print("Successfully connected to $ip:$port");
+        setState(() {
+          isGrantedAccess = true;
+        });
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -274,48 +281,22 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                             title: const Text('Auto Connect to My Device'),
                             subtitle: const Text(
                                 'Automatically connect to your device on the network'),
+                            trailing: deviceFound
+                                ? const Icon(Icons.circle,
+                                    color: Colors.green, size: 12)
+                                : null,
                             onTap: () {
                               _scanAndConnect();
                             },
                           ),
                           const Divider(),
-                          ListTile(
-                            leading: const Icon(Icons.input),
-                            title: const Text('Enter HUB IP Manually'),
-                            subtitle: const Text(
-                                'Connect to the HUB using its IP address'),
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Enter HUB IP'),
-                                  content: TextField(
-                                    controller: ipController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'HUB IP',
-                                      hintText: '192.168.0.1',
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        connect(ipController.text,
-                                            80); // Default port
-                                      },
-                                      child: const Text('Connect'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                          EnterHubIPTile(
+                            onConnectionSuccess: () {
+                              setState(() {
+                                isGrantedAccess = true;
+                              });
                             },
-                          ),
+                          ), // Use the EnterHubIPTile component here
                           const Divider(),
                           ListTile(
                             leading: const Icon(Icons.qr_code_scanner),
@@ -341,13 +322,11 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
               ),
             ),
             if (isLoading)
-              Positioned(
+              const Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: isWebSocketTry == false
-                    ? const Row()
-                    : const LinearProgressIndicator(),
+                child: LinearProgressIndicator(),
               ),
           ],
         ),
