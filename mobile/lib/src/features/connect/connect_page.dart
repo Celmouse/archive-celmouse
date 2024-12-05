@@ -39,7 +39,6 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
       isLoading = true;
     });
 
-
     final stream = NetworkScanner.scanNetwork();
 
     _subscription = stream.listen((device) {
@@ -295,6 +294,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                                 ? const Icon(Icons.circle,
                                     color: Colors.green, size: 12)
                                 : null,
+                            enabled: deviceFound,
                             onTap: () {
                               _scanAndConnect();
                             },
