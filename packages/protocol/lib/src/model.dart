@@ -64,6 +64,7 @@ enum ProtocolEvents {
   mouseDoubleClick,
   mouseButtonHold,
   mouseButtonReleased,
+  specialKeyPressed,
 }
 
 enum ClickType {

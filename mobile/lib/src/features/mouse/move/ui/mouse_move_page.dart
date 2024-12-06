@@ -18,10 +18,7 @@ import 'components/left_button.dart';
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
-    // required this.channel,
   });
-
-  // final WebSocketChannel channel;
 
   @override
   State<MoveMousePage> createState() => _MoveMousePageState();
@@ -101,7 +98,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(),
+                      builder: (context) => const KeyboardTyppingPage(),
                     ));
               },
               icon: const Icon(
@@ -243,7 +240,7 @@ class CursorFeatLabel extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         )
       ],
     );

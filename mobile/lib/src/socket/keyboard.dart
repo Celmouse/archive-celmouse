@@ -3,17 +3,27 @@ import 'package:controller/src/core/socket.dart';
 import 'package:protocol/protocol.dart';
 
 class KeyboardControl {
-
   void type(String text) {
     _send(event: ProtocolEvents.keyPressed, data: text);
   }
 
-  void _send({required ProtocolEvents event, required dynamic data}) =>
-      SocketConnection().getSocketConnection().sink.add(jsonEncode(
-        Protocol(
-          event: event,
-          data: data,
-          timestamp: DateTime.timestamp(),
-        ).toJson(),
-      ));
+  void specialKey(SpecialKeyType type) {
+    _send(event: ProtocolEvents.specialKeyPressed, data: type.toString());
+  }
+
+  void _send({required ProtocolEvents event, required dynamic data}) {
+    final socketConnection = SocketConnection().getSocketConnection();
+    socketConnection.sink.add(jsonEncode(
+      Protocol(
+        event: event,
+        data: data,
+        timestamp: DateTime.now(),
+      ).toJson(),
+    ));
+  }
+}
+
+enum SpecialKeyType {
+  mouse,
+  // Add other special key types here
 }
