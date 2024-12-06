@@ -17,10 +17,7 @@ import '../../mouse/view/left_button.dart';
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
-    required this.viewmodel,
   });
-
-  final MouseMoveViewmodel viewmodel;
 
   @override
   State<MoveMousePage> createState() => _MoveMousePageState();
@@ -87,7 +84,7 @@ class _MoveMousePageState extends State<MoveMousePage>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(),
+                      builder: (context) => const KeyboardTyppingPage(),
                     ));
               },
               icon: const Icon(
