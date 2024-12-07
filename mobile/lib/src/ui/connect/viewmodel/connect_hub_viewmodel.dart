@@ -25,7 +25,6 @@ class ConnectHUBViewmodel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.delayed(const Duration(seconds: 5));
       final result = await _connectRepository.connect(ip);
       switch (result) {
         case Ok():

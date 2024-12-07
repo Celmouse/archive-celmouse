@@ -25,7 +25,7 @@ class EnterHubIPTileState extends State<EnterHubIPTile> {
     return ListTile(
       leading: const Icon(Icons.input),
       title: const Text('Enter HUB IP Manually'),
-      subtitle: const Text('Connect to the HUB using its IP address'),
+      subtitle: const Text('Connect using its IP address'),
       onTap: () {
         showDialog(
           context: context,
