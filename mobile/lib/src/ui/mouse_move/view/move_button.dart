@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../bloc/mouse_movement.dart';
+import '../../../features/mouse/move/bloc/mouse_movement.dart';
 
 class MoveMouseButton extends StatefulWidget {
   const MoveMouseButton({

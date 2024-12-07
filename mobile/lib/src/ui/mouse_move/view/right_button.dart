@@ -26,7 +26,7 @@ class _RightMouseButtonState extends State<RightMouseButton> {
         setState(() {
           isPressed = true;
         });
-       widget. mouse.click(ClickType.right);
+        widget.mouse.click(ClickType.right);
       },
       onTapUp: (_) {
         setState(() {

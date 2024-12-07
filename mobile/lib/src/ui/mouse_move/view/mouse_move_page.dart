@@ -1,19 +1,19 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
-import 'package:controller/src/features/mouse/move/ui/components/move_button.dart';
-import 'package:controller/src/features/mouse/move/ui/components/right_button.dart';
-import 'package:controller/src/features/mouse/move/ui/components/scroll_button.dart';
+import 'package:controller/src/ui/mouse_move/view/move_button.dart';
+import 'package:controller/src/ui/mouse_move/view/right_button.dart';
+import 'package:controller/src/ui/mouse_move/view/scroll_button.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/keyboard/keyboard_type.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../data/mouse_settings_model.dart';
-import '../../socket_mouse.dart';
+import '../../../features/mouse/move/data/mouse_settings_model.dart';
+import '../../../features/mouse/socket_mouse.dart';
 
-import '../data/mouse_settings_persistence.dart';
-import 'components/left_button.dart';
+import '../../../features/mouse/move/data/mouse_settings_persistence.dart';
+import 'left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({

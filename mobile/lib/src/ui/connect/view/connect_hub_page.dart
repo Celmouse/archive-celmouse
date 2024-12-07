@@ -1,6 +1,6 @@
 import 'package:controller/src/ui/components/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
-import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
+import 'package:controller/src/ui/mouse_move/view/mouse_move_page.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
