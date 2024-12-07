@@ -1,10 +1,10 @@
 import 'package:controller/src/domain/models/button_settings.dart';
-import 'package:controller/src/ui/mouse/viewmodel/right_button_viewmodel.dart';
+import 'package:controller/src/ui/mouse/viewmodel/move_button_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RightMouseButton extends StatelessWidget {
-  const RightMouseButton({
+class MoveMouseButton extends StatelessWidget {
+  const MoveMouseButton({
     super.key,
     required this.settings,
   });
@@ -13,20 +13,20 @@ class RightMouseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RightButtonViewmodel viewmodel = RightButtonViewmodel(
-      mouseRepository: context.read(),
+    final MoveMouseButtonViewmodel viewmodel = MoveMouseButtonViewmodel(
+      mouseReposiry: context.read(),
     );
 
     return ListenableBuilder(
       listenable: viewmodel,
       builder: (_, __) => GestureDetector(
-        onTap: viewmodel.click,
+        onTap: viewmodel.toggle,
         child: Container(
           width: settings.width,
           height: settings.height,
           decoration: BoxDecoration(
             borderRadius: settings.borderRadius,
-            color: viewmodel.isPressed ? settings.color[200] : settings.color,
+            color: viewmodel.isActive ? settings.color[200] : settings.color,
           ),
         ),
       ),

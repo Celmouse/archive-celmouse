@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../utils/launch_site.dart';
 import 'connect_qr_code.dart';
-import '../../../core/connect.dart';
 import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {

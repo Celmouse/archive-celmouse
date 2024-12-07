@@ -19,7 +19,8 @@ class ConnectionRepository {
   Future<Result<void>> connect(String ip) async {
     // We are using port 7771 por now, so no need to pass it as a parameter
     try {
-      await _connectionService.connect(ip, 7771);
+      _socket = await _connectionService.connect(ip, 7771);
+
       return const Result.ok(null);
     } on Exception catch (e) {
       return Result.error(e);
@@ -30,6 +31,7 @@ class ConnectionRepository {
     if (!await isConnected) return Result.error(Exception('Not connected'));
     try {
       await _connectionService.disconnect(_socket!);
+      _socket = null;
       return const Result.ok(null);
     } on Exception catch (e) {
       return Result.error(e);

@@ -1,10 +1,11 @@
+
 import 'package:controller/src/domain/models/button_settings.dart';
-import 'package:controller/src/ui/mouse/viewmodel/right_button_viewmodel.dart';
+import 'package:controller/src/ui/mouse/viewmodel/left_button_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RightMouseButton extends StatelessWidget {
-  const RightMouseButton({
+class LeftMouseButton extends StatelessWidget {
+  const LeftMouseButton({
     super.key,
     required this.settings,
   });
@@ -13,7 +14,7 @@ class RightMouseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RightButtonViewmodel viewmodel = RightButtonViewmodel(
+    final LeftButtonViewmodel viewmodel = LeftButtonViewmodel(
       mouseRepository: context.read(),
     );
 
@@ -26,7 +27,9 @@ class RightMouseButton extends StatelessWidget {
           height: settings.height,
           decoration: BoxDecoration(
             borderRadius: settings.borderRadius,
-            color: viewmodel.isPressed ? settings.color[200] : settings.color,
+            color: viewmodel.isPressed
+                ? settings.color[200]
+                : settings.color,
           ),
         ),
       ),
