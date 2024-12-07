@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'package:controller/src/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../core/connect.dart';
-import '../../../features/mouse/move/ui/mouse_move_page.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
   const ConnectFromQrCodePage({super.key});
@@ -34,12 +35,8 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
       if (mounted) {
         _subscription?.cancel();
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MoveMousePage(),
-          ),
-        );
+        //TODO: Fix this
+        context.go(Routes.mouse);
       }
     } finally {
       if (mounted) {

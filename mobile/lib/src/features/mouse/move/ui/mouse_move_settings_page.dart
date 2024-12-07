@@ -1,5 +1,4 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/features/mouse/move/data/mouse_settings_persistence.dart';
 import 'package:flutter/material.dart';
 import '../data/mouse_settings_model.dart';
 
@@ -38,7 +37,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
           child: ListView(
             children: [
               ListTile(
-                title:  Text("Settings", style: Theme.of(context).textTheme.titleLarge,),
+                title: Text(
+                  "Settings",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 trailing: IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(

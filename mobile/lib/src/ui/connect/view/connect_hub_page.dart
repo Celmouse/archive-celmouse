@@ -1,12 +1,12 @@
+import 'package:controller/src/routing/routes.dart';
 import 'package:controller/src/ui/components/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
-import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../utils/launch_site.dart';
 import 'connect_qr_code.dart';
-import '../../../core/connect.dart';
 import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
@@ -22,15 +22,6 @@ class ConnectHUBPage extends StatefulWidget {
 }
 
 class _ConnectHUBPageState extends State<ConnectHUBPage> {
-  final TextEditingController ipController = TextEditingController();
-  bool isLoading = false;
-  bool isConnecting = false;
-  bool isWebSocketTry = false;
-  bool connectionEstablished = false;
-  bool isGrantedAccess = false;
-  bool deviceFound = false; // Add this state variable
-  List<Map<String, String>> availableDevices = [];
-
   @override
   void initState() {
     widget.viewmodel.addListener(_listener);
@@ -45,22 +36,9 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
 
   void _listener() {
     if (widget.viewmodel.isConnected) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MoveMousePage(),
-        ),
-      );
+      context.go(Routes.mouse);
     }
   }
-
-  void disconnect() {
-    disconnectWS();
-    setState(() {
-      connectionEstablished = false;
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +113,6 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                           leading: const Icon(Icons.qr_code_scanner),
                           title: const Text('Connect via QR Code'),
                           onTap: () {
-                            disconnect();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
