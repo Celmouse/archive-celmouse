@@ -1,6 +1,6 @@
-import 'package:controller/src/UI/menu.dart';
-import 'package:controller/src/features/connect/connect_page.dart';
-import 'package:flutter/foundation.dart';
+
+
+import 'package:controller/src/ui/connect/view/connect_page.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -21,9 +21,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: const ConnectToServerPage(),
-      // home: kDebugMode ? const MenuPage() : const ConnectToServerPage(),
       home: const ConnectToServerPage(),
+      // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
       // home: MoveMousePage(
       //   channel: WebSocketChannel.connect(
       //     Uri.parse('ws://192.168.1.10:7771'),

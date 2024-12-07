@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:controller/src/data/services/connection_service.dart';
 import 'package:controller/src/utils/result.dart';
 
@@ -18,6 +17,4 @@ class ConnectionRepository {
       return Result.error(e);
     }
   }
-
-  
 }
