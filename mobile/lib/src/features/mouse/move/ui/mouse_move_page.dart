@@ -36,6 +36,7 @@ class _MoveMousePageState extends State<MoveMousePage>
   bool isScrollingEnabled = false;
   bool isCursorMovingEnabled = false;
   bool isKeyboardVisible = false;
+  bool isLandscapeMode = false;
 
   CursorKeysPressed cursorKeysPressed = CursorKeysPressed.none;
 
@@ -46,6 +47,8 @@ class _MoveMousePageState extends State<MoveMousePage>
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -69,6 +72,8 @@ class _MoveMousePageState extends State<MoveMousePage>
   @override
   void dispose() {
     _animationController.dispose();
+    SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.edgeToEdge); // Restore system UI on dispose
     super.dispose();
   }
 
@@ -78,7 +83,7 @@ class _MoveMousePageState extends State<MoveMousePage>
       if (isKeyboardVisible) {
         _animationController.forward();
       } else {
-        _animationController.reverse();
+        hideKeyboard();
       }
     });
   }
@@ -86,8 +91,91 @@ class _MoveMousePageState extends State<MoveMousePage>
   void hideKeyboard() {
     setState(() {
       isKeyboardVisible = false;
+      isLandscapeMode = false;
       _animationController.reverse();
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     });
+  }
+
+  void toggleOrientationMode() {
+    setState(() {
+      isLandscapeMode = !isLandscapeMode;
+      if (isLandscapeMode) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      } else {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+      }
+    });
+  }
+
+  double _getHeightFactor() {
+    return isLandscapeMode
+        ? 0.8
+        : 0.4; // Adjusted height factor for landscape mode
+  }
+
+  Positioned _buildPositionedKeyboard(BuildContext context) {
+    final heightFactor = _getHeightFactor();
+
+    return Positioned(
+      bottom: _animationController.value *
+              MediaQuery.of(context).size.height *
+              heightFactor -
+          MediaQuery.of(context).size.height * heightFactor,
+      left: 0,
+      right: 0,
+      height: MediaQuery.of(context).size.height * heightFactor,
+      child: AnimatedOpacity(
+        opacity: _animationController.value,
+        duration: const Duration(milliseconds: 200),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 5,
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.screen_rotation),
+                      onPressed: toggleOrientationMode,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: hideKeyboard,
+                    ),
+                  ],
+                ),
+              ),
+              const Expanded(
+                child: KeyboardTyppingPage(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -227,63 +315,7 @@ class _MoveMousePageState extends State<MoveMousePage>
             AnimatedBuilder(
               animation: _animationController,
               builder: (context, child) {
-                return Positioned(
-                  bottom: _animationController.value *
-                          MediaQuery.of(context).size.height *
-                          0.4 -
-                      MediaQuery.of(context).size.height * 0.4,
-                  left: 0,
-                  right: 0,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: AnimatedOpacity(
-                    opacity: _animationController.value,
-                    duration: const Duration(milliseconds: 200),
-                    child: GestureDetector(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(20)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: hideKeyboard,
-                              onVerticalDragEnd: (details) {
-                                if (details.primaryVelocity! > 0) {
-                                  hideKeyboard();
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.close),
-                                      onPressed: hideKeyboard,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const Expanded(
-                              child: KeyboardTyppingPage(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return _buildPositionedKeyboard(context);
               },
             ),
           ],

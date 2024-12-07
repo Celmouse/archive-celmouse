@@ -9,13 +9,88 @@ import '../../UI/keyboard/model.dart';
 import '../../UI/keyboard/keyboard_theme.dart';
 import '../../UI/keyboard/keyboard_view_model.dart';
 
-class KeyboardTyppingPage extends StatelessWidget {
+class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
     super.key,
     this.theme = defaultKeyboardTheme,
   });
 
   final KeyboardTheme theme;
+
+  @override
+  KeyboardTyppingPageState createState() => KeyboardTyppingPageState();
+}
+
+class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
+  double _getKeyHeight(BuildContext context) {
+    return MediaQuery.of(context).orientation == Orientation.landscape
+        ? widget.theme.keyHeight * 0.9
+        : widget.theme.keyHeight;
+  }
+
+  double _getKeyWidth(double flex) {
+    return MediaQuery.of(context).orientation == Orientation.landscape
+        ? widget.theme.keyWidth * flex * 0.8
+        : widget.theme.keyWidth * flex;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => KeyboardViewModel(getIt<KeyboardRepository>()),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Consumer<KeyboardViewModel>(
+                builder: (context, viewModel, child) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: viewModel.keys
+                          .map<Row>((row) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: row.map<Widget>((keyItem) {
+                                  return Expanded(
+                                    flex: keyItem.flex,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                          widget.theme.keySpacing / 2),
+                                      child: KeyButton(
+                                        keyItem: keyItem,
+                                        viewModel: viewModel,
+                                        theme: widget.theme,
+                                        keyHeight: _getKeyHeight(context),
+                                        keyWidth: _getKeyWidth(
+                                          keyItem.flex.toDouble(),
+                                        ),
+                                        onPressed: () {
+                                          if (keyItem.label != null) {
+                                            viewModel
+                                                .onCharPressed(keyItem.label!);
+                                          } else if (keyItem.icon != null) {
+                                            viewModel.onSpecialKeyPressed(
+                                                _getSpecialKeyType(
+                                                    keyItem.icon!));
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ))
+                          .toList(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   SpecialKeyType _getSpecialKeyType(IconData icon) {
     switch (icon) {
@@ -29,55 +104,14 @@ class KeyboardTyppingPage extends StatelessWidget {
         return SpecialKeyType.space;
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => KeyboardViewModel(getIt<KeyboardRepository>()),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Consumer<KeyboardViewModel>(
-          builder: (context, viewModel, child) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: viewModel.keys
-                  .map<Row>((row) => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: row.map<Widget>((keyItem) {
-                          return Expanded(
-                            flex: keyItem.flex,
-                            child: Padding(
-                              padding: EdgeInsets.all(theme.keySpacing / 2),
-                              child: KeyButton(
-                                keyItem: keyItem,
-                                viewModel: viewModel,
-                                theme: theme,
-                                onPressed: () {
-                                  if (keyItem.label != null) {
-                                    viewModel.onCharPressed(keyItem.label!);
-                                  } else if (keyItem.icon != null) {
-                                    viewModel.onSpecialKeyPressed(
-                                        _getSpecialKeyType(keyItem.icon!));
-                                  }
-                                },
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ))
-                  .toList(),
-            );
-          },
-        ),
-      ),
-    );
-  }
 }
 
 class KeyButton extends StatefulWidget {
   final MKey keyItem;
   final KeyboardViewModel viewModel;
   final KeyboardTheme theme;
+  final double keyHeight;
+  final double keyWidth;
   final VoidCallback onPressed;
 
   const KeyButton({
@@ -85,6 +119,8 @@ class KeyButton extends StatefulWidget {
     required this.keyItem,
     required this.viewModel,
     required this.theme,
+    required this.keyHeight,
+    required this.keyWidth,
     required this.onPressed,
   });
 
@@ -111,8 +147,8 @@ class KeyButtonState extends State<KeyButton> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        height: widget.theme.keyHeight,
-        width: widget.theme.keyWidth * widget.keyItem.flex,
+        height: widget.keyHeight,
+        width: widget.keyWidth,
         decoration: BoxDecoration(
           color: _isPressed
               ? widget.theme.keyPressedColor
