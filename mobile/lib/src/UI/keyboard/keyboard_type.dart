@@ -7,7 +7,7 @@ import '../../ui/keyboard/model.dart';
 import '../../ui/keyboard/keyboard_theme.dart';
 import '../../ui/keyboard/keyboard_view_model.dart';
 
-class KeyboardTyppingPage extends StatefulWidget {
+class KeyboardTyppingPage extends StatelessWidget {
   const KeyboardTyppingPage({
     super.key,
     this.theme = defaultKeyboardTheme,
