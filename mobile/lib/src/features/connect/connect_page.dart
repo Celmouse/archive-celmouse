@@ -213,20 +213,8 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
         ),
         title: const Text('Connect'),
         centerTitle: true,
-        actions: [
-          const SupportButtonComponent(),
-          IconButton(
-            onPressed: () {
-              disconnect();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ConnectFromQrCodePage(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.qr_code),
-          )
+        actions: const [
+          SupportButtonComponent(),
         ],
       ),
       body: SafeArea(
