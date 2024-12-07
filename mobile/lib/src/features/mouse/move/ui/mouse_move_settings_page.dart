@@ -1,5 +1,4 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/features/mouse/move/data/mouse_settings_persistence.dart';
 import 'package:flutter/material.dart';
 import '../data/mouse_settings_model.dart';
 
