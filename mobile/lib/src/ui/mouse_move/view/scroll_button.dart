@@ -1,55 +1,38 @@
-import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
+import 'package:controller/src/domain/models/button_settings.dart';
+import 'package:controller/src/ui/mouse/viewmodel/scroll_button_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ScrollMouseButton extends StatefulWidget {
+class ScrollMouseButton extends StatelessWidget {
   const ScrollMouseButton({
     super.key,
-    required this.movement,
+    required this.settings,
   });
 
-  final MouseMovement movement;
-
-  @override
-  State<ScrollMouseButton> createState() => _ScrollMouseButtonState();
-}
-
-class _ScrollMouseButtonState extends State<ScrollMouseButton> {
-  bool isActive = false;
-
-  enableScrolling() {
-    setState(() {
-      isActive = true;
-    });
-
-    widget.movement.pauseMouseMovement();
-    widget.movement.startScrollMovement();
-  }
-
-  bool tmpCursorMovingEnabled = false;
-
-  disableScrolling() {
-    setState(() {
-      isActive = false;
-    });
-
-    widget.movement.stopScrollMovement();
-  }
+  final ButtonSettings settings;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final ScrollMouseButtonViewmodel viewmodel = ScrollMouseButtonViewmodel(
+      mouseReposiry: context.read(),
+    );
 
-    return GestureDetector(
-      onTapDown: (_) => enableScrolling(),
-      onTapUp: (_) => disableScrolling(),
-      child: Container(
-        width: double.infinity,
-        height: size.height * 0.13,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          color: isActive ? Colors.purple[200] : Colors.purple,
-        ),
-      ),
+    return ListenableBuilder(
+      listenable: viewmodel,
+      builder: (_, __) {
+        return GestureDetector(
+          onTapDown: (_) => viewmodel.toggle(),
+          onTapUp: (_) => viewmodel.toggle(),
+          child: Container(
+            width: settings.width,
+            height: settings.height,
+            decoration: BoxDecoration(
+              borderRadius: settings.borderRadius,
+              color: viewmodel.isActive ? settings.color[200] : settings.color,
+            ),
+          ),
+        );
+      },
     );
   }
 }

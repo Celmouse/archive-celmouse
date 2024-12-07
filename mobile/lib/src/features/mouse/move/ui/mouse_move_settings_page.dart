@@ -37,7 +37,10 @@ class _CursorSettingsPageState extends State<CursorSettingsPage> {
           child: ListView(
             children: [
               ListTile(
-                title:  Text("Settings", style: Theme.of(context).textTheme.titleLarge,),
+                title: Text(
+                  "Settings",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 trailing: IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(

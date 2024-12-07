@@ -1,4 +1,6 @@
 import 'package:controller/src/data/repositories/connection_repository.dart';
+import 'package:controller/src/data/repositories/mouse_repository.dart';
+import 'package:controller/src/data/services/client_api_service.dart';
 import 'package:controller/src/routing/routes.dart';
 import 'package:controller/src/ui/connect/view/connect_hub_page.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
@@ -26,9 +28,17 @@ GoRouter router(
         GoRoute(
           path: Routes.mouse,
           builder: (context, state) {
-            return MoveMousePage(
-              viewmodel: MouseMoveViewmodel(
-                // mouseRepository: context.read(),
+            return Provider(
+              create: (context) => MouseRepository(
+                clientApiService: ClientApiService(
+                  socket: context.read<ConnectionRepository>().socket,
+                ),
+                sensorsService: context.read(),
+              ),
+              builder: (context, child) => MoveMousePage(
+                viewmodel: MouseMoveViewmodel(
+                  mouseRepository: context.read(),
+                ),
               ),
             );
           },

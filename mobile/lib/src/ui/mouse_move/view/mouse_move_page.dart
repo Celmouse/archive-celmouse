@@ -1,27 +1,26 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
-import 'package:controller/src/ui/mouse_move/view/move_button.dart';
+import 'package:controller/src/domain/models/button_settings.dart';
+import 'package:controller/src/ui/mouse/view/move_button.dart';
 import 'package:controller/src/ui/mouse_move/view/right_button.dart';
 import 'package:controller/src/ui/mouse_move/view/scroll_button.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/keyboard/keyboard_type.dart';
+import 'package:controller/src/ui/mouse_move/viewmodel/mouse_move_viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../../features/mouse/move/data/mouse_settings_model.dart';
-import '../../../features/mouse/socket_mouse.dart';
-
 import '../../../features/mouse/move/data/mouse_settings_persistence.dart';
-import 'left_button.dart';
+import '../../mouse/view/left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
     super.key,
-    // required this.channel,
+    required this.viewmodel,
   });
 
-  // final WebSocketChannel channel;
+  final MouseMoveViewmodel viewmodel;
 
   @override
   State<MoveMousePage> createState() => _MoveMousePageState();
@@ -35,16 +34,6 @@ enum CursorKeysPressed {
 
 class _MoveMousePageState extends State<MoveMousePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // bool isMicOn = false;
-  bool isScrollingEnabled = false;
-  bool isCursorMovingEnabled = false;
-
-  CursorKeysPressed cursorKeysPressed = CursorKeysPressed.none;
-
-  late final MouseControl mouse;
-  late final MouseMovement movement;
-  // late final KeyboardControl keyboard;
-
   @override
   void initState() {
     super.initState();
@@ -58,24 +47,20 @@ class _MoveMousePageState extends State<MoveMousePage> {
     MouseSettingsPersistence.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
-
-    mouse = MouseControl();
-    // keyboard = KeyboardControl(widget.channel);
-    movement = MouseMovement(mouse: mouse);
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       key: scaffoldKey,
       endDrawer: const CursorSettingsPage(),
-      // endDrawerEnableOpenDragGesture: false,
       onEndDrawerChanged: (isOpened) {
         if (!isOpened) {
           MouseSettingsPersistence.saveSettings(getIt<MouseSettings>());
         } else {
-          movement.stopMouseMovement();
-          movement.stopScrollMovement();
+          widget.viewmodel.stopMouse();
         }
       },
       appBar: AppBar(
@@ -96,8 +81,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
             visible: kDebugMode,
             child: IconButton(
               onPressed: () {
-                movement.stopMouseMovement();
-                movement.stopScrollMovement();
+                widget.viewmodel.stopMouse();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -148,9 +132,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
               ),
             ),
             const Row(
-              // crossAxisAlignment: CrossAxisAlignment.baseline,
               mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Column(
@@ -192,8 +174,28 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    LeftMouseButton(mouse: mouse),
-                    RightMouseButton(mouse: mouse)
+                    LeftMouseButton(
+                      settings: ButtonSettings(
+                        width: size.width / 2 - 20,
+                        height: size.height * 0.3,
+                        color: Colors.red,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    RightMouseButton(
+                      settings: ButtonSettings(
+                        width: size.width / 2 - 20,
+                        height: size.height * 0.3,
+                        color: Colors.blue,
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -205,14 +207,28 @@ class _MoveMousePageState extends State<MoveMousePage> {
                 children: [
                   Flexible(
                     flex: 8,
-                    child: MoveMouseButton(movement: movement),
+                    child: MoveMouseButton(
+                      settings: ButtonSettings(
+                        color: Colors.green,
+                        width: double.infinity,
+                        height: size.height * 0.13,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     width: 12,
                   ),
                   Flexible(
                     flex: 3,
-                    child: ScrollMouseButton(movement: movement),
+                    child: ScrollMouseButton(
+                      settings: ButtonSettings(
+                        color: Colors.purple,
+                        width: double.infinity,
+                        height: size.height * 0.13,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -243,7 +259,7 @@ class CursorFeatLabel extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         )
       ],
     );
