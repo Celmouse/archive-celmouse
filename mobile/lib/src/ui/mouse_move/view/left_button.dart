@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:protocol/protocol.dart';
 
-import '../../data/mouse_settings_model.dart';
+import '../../../features/mouse/move/data/mouse_settings_model.dart';
 
 class LeftMouseButton extends StatefulWidget {
   const LeftMouseButton({

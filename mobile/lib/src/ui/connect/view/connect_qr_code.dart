@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../core/connect.dart';
-import '../../../features/mouse/move/ui/mouse_move_page.dart';
+import '../../mouse_move/view/mouse_move_page.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
   const ConnectFromQrCodePage({super.key});
