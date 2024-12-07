@@ -11,7 +11,7 @@ class DevicesScannerViewmodel extends ChangeNotifier {
 
   bool _isScanning = false;
 
-  final List<Device> _devices = [];
+  List<Device> _devices = [];
 
   List<Device> get devices => _devices;
 
@@ -21,8 +21,8 @@ class DevicesScannerViewmodel extends ChangeNotifier {
     _isScanning = true;
     notifyListeners();
 
-    _connectionRepository.scanDevices().listen((device) {
-      _devices.add(device);
+    _connectionRepository.scanDevices().listen((devices) {
+      _devices = devices;
       notifyListeners();
     });
 
@@ -30,6 +30,7 @@ class DevicesScannerViewmodel extends ChangeNotifier {
   }
 
   void stopScan() {
+    _connectionRepository.stopScan();
     _isScanning = false;
     notifyListeners();
   }
