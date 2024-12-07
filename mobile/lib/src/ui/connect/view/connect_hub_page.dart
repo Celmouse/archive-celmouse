@@ -1,24 +1,29 @@
 import 'dart:async';
 import 'package:controller/src/ui/components/support_button.dart';
-import 'package:controller/src/features/connect/input_ip/ui/pages/enter_hub_ip_tile.dart';
+import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
+import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
-import '../../utils/launch_site.dart';
-import '../../ui/connect/connect_qr_code.dart';
-import '../../core/connect.dart';
-import '../../core/network_scanner.dart';
+import '../../../utils/launch_site.dart';
+import 'connect_qr_code.dart';
+import '../../../core/connect.dart';
+import '../../../core/network_scanner.dart';
 
-class ConnectToServerPage extends StatefulWidget {
-  const ConnectToServerPage({super.key});
+class ConnectHUBPage extends StatefulWidget {
+  const ConnectHUBPage({
+    super.key,
+    required this.viewmodel,
+  });
+
+  final ConnectHUBViewmodel viewmodel;
 
   @override
-  State<ConnectToServerPage> createState() => _ConnectToServerPageState();
+  State<ConnectHUBPage> createState() => _ConnectHUBPageState();
 }
 
-class _ConnectToServerPageState extends State<ConnectToServerPage> {
+class _ConnectHUBPageState extends State<ConnectHUBPage> {
   final TextEditingController ipController = TextEditingController();
-  String connError = "";
   bool isLoading = false;
   bool isConnecting = false;
   bool isWebSocketTry = false;
@@ -32,6 +37,27 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
   void initState() {
     super.initState();
     _gatherIPs();
+    widget.viewmodel.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    //TODO: [Marcelo] Remove this
+    _subscription?.cancel();
+
+    widget.viewmodel.removeListener(_listener);
+    super.dispose();
+  }
+
+  void _listener() {
+    if (widget.viewmodel.isConnected) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MoveMousePage(),
+        ),
+      );
+    }
   }
 
   void _gatherIPs() async {
@@ -154,22 +180,12 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
           content: const Text("Failed to connect, try again"),
           backgroundColor: Theme.of(context).colorScheme.error,
         ));
-      } else {
-        setState(() {
-          connError = "Failed to connect, try another IP";
-        });
       }
     } finally {
       setState(() {
         isConnecting = false;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    super.dispose();
   }
 
   @override
@@ -244,8 +260,11 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                               ? const Text('Scanning...')
                               : const Text('Auto connect to the HUB'),
                           trailing: deviceFound
-                              ? const Icon(Icons.circle,
-                                  color: Colors.green, size: 12)
+                              ? const Icon(
+                                  Icons.circle,
+                                  color: Colors.green,
+                                  size: 12,
+                                )
                               : null,
                           enabled: deviceFound,
                           onTap: () {
@@ -253,19 +272,14 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                           },
                         ),
                         const Divider(),
-                        EnterHubIPTile(
-                          onConnectionSuccess: () {
-                            setState(() {
-                              isGrantedAccess = true;
-                            });
-                          },
-                        ), // Use the EnterHubIPTile component here
+                        EnterHubIPTile(viewmodel: widget.viewmodel),
                         const Divider(),
                         ListTile(
                           leading: const Icon(Icons.qr_code_scanner),
                           title: const Text('Scan QR Code'),
                           subtitle: const Text(
-                              'Scan a QR code to connect to the HUB'),
+                            'Scan a QR code to connect to the HUB',
+                          ),
                           onTap: () {
                             disconnect();
                             Navigator.push(
