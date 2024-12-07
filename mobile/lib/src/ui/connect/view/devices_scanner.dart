@@ -30,7 +30,7 @@ class DevicesScanner extends StatelessWidget {
                   ? viewmodel.stopScan
                   : viewmodel.startScan,
               leading: const Icon(Icons.wifi),
-              title: const Text('Scanning for nearby devices'),
+              title: const Text('Nearby Devices'),
               subtitle: viewmodel.isScanning ? const Text('Scanning...') : null,
               // enabled: viewmodel.isScanning,
               trailing: viewmodel.isScanning
