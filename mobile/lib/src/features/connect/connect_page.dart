@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:controller/src/UI/components/support_button.dart';
+import 'package:controller/src/ui/components/support_button.dart';
 import 'package:controller/src/features/connect/input_ip/ui/pages/enter_hub_ip_tile.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
+import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import '../../utils/launch_site.dart';
-import '../../UI/connect/connect_qr_code.dart';
+import '../../ui/connect/connect_qr_code.dart';
 import '../../core/connect.dart';
 import '../../core/network_scanner.dart';
 
@@ -176,41 +176,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.info_outline),
-          onPressed: () async {
-            PackageInfo packageInfo = await PackageInfo.fromPlatform();
-            String version = packageInfo.version;
-
-            if (!context.mounted) return;
-            showDialog(
-                builder: (context) => AlertDialog(
-                      icon: Image.asset(
-                        "assets/logo.png",
-                        height: 52,
-                        width: 52,
-                      ),
-                      title: const Text("Celmouse"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text("© 2024 Celmouse Ltda."),
-                          const SizedBox(height: 4),
-                          Text("Version: $version"),
-                          const Text("HUB Min Version: 2.1.0"),
-                          TextButton(
-                            onPressed: () => launchSite(),
-                            child: const Text(
-                              "Visit Website",
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                context: context);
-          },
-        ),
+        leading: const AppInfoButton(),
         title: const Text('Connect'),
         centerTitle: true,
         actions: const [
