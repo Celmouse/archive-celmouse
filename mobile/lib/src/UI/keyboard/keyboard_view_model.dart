@@ -1,7 +1,6 @@
 import 'package:controller/src/UI/keyboard/keyboard_repository.dart';
 import 'package:controller/src/UI/keyboard/keyboard_service.dart';
 import 'package:flutter/material.dart';
-
 import 'package:controller/src/UI/keyboard/model.dart';
 
 class KeyboardViewModel extends ChangeNotifier {
@@ -18,17 +17,26 @@ class KeyboardViewModel extends ChangeNotifier {
       _isShiftActive = false;
       notifyListeners();
     }
-    print(char);
     _keyboardRepository.type(char);
   }
 
   void onSpecialKeyPressed(SpecialKeyType type) {
-    if (type == SpecialKeyType.shift) {
-      _isShiftActive = !_isShiftActive;
-      notifyListeners();
-    } else {
-      print(type);
-      _keyboardRepository.specialKey(type);
+    switch (type) {
+      case SpecialKeyType.shift:
+        _isShiftActive = !_isShiftActive;
+        notifyListeners();
+        break;
+      case SpecialKeyType.backspace:
+      case SpecialKeyType.hide:
+      case SpecialKeyType.enter:
+        _keyboardRepository.specialKey(type);
+        break;
+      case SpecialKeyType.space:
+        _keyboardRepository.type(' ');
+        break;
+      default:
+        _keyboardRepository.specialKey(type);
+        break;
     }
   }
 

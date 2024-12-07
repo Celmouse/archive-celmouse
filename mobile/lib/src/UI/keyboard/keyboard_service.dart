@@ -29,6 +29,5 @@ enum SpecialKeyType {
   hide,
   space,
   enter,
-  mouse,
   // Add other special key types here
 }
