@@ -14,6 +14,8 @@ class ConnectionRepository {
 
   WebSocketChannel? _socket;
 
+  WebSocketChannel get socket => _socket!;
+
   Future<Result<void>> connect(String ip) async {
     // We are using port 7771 por now, so no need to pass it as a parameter
     try {
