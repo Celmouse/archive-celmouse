@@ -242,7 +242,7 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
                             leading: const Icon(Icons.wifi),
                             title: const Text('Connect to My Device'),
                             subtitle: isLoading
-                                ? const Text('Loading...')
+                                ? const Text('Scanning...')
                                 : const Text('Auto connect to the HUB'),
                             trailing: deviceFound
                                 ? const Icon(Icons.circle,
