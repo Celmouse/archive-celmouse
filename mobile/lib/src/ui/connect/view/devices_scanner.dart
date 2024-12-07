@@ -26,15 +26,22 @@ class DevicesScanner extends StatelessWidget {
         return Column(
           children: [
             ListTile(
+              onLongPress: viewmodel.isScanning
+                  ? viewmodel.stopScan
+                  : viewmodel.startScan,
               leading: const Icon(Icons.wifi),
               title: const Text('Scanning for nearby devices'),
               subtitle: viewmodel.isScanning ? const Text('Scanning...') : null,
-              enabled: viewmodel.isScanning,
+              // enabled: viewmodel.isScanning,
               trailing: viewmodel.isScanning
                   ? Animate(
                       effects: const [
                         FadeEffect(
-                          duration: Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        ),
+                        ScaleEffect(
+                          duration: Duration(milliseconds: 500),
                           curve: Curves.easeInOut,
                         ),
                       ],
@@ -55,7 +62,10 @@ class DevicesScanner extends StatelessWidget {
                   color: Colors.green,
                   size: 12,
                 ),
-                onTap: () => connectionViewmodel.connect(device.ip),
+                onTap: () {
+                  viewmodel.stopScan();
+                  connectionViewmodel.connect(device.ip);
+                },
               );
             }),
           ],

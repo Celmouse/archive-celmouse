@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:controller/src/data/services/connection_service.dart';
 import 'package:controller/src/domain/models/devices.dart';
 import 'package:controller/src/utils/result.dart';
@@ -37,9 +39,9 @@ class ConnectionRepository {
     return _socket != null;
   }
 
-  Stream<Device> scanDevices() {
-    return _connectionService.scan();
-  }
+  Stream<List<Device>> scanDevices() => _connectionService.scan();
 
   void startScan() => _connectionService.startScan();
+
+  void stopScan() => _connectionService.stopScan();
 }
