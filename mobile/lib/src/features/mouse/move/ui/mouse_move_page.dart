@@ -4,7 +4,7 @@ import 'package:controller/src/features/mouse/move/ui/components/move_button.dar
 import 'package:controller/src/features/mouse/move/ui/components/right_button.dart';
 import 'package:controller/src/features/mouse/move/ui/components/scroll_button.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
-import 'package:controller/src/UI/keyboard/keyboard_type.dart';
+import 'package:controller/src/ui/keyboard/keyboard_type.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
