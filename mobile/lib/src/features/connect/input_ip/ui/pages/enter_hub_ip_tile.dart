@@ -1,5 +1,6 @@
 import 'package:controller/src/features/connect/input_ip/ui/bloc/ip_connect_bloc.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -67,22 +68,25 @@ class EnterHubIPTileState extends State<EnterHubIPTile> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        DropdownButtonFormField<int>(
-                          value: selectedPort,
-                          decoration: const InputDecoration(
-                            labelText: 'Select Port',
+                        Visibility(
+                          visible: kDebugMode,
+                          child: DropdownButtonFormField<int>(
+                            value: selectedPort,
+                            decoration: const InputDecoration(
+                              labelText: 'Select Port',
+                            ),
+                            items: ports.map((int port) {
+                              return DropdownMenuItem<int>(
+                                value: port,
+                                child: Text(port.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                selectedPort = newValue!;
+                              });
+                            },
                           ),
-                          items: ports.map((int port) {
-                            return DropdownMenuItem<int>(
-                              value: port,
-                              child: Text(port.toString()),
-                            );
-                          }).toList(),
-                          onChanged: (int? newValue) {
-                            setState(() {
-                              selectedPort = newValue!;
-                            });
-                          },
                         ),
                       ],
                     ),
