@@ -10,9 +10,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../../../features/mouse/move/data/mouse_settings_model.dart';
-import '../../../features/mouse/move/data/mouse_settings_persistence.dart';
-import '../../mouse/view/left_button.dart';
+import '../data/mouse_settings_model.dart';
+import '../../socket_mouse.dart';
+
+import '../data/mouse_settings_persistence.dart';
+import 'components/left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -48,6 +50,39 @@ class _MoveMousePageState extends State<MoveMousePage>
 
     MouseSettingsPersistence.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
+    });
+
+    mouse = MouseControl();
+    movement = MouseMovement(mouse: mouse);
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+          milliseconds: 200), // Reduced duration for faster animation
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void toggleKeyboardVisibility() {
+    setState(() {
+      isKeyboardVisible = !isKeyboardVisible;
+      if (isKeyboardVisible) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
+  void hideKeyboard() {
+    setState(() {
+      isKeyboardVisible = false;
+      _animationController.reverse();
     });
   }
 
@@ -237,7 +272,63 @@ class _MoveMousePageState extends State<MoveMousePage>
             AnimatedBuilder(
               animation: _animationController,
               builder: (context, child) {
-                return _buildPositionedKeyboard(context);
+                return Positioned(
+                  bottom: _animationController.value *
+                          MediaQuery.of(context).size.height *
+                          0.4 -
+                      MediaQuery.of(context).size.height * 0.4,
+                  left: 0,
+                  right: 0,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: AnimatedOpacity(
+                    opacity: _animationController.value,
+                    duration: const Duration(milliseconds: 200),
+                    child: GestureDetector(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(20)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: hideKeyboard,
+                              onVerticalDragEnd: (details) {
+                                if (details.primaryVelocity! > 0) {
+                                  hideKeyboard();
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: hideKeyboard,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const Expanded(
+                              child: KeyboardTyppingPage(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
           ],

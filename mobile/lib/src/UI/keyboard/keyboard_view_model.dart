@@ -23,19 +23,10 @@ class KeyboardViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onCharPressed(String char) {
-    if (_isShiftActive) {
-      char = char.toUpperCase();
-      _isShiftActive = false;
-      notifyListeners();
-    }
-    _keyboardRepository.type(char);
-  }
-
-  void onSpecialKeyPressed(SpecialKeyType type) {
-    switch (type) {
-      case SpecialKeyType.shift:
-        _isShiftActive = !_isShiftActive;
+    void onCharPressed(String char) {
+      if (_isShiftActive) {
+        char = char.toUpperCase();
+        _isShiftActive = false;
         notifyListeners();
         break;
       case SpecialKeyType.backspace:
@@ -50,7 +41,6 @@ class KeyboardViewModel extends ChangeNotifier {
         _keyboardRepository.specialKey(type);
         break;
     }
-  }
 
   List<List<MKey>> get mainKeys => [
         "1234567890".split("").map((e) => MKey(label: e)).toList(),

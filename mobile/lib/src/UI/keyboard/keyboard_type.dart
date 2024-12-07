@@ -181,3 +181,97 @@ class KeyButtonState extends State<KeyButton> {
     );
   }
 }
+
+class KeyButton extends StatefulWidget {
+  final MKey keyItem;
+  final KeyboardViewModel viewModel;
+  final KeyboardTheme theme;
+  final VoidCallback onPressed;
+
+  const KeyButton({
+    super.key,
+    required this.keyItem,
+    required this.viewModel,
+    required this.theme,
+    required this.onPressed,
+  });
+
+  @override
+  KeyButtonState createState() => KeyButtonState();
+}
+
+class KeyButtonState extends State<KeyButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) {
+        setState(() => _isPressed = true);
+        HapticFeedback.lightImpact();
+      },
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onPressed();
+      },
+      onTapCancel: () {
+        setState(() => _isPressed = false);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        height: widget.theme.keyHeight,
+        width: widget.theme.keyWidth * widget.keyItem.flex,
+        decoration: BoxDecoration(
+          color: _isPressed
+              ? widget.theme.keyPressedColor
+              : widget.keyItem.type == KeyType.normal
+                  ? widget.theme.keyColor
+                  : widget.keyItem.type == KeyType.special
+                      ? widget.theme.specialKeyColor
+                      : widget.theme.aderenceKeyColor,
+          border: Border.all(color: Colors.black26),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(2, 2),
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: widget.keyItem.label != null
+                  ? Text(
+                      widget.viewModel.isShiftActive
+                          ? widget.keyItem.label!.toUpperCase()
+                          : widget.keyItem.label!,
+                      style: widget.keyItem.type == KeyType.normal
+                          ? widget.theme.textStyle
+                          : widget.keyItem.type == KeyType.special
+                              ? widget.theme.specialTextStyle
+                              : widget.theme.aderenceTextStyle,
+                    )
+                  : Icon(widget.keyItem.icon, size: 24),
+            ),
+            if (widget.keyItem.label == "Shift" &&
+                widget.viewModel.isShiftActive)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
