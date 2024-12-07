@@ -1,6 +1,8 @@
 import 'package:controller/src/features/connect/connect_page.dart';
+import 'package:controller/src/features/mouse/move/ui/mouse_move_page.dart';
 import 'package:flutter/material.dart';
-import 'package:controller/getit.dart'; // Import the getit.dart file
+import 'package:controller/getit.dart';
+import 'package:web_socket_channel/web_socket_channel.dart'; // Import the getit.dart file
 
 void main() {
   setup(); // Call the setup function to register dependencies
@@ -27,12 +29,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const ConnectToServerPage(),
-      // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
-      // home: MoveMousePage(
-      //   channel: WebSocketChannel.connect(
-      //     Uri.parse('ws://192.168.1.10:7771'),
-      //   ),
-      // ),
+      // home: kDebugMode ? MenuPage() : const ConnectToServerPage(),
+      // home: const MoveMousePage(),
     );
   }
 }

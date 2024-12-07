@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../data/mouse_settings_model.dart';
 import '../../socket_mouse.dart';
+
 import '../data/mouse_settings_persistence.dart';
 import 'components/left_button.dart';
 
@@ -60,7 +61,8 @@ class _MoveMousePageState extends State<MoveMousePage>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(
+          milliseconds: 200), // Reduced duration for faster animation
     );
   }
 
@@ -237,11 +239,6 @@ class _MoveMousePageState extends State<MoveMousePage>
                     opacity: _animationController.value,
                     duration: const Duration(milliseconds: 200),
                     child: GestureDetector(
-                      onVerticalDragEnd: (details) {
-                        if (details.primaryVelocity! > 0) {
-                          hideKeyboard();
-                        }
-                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -257,24 +254,26 @@ class _MoveMousePageState extends State<MoveMousePage>
                         ),
                         child: Column(
                           children: [
-                            TweenAnimationBuilder(
-                              tween: Tween<double>(begin: 0.8, end: 1.0),
-                              duration: const Duration(milliseconds: 200),
-                              builder: (context, value, child) {
-                                return Transform.scale(
-                                  scale: value,
-                                  child: Container(
-                                    height: 4,
-                                    width: 40,
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                  ),
-                                );
+                            GestureDetector(
+                              onTap: hideKeyboard,
+                              onVerticalDragEnd: (details) {
+                                if (details.primaryVelocity! > 0) {
+                                  hideKeyboard();
+                                }
                               },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: hideKeyboard,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                             const Expanded(
                               child: KeyboardTyppingPage(),

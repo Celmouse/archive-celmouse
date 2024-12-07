@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class KeyboardTheme {
   final Color keyColor;
+  final Color keyPressedColor;
   final Color specialKeyColor;
   final Color aderenceKeyColor;
   final TextStyle textStyle;
@@ -21,17 +22,19 @@ class KeyboardTheme {
     required this.keyHeight,
     required this.keyWidth,
     required this.keySpacing,
+    required this.keyPressedColor,
   });
 }
 
 const defaultKeyboardTheme = KeyboardTheme(
   keyColor: Colors.grey,
+  keyPressedColor: Colors.black54,
   specialKeyColor: Colors.red,
   aderenceKeyColor: Colors.yellow,
   textStyle: TextStyle(fontSize: 18, color: Colors.black),
   specialTextStyle: TextStyle(fontSize: 18, color: Colors.white),
   aderenceTextStyle: TextStyle(fontSize: 18, color: Colors.black),
-  keyHeight: 60,
-  keyWidth: 60,
+  keyHeight: 50,
+  keyWidth: 50,
   keySpacing: 4,
 );

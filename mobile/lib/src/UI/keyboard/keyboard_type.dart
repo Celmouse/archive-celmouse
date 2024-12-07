@@ -35,8 +35,7 @@ class KeyboardTyppingPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => KeyboardViewModel(getIt<KeyboardRepository>()),
       child: Padding(
-        padding: const EdgeInsets.all(
-            4.0), // Reduced padding for less space between keys
+        padding: const EdgeInsets.all(4.0),
         child: Consumer<KeyboardViewModel>(
           builder: (context, viewModel, child) {
             return Column(
@@ -44,80 +43,23 @@ class KeyboardTyppingPage extends StatelessWidget {
               children: viewModel.keys
                   .map<Row>((row) => Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: row.map<Widget>((key) {
+                        children: row.map<Widget>((keyItem) {
                           return Expanded(
-                            flex: key.flex,
+                            flex: keyItem.flex,
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  theme.keySpacing / 2), // Reduced spacing
-                              child: GestureDetector(
-                                onTapDown: (_) {
-                                  HapticFeedback.lightImpact();
-                                  if (key.label != null) {
-                                    viewModel.onCharPressed(key.label!);
-                                  } else if (key.icon != null) {
+                              padding: EdgeInsets.all(theme.keySpacing / 2),
+                              child: KeyButton(
+                                keyItem: keyItem,
+                                viewModel: viewModel,
+                                theme: theme,
+                                onPressed: () {
+                                  if (keyItem.label != null) {
+                                    viewModel.onCharPressed(keyItem.label!);
+                                  } else if (keyItem.icon != null) {
                                     viewModel.onSpecialKeyPressed(
-                                        _getSpecialKeyType(key.icon!));
+                                        _getSpecialKeyType(keyItem.icon!));
                                   }
                                 },
-                                child: Stack(
-                                  children: [
-                                    AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 100),
-                                      height: theme.keyHeight / 1.2,
-                                      width: theme.keyWidth * key.flex,
-                                      decoration: BoxDecoration(
-                                        color: key.type == KeyType.normal
-                                            ? theme.keyColor
-                                            : key.type == KeyType.special
-                                                ? theme.specialKeyColor
-                                                : theme.aderenceKeyColor,
-                                        border:
-                                            Border.all(color: Colors.black26),
-                                        borderRadius: BorderRadius.circular(8),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            offset: Offset(2, 2),
-                                            blurRadius: 4,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Center(
-                                        child: key.label != null
-                                            ? Text(
-                                                viewModel.isShiftActive
-                                                    ? key.label!.toUpperCase()
-                                                    : key.label!,
-                                                style: key.type ==
-                                                        KeyType.normal
-                                                    ? theme.textStyle
-                                                    : key.type ==
-                                                            KeyType.special
-                                                        ? theme.specialTextStyle
-                                                        : theme
-                                                            .aderenceTextStyle,
-                                              )
-                                            : Icon(key.icon, size: 24),
-                                      ),
-                                    ),
-                                    if (key.label == "Shift" &&
-                                        viewModel.isShiftActive)
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: Container(
-                                          width: 8,
-                                          height: 8,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.green,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
                               ),
                             ),
                           );
@@ -126,6 +68,100 @@ class KeyboardTyppingPage extends StatelessWidget {
                   .toList(),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class KeyButton extends StatefulWidget {
+  final MKey keyItem;
+  final KeyboardViewModel viewModel;
+  final KeyboardTheme theme;
+  final VoidCallback onPressed;
+
+  const KeyButton({
+    super.key,
+    required this.keyItem,
+    required this.viewModel,
+    required this.theme,
+    required this.onPressed,
+  });
+
+  @override
+  KeyButtonState createState() => KeyButtonState();
+}
+
+class KeyButtonState extends State<KeyButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) {
+        setState(() => _isPressed = true);
+        HapticFeedback.lightImpact();
+      },
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onPressed();
+      },
+      onTapCancel: () {
+        setState(() => _isPressed = false);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        height: widget.theme.keyHeight,
+        width: widget.theme.keyWidth * widget.keyItem.flex,
+        decoration: BoxDecoration(
+          color: _isPressed
+              ? widget.theme.keyPressedColor
+              : widget.keyItem.type == KeyType.normal
+                  ? widget.theme.keyColor
+                  : widget.keyItem.type == KeyType.special
+                      ? widget.theme.specialKeyColor
+                      : widget.theme.aderenceKeyColor,
+          border: Border.all(color: Colors.black26),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(2, 2),
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: widget.keyItem.label != null
+                  ? Text(
+                      widget.viewModel.isShiftActive
+                          ? widget.keyItem.label!.toUpperCase()
+                          : widget.keyItem.label!,
+                      style: widget.keyItem.type == KeyType.normal
+                          ? widget.theme.textStyle
+                          : widget.keyItem.type == KeyType.special
+                              ? widget.theme.specialTextStyle
+                              : widget.theme.aderenceTextStyle,
+                    )
+                  : Icon(widget.keyItem.icon, size: 24),
+            ),
+            if (widget.keyItem.label == "Shift" &&
+                widget.viewModel.isShiftActive)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
