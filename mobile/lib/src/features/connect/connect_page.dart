@@ -185,108 +185,106 @@ class _ConnectToServerPageState extends State<ConnectToServerPage> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 32),
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ExpansionTile(
-                    dense: true,
-                    tilePadding: EdgeInsets.zero,
-                    title: const Text(
-                      "How to use this app?",
-                    ),
-                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    childrenPadding: const EdgeInsets.only(bottom: 16),
-                    expandedAlignment: Alignment.centerLeft,
-                    children: [
-                      const Text("1. Check if your phone supports gyroscope."),
-                      GestureDetector(
-                        onTap: () => launchSite(),
-                        child: const Text(
-                          '2. Download the HUB.',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.blue,
-                          ),
-                          textAlign: TextAlign.start,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ExpansionTile(
+                  dense: true,
+                  tilePadding: EdgeInsets.zero,
+                  title: const Text(
+                    "How to use this app?",
+                  ),
+                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                  childrenPadding: const EdgeInsets.only(bottom: 16),
+                  expandedAlignment: Alignment.centerLeft,
+                  children: [
+                    const Text("1. Check if your phone supports gyroscope."),
+                    GestureDetector(
+                      onTap: () => launchSite(),
+                      child: const Text(
+                        '2. Download the HUB.',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.blue,
                         ),
-                      ),
-                      const Text("3. Connect to the HUB."),
-                      const Text("4. Start moving your pointer."),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Connection Options',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Divider(),
-                          ListTile(
-                            leading: const Icon(Icons.wifi),
-                            title: const Text('Connect to My Device'),
-                            subtitle: isLoading
-                                ? const Text('Scanning...')
-                                : const Text('Auto connect to the HUB'),
-                            trailing: deviceFound
-                                ? const Icon(Icons.circle,
-                                    color: Colors.green, size: 12)
-                                : null,
-                            enabled: deviceFound,
-                            onTap: () {
-                              _scanAndConnect();
-                            },
-                          ),
-                          const Divider(),
-                          EnterHubIPTile(
-                            onConnectionSuccess: () {
-                              setState(() {
-                                isGrantedAccess = true;
-                              });
-                            },
-                          ), // Use the EnterHubIPTile component here
-                          const Divider(),
-                          ListTile(
-                            leading: const Icon(Icons.qr_code_scanner),
-                            title: const Text('Scan QR Code'),
-                            subtitle: const Text(
-                                'Scan a QR code to connect to the HUB'),
-                            onTap: () {
-                              disconnect();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ConnectFromQrCodePage(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                        textAlign: TextAlign.start,
                       ),
                     ),
+                    const Text("3. Connect to the HUB."),
+                    const Text("4. Start moving your pointer."),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  const SizedBox(height: 20),
-                ],
-              ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Connection Options',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.wifi),
+                          title: const Text('Connect to My Device'),
+                          subtitle: isLoading
+                              ? const Text('Scanning...')
+                              : const Text('Auto connect to the HUB'),
+                          trailing: deviceFound
+                              ? const Icon(Icons.circle,
+                                  color: Colors.green, size: 12)
+                              : null,
+                          enabled: deviceFound,
+                          onTap: () {
+                            _scanAndConnect();
+                          },
+                        ),
+                        const Divider(),
+                        EnterHubIPTile(
+                          onConnectionSuccess: () {
+                            setState(() {
+                              isGrantedAccess = true;
+                            });
+                          },
+                        ), // Use the EnterHubIPTile component here
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.qr_code_scanner),
+                          title: const Text('Scan QR Code'),
+                          subtitle: const Text(
+                              'Scan a QR code to connect to the HUB'),
+                          onTap: () {
+                            disconnect();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ConnectFromQrCodePage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
