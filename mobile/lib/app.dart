@@ -1,7 +1,7 @@
-
-
-import 'package:controller/src/ui/connect/view/connect_page.dart';
+import 'package:controller/src/ui/connect/view/connect_hub_page.dart';
+import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,13 +21,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ConnectToServerPage(),
-      // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
-      // home: MoveMousePage(
-      //   channel: WebSocketChannel.connect(
-      //     Uri.parse('ws://192.168.1.10:7771'),
-      //   ),
-      // ),
+      home: ConnectHUBPage(
+        viewmodel: ConnectHUBViewmodel(
+          connectRepository: context.read(),
+        ),
+      ),
     );
   }
 }
