@@ -10,13 +10,15 @@ enum KeyType {
 }
 
 class MKey {
-  final int spacing;
+  final String? label;
+  final IconData? icon;
   final KeyType type;
+  final int flex;
 
   MKey({
+    this.label,
+    this.icon,
     this.type = KeyType.normal,
-    this.spacing = 1,
+    this.flex = 1,
   });
-
-
 }

@@ -46,13 +46,13 @@ dependencies:
   toggle_switch: ^2.3.0
   fluttertoast: ^8.2.8
   package_info_plus: ^8.1.1
-  
   ping_discover_network_forked: ^0.0.1
 
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   shared_preferences: ^2.3.3
-
+  provider: ^6.1.2
+  
   protocol:
     path: ../packages/protocol
   network_info_plus: ^6.1.1

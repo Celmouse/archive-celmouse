@@ -1,6 +1,14 @@
+import 'package:controller/getit.dart';
+import 'package:controller/src/UI/keyboard/keyboard_repository.dart';
+import 'package:controller/src/UI/keyboard/keyboard_service.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import '../../socket/keyboard.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
+
+import '../../UI/keyboard/model.dart';
+import '../../UI/keyboard/keyboard_theme.dart';
+import '../../UI/keyboard/keyboard_view_model.dart';
 
 /*
   enableVoiceType() {
@@ -27,7 +35,7 @@ import '../../socket/keyboard.dart';
     final words = result.recognizedWords;
     String splited = "";
     if (speechedText == "") {
-      if (words.length > speechedText.length) {
+      if (words length > speechedText.length) {
         splited = speechedText.substring(speechedText.length);
       }
     } else {
@@ -49,147 +57,99 @@ import '../../socket/keyboard.dart';
 
   */
 
-class KeyboardTyppingPage extends StatefulWidget {
+class KeyboardTyppingPage extends StatelessWidget {
   const KeyboardTyppingPage({
     super.key,
+    this.theme = defaultKeyboardTheme,
   });
 
-  @override
-  State<KeyboardTyppingPage> createState() => _KeyboardTyppingPageState();
-}
+  final KeyboardTheme theme;
 
-Icon? replaceIcon(String char) {
-  IconData? data;
-  switch (char) {
-    case '*':
-      data = Icons.mouse;
-      break;
-    case '[':
-      data = Icons.calculate;
-      break;
-    default:
-      return null;
-  }
-  // if(data == null)
-  return Icon(data);
-}
-
-class KeyboardKey {
-  late final (String?, IconData?) _icon;
-  final VoidCallback onTap;
-  bool isUpperCase;
-
-  KeyboardKey({
-    String? char,
-    IconData? icon,
-    required this.onTap,
-    this.isUpperCase = false,
-  }) {
-    _icon = (char, icon);
-  }
-
-  Widget get icon {
-    if (_icon.$1 != null) {
-      final char = isUpperCase ? _icon.$1?.toUpperCase() : _icon.$1;
-      return Text(char!);
-    } else {
-      return Icon(_icon.$2);
-    }
-  }
-}
-
-onCharPressed(String char) {
-  print(char);
-}
-
-enum SpecialKeyType {
-  mouse,
-}
-
-onSpecialKeyPressed(SpecialKeyType type) {
-  print(type);
-}
-
-const ROW_KEY_AMOUNT = 10;
-const COLUMN_KEY_AMOUNT = 5;
-const HEIGHT_MULTIPLYER = 0.78;
-const WIDTH_MULTIPLYER = 0.8;
-
-class _KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
-  // late final keyboard = KeyboardControl(widget.channel);
   @override
   Widget build(BuildContext context) {
-    final List<List<KeyboardKey>> keys = [
-      "0123456789"
-          .split("")
-          .map(
-            (e) => KeyboardKey(char: e, onTap: () => onCharPressed(e)),
-          )
-          .toList(),
-      "0123456789"
-          .split("")
-          .map(
-            (e) => KeyboardKey(char: e, onTap: () => onCharPressed(e)),
-          )
-          .toList(),
-      "qwertyuiop"
-          .split("")
-          .map(
-            (e) => KeyboardKey(
-                char: e, onTap: () => onCharPressed(e), isUpperCase: true),
-          )
-          .toList(),
-      "asdfghjkl"
-          .split("")
-          .map(
-            (e) => KeyboardKey(char: e, onTap: () => onCharPressed(e)),
-          )
-          .toList(),
-      "zxcvbnm"
-          .split("")
-          .map(
-            (e) => KeyboardKey(char: e, onTap: () => onCharPressed(e)),
-          )
-          .toList()
-    ];
-    print(MediaQuery.of(context).size.height);
-    print(MediaQuery.of(context).size.width);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Teclado'),
+    return ChangeNotifierProvider(
+      create: (_) => KeyboardViewModel(getIt<KeyboardRepository>()),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Teclado'),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Consumer<KeyboardViewModel>(
+              builder: (context, viewModel, child) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: viewModel.keys
+                      .map<Row>((row) => Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: row.map<Widget>((key) {
+                              return Expanded(
+                                flex: key.flex,
+                                child: Padding(
+                                  padding: EdgeInsets.all(theme.keySpacing),
+                                  child: GestureDetector(
+                                    onTapDown: (_) {
+                                      HapticFeedback.lightImpact();
+                                      if (key.label != null) {
+                                        viewModel.onCharPressed(key.label!);
+                                      } else if (key.icon != null) {
+                                        viewModel.onSpecialKeyPressed(
+                                            SpecialKeyType.mouse);
+                                      }
+                                    },
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 100),
+                                      height: theme.keyHeight,
+                                      width: theme.keyWidth,
+                                      decoration: BoxDecoration(
+                                        color: key.type == KeyType.normal
+                                            ? theme.keyColor
+                                            : key.type == KeyType.special
+                                                ? theme.specialKeyColor
+                                                : theme.aderenceKeyColor,
+                                        border:
+                                            Border.all(color: Colors.black26),
+                                        borderRadius: BorderRadius.circular(8),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            offset: Offset(2, 2),
+                                            blurRadius: 4,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: key.label != null
+                                            ? Text(
+                                                viewModel.isShiftActive
+                                                    ? key.label!.toUpperCase()
+                                                    : key.label!,
+                                                style: key.type ==
+                                                        KeyType.normal
+                                                    ? theme.textStyle
+                                                    : key.type ==
+                                                            KeyType.special
+                                                        ? theme.specialTextStyle
+                                                        : theme
+                                                            .aderenceTextStyle,
+                                              )
+                                            : Icon(key.icon, size: 24),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ))
+                      .toList(),
+                );
+              },
+            ),
+          ),
+        ),
       ),
-      body: SafeArea(
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: keys
-            .map<Row>((e) => Row(
-                  children: e.map<Widget>(
-                    (e) {
-                      return GestureDetector(
-                        onTap: e.onTap,
-                        child: Container(
-                          height: (MediaQuery.of(context).size.height *
-                                  HEIGHT_MULTIPLYER) /
-                              COLUMN_KEY_AMOUNT,
-                          width: (MediaQuery.of(context).size.width *
-                                  WIDTH_MULTIPLYER) /
-                              ROW_KEY_AMOUNT,
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              border: Border.all(),
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Center(
-                            child: e.icon,
-                          ),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                ))
-            .toList(),
-      )),
     );
   }
 }
