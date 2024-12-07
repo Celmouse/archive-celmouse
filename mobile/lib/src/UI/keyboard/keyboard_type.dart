@@ -7,7 +7,7 @@ import '../../ui/keyboard/model.dart';
 import '../../ui/keyboard/keyboard_theme.dart';
 import '../../ui/keyboard/keyboard_view_model.dart';
 
-class KeyboardTyppingPage extends StatelessWidget {
+class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
     super.key,
     this.theme = defaultKeyboardTheme,
@@ -186,6 +186,8 @@ class KeyButton extends StatefulWidget {
   final MKey keyItem;
   final KeyboardViewModel viewModel;
   final KeyboardTheme theme;
+  final double keyHeight;
+  final double keyWidth;
   final VoidCallback onPressed;
 
   const KeyButton({
@@ -193,6 +195,8 @@ class KeyButton extends StatefulWidget {
     required this.keyItem,
     required this.viewModel,
     required this.theme,
+    required this.keyHeight,
+    required this.keyWidth,
     required this.onPressed,
   });
 
@@ -219,8 +223,8 @@ class KeyButtonState extends State<KeyButton> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        height: widget.theme.keyHeight,
-        width: widget.theme.keyWidth * widget.keyItem.flex,
+        height: widget.keyHeight,
+        width: widget.keyWidth,
         decoration: BoxDecoration(
           color: _isPressed
               ? widget.theme.keyPressedColor
