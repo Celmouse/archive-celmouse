@@ -24,7 +24,7 @@ class KeyboardTyppingPage extends StatefulWidget {
 class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
   double _getKeyHeight(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.landscape
-        ? widget.theme.keyHeight * 0.9
+        ? widget.theme.keyHeight * 0.95
         : widget.theme.keyHeight;
   }
 
@@ -63,8 +63,7 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
                                         theme: widget.theme,
                                         keyHeight: _getKeyHeight(context),
                                         keyWidth: _getKeyWidth(
-                                          keyItem.flex.toDouble(),
-                                        ),
+                                            keyItem.flex.toDouble()),
                                         onPressed: () {
                                           if (keyItem.label != null) {
                                             viewModel
@@ -96,8 +95,12 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
     switch (icon) {
       case Icons.backspace:
         return SpecialKeyType.backspace;
-      case Icons.keyboard_hide:
-        return SpecialKeyType.hide;
+      case Icons.emoji_symbols:
+        return SpecialKeyType.specialChars;
+
+      case Icons.format_size:
+        return SpecialKeyType.defaultLayout;
+
       case Icons.keyboard_return:
         return SpecialKeyType.enter;
       default:

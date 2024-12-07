@@ -3,13 +3,24 @@ import 'package:controller/src/UI/keyboard/keyboard_service.dart';
 import 'package:flutter/material.dart';
 import 'package:controller/src/UI/keyboard/model.dart';
 
+enum KeyboardLayout { main, special }
+
 class KeyboardViewModel extends ChangeNotifier {
   final KeyboardRepository _keyboardRepository;
   bool _isShiftActive = false;
+  KeyboardLayout _currentLayout = KeyboardLayout.main;
 
   KeyboardViewModel(this._keyboardRepository);
 
   bool get isShiftActive => _isShiftActive;
+  KeyboardLayout get currentLayout => _currentLayout;
+
+  void toggleLayout() {
+    _currentLayout = _currentLayout == KeyboardLayout.main
+        ? KeyboardLayout.special
+        : KeyboardLayout.main;
+    notifyListeners();
+  }
 
   void onCharPressed(String char) {
     if (_isShiftActive) {
@@ -27,7 +38,7 @@ class KeyboardViewModel extends ChangeNotifier {
         notifyListeners();
         break;
       case SpecialKeyType.backspace:
-      case SpecialKeyType.hide:
+      case SpecialKeyType.specialChars:
       case SpecialKeyType.enter:
         _keyboardRepository.specialKey(type);
         break;
@@ -40,7 +51,7 @@ class KeyboardViewModel extends ChangeNotifier {
     }
   }
 
-  List<List<MKey>> get keys => [
+  List<List<MKey>> get mainKeys => [
         "1234567890".split("").map((e) => MKey(label: e)).toList(),
         "qwertyuiop".split("").map((e) => MKey(label: e)).toList(),
         "asdfghjkl".split("").map((e) => MKey(label: e)).toList(),
@@ -50,9 +61,26 @@ class KeyboardViewModel extends ChangeNotifier {
           MKey(icon: Icons.backspace, type: KeyType.special, flex: 2),
         ],
         [
-          MKey(icon: Icons.keyboard_hide, type: KeyType.special, flex: 2),
+          MKey(icon: Icons.emoji_symbols, type: KeyType.special, flex: 2),
           MKey(label: "Space", type: KeyType.aderence, flex: 5),
           MKey(icon: Icons.keyboard_return, type: KeyType.special, flex: 2),
         ],
       ];
+
+  List<List<MKey>> get specialKeys => [
+        "!@#\$%^&*()".split("").map((e) => MKey(label: e)).toList(),
+        "_+-=[]{}|;:'\",.<>?/".split("").map((e) => MKey(label: e)).toList(),
+        [
+          MKey(label: "123", type: KeyType.special, flex: 2),
+          MKey(icon: Icons.backspace, type: KeyType.special, flex: 2),
+        ],
+        [
+          MKey(icon: Icons.format_size, type: KeyType.special, flex: 2),
+          MKey(label: "Space", type: KeyType.aderence, flex: 5),
+          MKey(icon: Icons.keyboard_return, type: KeyType.special, flex: 2),
+        ],
+      ];
+
+  List<List<MKey>> get keys =>
+      _currentLayout == KeyboardLayout.main ? mainKeys : specialKeys;
 }

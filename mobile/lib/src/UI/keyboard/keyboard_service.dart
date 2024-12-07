@@ -26,8 +26,9 @@ class KeyboardService {
 enum SpecialKeyType {
   shift,
   backspace,
-  hide,
+  specialChars,
   space,
   enter,
+  defaultLayout,
   // Add other special key types here
 }
