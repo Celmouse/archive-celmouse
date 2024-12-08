@@ -40,17 +40,17 @@ class MouseControl {
 
   void move(double x, double y) {
     if (x == 0 && y == 0) return;
-    _send(
-      event: ProtocolEvents.mouseMove,
-      data: MouseMovementProtocolData(x: x, y: y),
-    );
+    // _send(
+    //   event: ProtocolEvents.mouseMove,
+    //   data: MouseMovementProtocolData(x: x, y: y),
+    // );
   }
 
   void scroll(double x, double y) {
-    _send(
-      event: ProtocolEvents.mouseScroll,
-      data: MouseMovementProtocolData(x: x, y: y),
-    );
+    // _send(
+    //   event: ProtocolEvents.mouseScroll,
+    //   data: MouseMovementProtocolData(x: x, y: y),
+    // );
   }
 
   @Deprecated('Use scroll instead')
