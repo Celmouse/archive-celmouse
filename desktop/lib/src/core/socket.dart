@@ -26,29 +26,18 @@ class SocketInterpreter {
 
         double x = data.x;
         double y = data.y;
+        double sense = data.intensity;
 
-        return mouse.move(x, y);
-      case ProtocolEvents.changeSensitivity:
-        mouse.sensitivity = protocol.data;
-        break;
-      case ProtocolEvents.changeScrollSensitivity:
-        mouse.scrollSensitivity = protocol.data;
-        break;
+        return mouse.move(x, y, sense);
+    
       case ProtocolEvents.mouseScroll:
-        if (protocol.data is MouseMovementProtocolData) {
-          final data = MouseMovementProtocolData.fromJson(protocol.data);
-          final intensity = data.x.abs() + data.y.abs();
+        final data = MouseMovementProtocolData.fromJson(protocol.data);
 
-          mouse.scroll(
-            (data.x / data.x.abs()).toInt(),
-            (data.y / data.y.abs()).toInt(),
-            intensity.ceil(),
-          );
-        } else {
-          final data = MouseScrollProtocolData.fromJson(protocol.data);
-          final (x, y) = data.fromProtocolData();
-          mouse.scroll(x, y);
-        }
+        mouse.scroll(
+          data.x.sign.ceil(),
+          data.y.sign.ceil(),
+          data.intensity.round(),
+        );
 
         break;
       case ProtocolEvents.mouseClick:

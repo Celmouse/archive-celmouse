@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:controller/getit.dart';
+import 'package:controller/src/data/models/vector2.dart';
 import 'package:controller/src/data/services/client_api_service.dart';
 import 'package:controller/src/data/services/sensors_api_service.dart';
 import 'package:controller/src/features/mouse/move/data/mouse_settings_model.dart';
@@ -24,24 +25,43 @@ class MouseRepository {
         getIt.get<MouseSettings>().vibrationThreshold.value;
     final bool invertX = getIt.get<MouseSettings>().invertedPointerX;
     final bool invertY = getIt.get<MouseSettings>().invertedPointerY;
+    final sensitivity = getIt.get<MouseSettings>().sensitivity;
+
+    if (movementSubscription?.isPaused ?? false) {
+      movementSubscription?.resume();
+      return;
+    }
 
     movementSubscription ??= _sensorsService
         .gyroscope(
-          invertX,
-          invertY,
-          threshold,
-        )
+      invertX,
+      invertY,
+      threshold,
+    )
         .listen(
-          (event) => _clientApiService.send(
-            event: ProtocolEvents.mouseMove,
-            data: MouseMovementProtocolData(x: event.$1, y: event.$2),
+      (event) {
+        var (x, y) = event;
+
+        final vector = Vector2D(x, y);
+
+        if (!vector.canNormalize) return;
+        Vector2D normalized = vector.normalized;
+
+        _clientApiService.send(
+          event: ProtocolEvents.mouseMove,
+          data: MouseMovementProtocolData(
+            x: normalized.x,
+            y: normalized.y,
+            intensity: vector.length * sensitivity,
           ),
         );
+      },
+    );
   }
 
   void disableMovement() {
-    movementSubscription?.cancel();
-    movementSubscription = null;
+    movementSubscription?.pause(); // .cancel();
+    // movementSubscription = null;
   }
 
   void click(ClickType type) {
@@ -59,8 +79,7 @@ class MouseRepository {
   }
 
   void disableScrolling() {
-    scrollingSubscription?.cancel();
-    scrollingSubscription = null;
+    scrollingSubscription?.pause();
   }
 
   void enableScrolling() {
@@ -69,6 +88,11 @@ class MouseRepository {
 
     final bool invertX = getIt.get<MouseSettings>().invertedScrollX;
     final bool invertY = getIt.get<MouseSettings>().invertedScrollY;
+
+    if (scrollingSubscription?.isPaused ?? false) {
+      scrollingSubscription?.resume();
+      return;
+    }
 
     scrollingSubscription ??= _sensorsService
         .gyroscope(
@@ -85,18 +109,18 @@ class MouseRepository {
         } else {
           x = 0;
         }
-        if (x != 0) {
-          x = x / (x.abs()) * sensitivity;
-        }
-        if (y != 0) {
-          y = y / (y.abs()) * sensitivity;
-        }
 
-        //TODO: Implement movement via coordinates at HUB
+        final vector = Vector2D(x, y);
+        if (!vector.canNormalize) return;
+        Vector2D normalized = vector.normalized;
 
         _clientApiService.send(
           event: ProtocolEvents.mouseScroll,
-          data: MouseMovementProtocolData(x: x, y: y),
+          data: MouseMovementProtocolData(
+            x: normalized.x,
+            y: normalized.y,
+            intensity: vector.length * sensitivity,
+          ),
         );
       },
     );

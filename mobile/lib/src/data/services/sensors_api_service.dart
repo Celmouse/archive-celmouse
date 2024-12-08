@@ -31,7 +31,7 @@ class SensorsApiService {
       final invertedY = invertY ? -1 : 1;
 
       return (invertedX * x, invertedY * y);
-    }).asBroadcastStream();
+    });
   }
 
   (double x, double y) _tranformGyroscopeCoordinates(
@@ -49,8 +49,10 @@ class SensorsApiService {
     final diffMS = timestamp.difference(tmpTimestamp!).inMicroseconds;
     tmpTimestamp = timestamp;
 
+    print(diffMS);
+
     // Ensure no jumps
-    if (diffMS > 100000) {
+    if (diffMS > 16300) {
       return (0, 0);
     }
 
