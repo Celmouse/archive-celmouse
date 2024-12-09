@@ -1,4 +1,4 @@
-import 'package:controller/src/ui/connect/connect_qr_code.dart';
+import 'package:controller/src/ui/connect/view/connect_qr_code.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
