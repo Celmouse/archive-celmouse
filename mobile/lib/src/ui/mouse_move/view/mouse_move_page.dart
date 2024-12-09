@@ -1,5 +1,10 @@
 import 'package:controller/getit.dart';
+import 'package:controller/src/UI/mouse/view/left_button.dart';
 import 'package:controller/src/domain/models/button_settings.dart';
+import 'package:controller/src/features/mouse/move/bloc/mouse_movement.dart';
+import 'package:controller/src/features/mouse/move/data/mouse_settings_model.dart';
+import 'package:controller/src/features/mouse/move/data/mouse_settings_persistence.dart';
+import 'package:controller/src/features/mouse/socket_mouse.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
 import 'package:controller/src/ui/mouse_move/view/right_button.dart';
 import 'package:controller/src/ui/mouse_move/view/scroll_button.dart';
@@ -10,11 +15,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../data/mouse_settings_model.dart';
-import '../../socket_mouse.dart';
-
-import '../data/mouse_settings_persistence.dart';
-import 'components/left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -218,7 +218,7 @@ class _MoveMousePageState extends State<MoveMousePage>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(),
+                      builder: (context) => const KeyboardTyppingPage(),
                     ));
               },
               icon: const Icon(
