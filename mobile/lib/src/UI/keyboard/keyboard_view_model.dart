@@ -1,7 +1,6 @@
-import 'package:controller/src/UI/keyboard/keyboard_repository.dart';
-import 'package:controller/src/UI/keyboard/keyboard_service.dart';
+import 'package:controller/src/ui/keyboard/keyboard_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:controller/src/UI/keyboard/model.dart';
+import 'package:controller/src/ui/keyboard/model.dart';
 
 enum KeyboardLayout { main, special }
 
@@ -10,7 +9,9 @@ class KeyboardViewModel extends ChangeNotifier {
   bool _isShiftActive = false;
   KeyboardLayout _currentLayout = KeyboardLayout.main;
 
-  KeyboardViewModel(this._keyboardRepository);
+  KeyboardViewModel({
+    required KeyboardRepository keyboardRepository,
+  }) : _keyboardRepository = keyboardRepository;
 
   bool get isShiftActive => _isShiftActive;
   KeyboardLayout get currentLayout => _currentLayout;

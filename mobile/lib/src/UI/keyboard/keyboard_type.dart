@@ -1,13 +1,11 @@
-import 'package:controller/getit.dart';
-import 'package:controller/src/UI/keyboard/keyboard_repository.dart';
-import 'package:controller/src/UI/keyboard/keyboard_service.dart';
+import 'package:controller/src/ui/keyboard/keyboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../UI/keyboard/model.dart';
-import '../../UI/keyboard/keyboard_theme.dart';
-import '../../UI/keyboard/keyboard_view_model.dart';
+import '../../ui/keyboard/model.dart';
+import '../../ui/keyboard/keyboard_theme.dart';
+import '../../ui/keyboard/keyboard_view_model.dart';
 
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
@@ -24,7 +22,7 @@ class KeyboardTyppingPage extends StatefulWidget {
 class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
   double _getKeyHeight(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.landscape
-        ? widget.theme.keyHeight * 0.95
+        ? widget.theme.keyHeight * 0.5
         : widget.theme.keyHeight;
   }
 
@@ -36,57 +34,54 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => KeyboardViewModel(getIt<KeyboardRepository>()),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Consumer<KeyboardViewModel>(
-                builder: (context, viewModel, child) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: viewModel.keys
-                          .map<Row>((row) => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: row.map<Widget>((keyItem) {
-                                  return Expanded(
-                                    flex: keyItem.flex,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          widget.theme.keySpacing / 2),
-                                      child: KeyButton(
-                                        keyItem: keyItem,
-                                        viewModel: viewModel,
-                                        theme: widget.theme,
-                                        keyHeight: _getKeyHeight(context),
-                                        keyWidth: _getKeyWidth(
-                                            keyItem.flex.toDouble()),
-                                        onPressed: () {
-                                          if (keyItem.label != null) {
-                                            viewModel
-                                                .onCharPressed(keyItem.label!);
-                                          } else if (keyItem.icon != null) {
-                                            viewModel.onSpecialKeyPressed(
-                                                _getSpecialKeyType(
-                                                    keyItem.icon!));
-                                          }
-                                        },
-                                      ),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: Consumer<KeyboardViewModel>(
+              builder: (context, viewModel, child) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: viewModel.keys
+                        .map<Row>((row) => Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: row.map<Widget>((keyItem) {
+                                return Expanded(
+                                  flex: keyItem.flex,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                        widget.theme.keySpacing / 2),
+                                    child: KeyButton(
+                                      keyItem: keyItem,
+                                      viewModel: viewModel,
+                                      theme: widget.theme,
+                                      keyHeight: _getKeyHeight(context),
+                                      keyWidth:
+                                          _getKeyWidth(keyItem.flex.toDouble()),
+                                      onPressed: () {
+                                        if (keyItem.label != null) {
+                                          viewModel
+                                              .onCharPressed(keyItem.label!);
+                                        } else if (keyItem.icon != null) {
+                                          viewModel.onSpecialKeyPressed(
+                                              _getSpecialKeyType(
+                                                  keyItem.icon!));
+                                        }
+                                      },
                                     ),
-                                  );
-                                }).toList(),
-                              ))
-                          .toList(),
-                    ),
-                  );
-                },
-              ),
+                                  ),
+                                );
+                              }).toList(),
+                            ))
+                        .toList(),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -97,10 +92,8 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
         return SpecialKeyType.backspace;
       case Icons.emoji_symbols:
         return SpecialKeyType.specialChars;
-
       case Icons.format_size:
         return SpecialKeyType.defaultLayout;
-
       case Icons.keyboard_return:
         return SpecialKeyType.enter;
       default:
@@ -170,37 +163,19 @@ class KeyButtonState extends State<KeyButton> {
             ),
           ],
         ),
-        child: Stack(
-          children: [
-            Center(
-              child: widget.keyItem.label != null
-                  ? Text(
-                      widget.viewModel.isShiftActive
-                          ? widget.keyItem.label!.toUpperCase()
-                          : widget.keyItem.label!,
-                      style: widget.keyItem.type == KeyType.normal
-                          ? widget.theme.textStyle
-                          : widget.keyItem.type == KeyType.special
-                              ? widget.theme.specialTextStyle
-                              : widget.theme.aderenceTextStyle,
-                    )
-                  : Icon(widget.keyItem.icon, size: 24),
-            ),
-            if (widget.keyItem.label == "Shift" &&
-                widget.viewModel.isShiftActive)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-          ],
+        child: Center(
+          child: widget.keyItem.label != null
+              ? Text(
+                  widget.viewModel.isShiftActive
+                      ? widget.keyItem.label!.toUpperCase()
+                      : widget.keyItem.label!,
+                  style: widget.keyItem.type == KeyType.normal
+                      ? widget.theme.textStyle
+                      : widget.keyItem.type == KeyType.special
+                          ? widget.theme.specialTextStyle
+                          : widget.theme.aderenceTextStyle,
+                )
+              : Icon(widget.keyItem.icon, size: 24),
         ),
       ),
     );

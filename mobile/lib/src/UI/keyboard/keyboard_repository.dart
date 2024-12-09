@@ -1,15 +1,34 @@
-import 'package:controller/src/UI/keyboard/keyboard_service.dart';
+import 'dart:convert';
+import 'package:controller/src/core/socket.dart';
+import 'package:protocol/protocol.dart';
 
 class KeyboardRepository {
-  final KeyboardService _keyboardService;
-
-  KeyboardRepository(this._keyboardService);
-
   void type(String text) {
-    _keyboardService.type(text);
+    _send(event: ProtocolEvents.keyPressed, data: text);
   }
 
   void specialKey(SpecialKeyType type) {
-    _keyboardService.specialKey(type);
+    _send(event: ProtocolEvents.specialKeyPressed, data: type.toString());
   }
+
+  void _send({required ProtocolEvents event, required dynamic data}) {
+    final socketConnection = SocketConnection().getSocketConnection();
+    socketConnection.sink.add(jsonEncode(
+      Protocol(
+        event: event,
+        data: data,
+        timestamp: DateTime.now(),
+      ).toJson(),
+    ));
+  }
+}
+
+enum SpecialKeyType {
+  shift,
+  backspace,
+  specialChars,
+  space,
+  enter,
+  defaultLayout,
+  // Add other special key types here
 }
