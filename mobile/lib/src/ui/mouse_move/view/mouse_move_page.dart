@@ -205,7 +205,7 @@ class _MoveMousePageState extends State<MoveMousePage>
       ),
       body: SafeArea(
         minimum: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12),
-        child: Stack(
+        child: Column(
           children: [
             Visibility(
               visible: kDebugMode,
@@ -336,12 +336,12 @@ class _MoveMousePageState extends State<MoveMousePage>
                 ],
               ),
             ),
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return _buildPositionedKeyboard(context);
-              },
-            ),
+            // AnimatedBuilder(
+            //   animation: _animationController,
+            //   builder: (context, child) {
+            //     return _buildPositionedKeyboard(context);
+            //   },
+            // ),
           ],
         ),
       ),
