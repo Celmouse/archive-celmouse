@@ -1,8 +1,8 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/domain/models/button_settings.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
-import 'package:controller/src/ui/mouse_move/view/right_button.dart';
-import 'package:controller/src/ui/mouse_move/view/scroll_button.dart';
+import 'package:controller/src/ui/mouse/view/right_button.dart';
+import 'package:controller/src/ui/mouse/view/scroll_button.dart';
 import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/keyboard/keyboard_type.dart';
 import 'package:controller/src/ui/mouse_move/viewmodel/mouse_move_viewmodel.dart';

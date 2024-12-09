@@ -1,13 +1,11 @@
-import 'package:controller/getit.dart';
-import 'package:controller/src/UI/keyboard/keyboard_repository.dart';
-import 'package:controller/src/UI/keyboard/keyboard_service.dart';
+import 'package:controller/src/data/repositories/keyboard_repository.dart';
+import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../UI/keyboard/model.dart';
 import '../../UI/keyboard/keyboard_theme.dart';
-import '../../UI/keyboard/keyboard_view_model.dart';
 
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
@@ -37,7 +35,11 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => KeyboardViewModel(getIt<KeyboardRepository>()),
+      create: (_) => KeyboardViewModel(
+        keyboardRepository: KeyboardRepository(
+          clientApiService: context.read(),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Column(
