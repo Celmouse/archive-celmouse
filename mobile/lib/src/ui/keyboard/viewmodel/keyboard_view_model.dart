@@ -34,17 +34,22 @@ class KeyboardViewModel extends ChangeNotifier {
     _keyboardRepository.type(char);
   }
 
+  void onSpecialKeyReleased(SpecialKeyType type) {
+    _keyboardRepository.releaseSpecialKey(type);
+  }
+
   void onSpecialKeyPressed(SpecialKeyType type) {
     switch (type) {
       case SpecialKeyType.shift:
         _isShiftActive = !_isShiftActive;
         notifyListeners();
         break;
-      case SpecialKeyType.backspace:
       case SpecialKeyType.specialChars:
+        break;
+      case SpecialKeyType.backspace:
       case SpecialKeyType.enter:
       case SpecialKeyType.space:
-        _keyboardRepository.specialKey(type);
+        _keyboardRepository.pressSpecialKey(type);
       default:
         break;
     }

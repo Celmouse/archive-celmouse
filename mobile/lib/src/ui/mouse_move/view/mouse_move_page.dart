@@ -1,5 +1,4 @@
 import 'package:controller/getit.dart';
-import 'package:controller/main.dart';
 import 'package:controller/src/domain/models/button_settings.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
@@ -27,12 +26,6 @@ class MoveMousePage extends StatefulWidget {
 
   @override
   State<MoveMousePage> createState() => _MoveMousePageState();
-}
-
-enum CursorKeysPressed {
-  none,
-  leftClick,
-  rightClick,
 }
 
 class _MoveMousePageState extends State<MoveMousePage> {
