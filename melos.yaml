@@ -4,8 +4,10 @@ packages:
   - mobile
   - desktop
   - packages/**
-  - plugins/mouse/**
-  # - plugins/**
+  - plugins/**
 
 scripts:
   clean: melos clean && melos bootstrap
+
+  protocol:
+    run: melos exec --scope="*protocol*" -- dart run build_runner build --delete-conflicting-outputs
