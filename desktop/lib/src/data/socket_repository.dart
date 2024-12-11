@@ -60,7 +60,10 @@ class SocketRepository {
       keyboard.type(data);
     } else if (event == KeyboardProtocolEvents.specialKeyPressed.name) {
       final data = KeyboardProtocolData.fromJson(protocol.data);
-      keyboard.typeSpecial(data.key);
+      keyboard.pressSpecial(data.key);
+    } else if (event == KeyboardProtocolEvents.specialKeyReleased.name) {
+      final data = KeyboardProtocolData.fromJson(protocol.data);
+      keyboard.releaseSpecial(data.key);
     }
   }
 }

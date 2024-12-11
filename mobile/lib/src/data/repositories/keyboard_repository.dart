@@ -15,9 +15,18 @@ class KeyboardRepository {
     );
   }
 
-  void specialKey(SpecialKeyType type) {
+  void pressSpecialKey(SpecialKeyType type) {
     _clientApiService.send(
       event: KeyboardProtocolEvents.specialKeyPressed,
+      data: KeyboardProtocolData(
+        key: type,
+      ),
+    );
+  }
+  
+  void releaseSpecialKey(SpecialKeyType type) {
+    _clientApiService.send(
+      event: KeyboardProtocolEvents.specialKeyReleased,
       data: KeyboardProtocolData(
         key: type,
       ),

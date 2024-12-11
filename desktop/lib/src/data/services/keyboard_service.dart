@@ -12,12 +12,12 @@ class KeyboardService {
       keyboard.releaseKey(key);
     });
   }
-  
-  void typeSpecial(SpecialKeyType key){
+
+  void pressSpecial(SpecialKeyType key) {
     keyboard.pressSpecialKey(key);
-    Timer(const Duration(milliseconds: 100), () {
-      keyboard.releaseSpecialKey(key);
-    });
+  }
+
+  void releaseSpecial(SpecialKeyType key) {
+    keyboard.releaseSpecialKey(key);
   }
 }
- 

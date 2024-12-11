@@ -11,7 +11,6 @@ class KeyboardViewModel extends ChangeNotifier {
     required KeyboardRepository keyboardRepository,
   }) : _keyboardRepository = keyboardRepository;
 
-  
   bool _isShiftActive = false;
   KeyboardLayout _currentLayout = KeyboardLayout.main;
 
@@ -34,17 +33,27 @@ class KeyboardViewModel extends ChangeNotifier {
     _keyboardRepository.type(char);
   }
 
+  void onSpecialKeyReleased(SpecialKeyType type) {
+    if (type == SpecialKeyType.shift) {
+      _isShiftActive = false;
+      notifyListeners();
+    }
+    _keyboardRepository.releaseSpecialKey(type);
+  }
+
   void onSpecialKeyPressed(SpecialKeyType type) {
     switch (type) {
       case SpecialKeyType.shift:
-        _isShiftActive = !_isShiftActive;
+        _isShiftActive = true;
         notifyListeners();
+        _keyboardRepository.pressSpecialKey(type);
+        break;
+      case SpecialKeyType.specialChars:
         break;
       case SpecialKeyType.backspace:
-      case SpecialKeyType.specialChars:
       case SpecialKeyType.enter:
       case SpecialKeyType.space:
-        _keyboardRepository.specialKey(type);
+        _keyboardRepository.pressSpecialKey(type);
       default:
         break;
     }
@@ -55,14 +64,14 @@ class KeyboardViewModel extends ChangeNotifier {
         "qwertyuiop".split("").map((e) => MKey(label: e)).toList(),
         "asdfghjkl".split("").map((e) => MKey(label: e)).toList(),
         [
-          MKey(label: "Shift", type: KeyType.special, flex: 2),
+          MKey(label: "Shift", type: KeyType.special, flex: 2, specialKeyType: SpecialKeyType.shift),
           ...("zxcvbnm".split("").map((e) => MKey(label: e)).toList()),
-          MKey(icon: Icons.backspace, type: KeyType.special, flex: 2),
+          MKey(icon: Icons.backspace, type: KeyType.special, flex: 2, specialKeyType: SpecialKeyType.backspace),
         ],
         [
           MKey(icon: Icons.emoji_symbols, type: KeyType.special, flex: 2),
-          MKey(label: "Space", type: KeyType.aderence, flex: 5),
-          MKey(icon: Icons.keyboard_return, type: KeyType.special, flex: 2),
+          MKey(label: "Space", type: KeyType.aderence, flex: 5, specialKeyType: SpecialKeyType.space),
+          MKey(icon: Icons.keyboard_return, type: KeyType.special, flex: 2, specialKeyType: SpecialKeyType.enter),
         ],
       ];
 
@@ -71,12 +80,12 @@ class KeyboardViewModel extends ChangeNotifier {
         "_+-=[]{}|;:'\",.<>?/".split("").map((e) => MKey(label: e)).toList(),
         [
           MKey(label: "123", type: KeyType.special, flex: 2),
-          MKey(icon: Icons.backspace, type: KeyType.special, flex: 2),
+          MKey(icon: Icons.backspace, type: KeyType.special, flex: 2, specialKeyType: SpecialKeyType.backspace),
         ],
         [
           MKey(icon: Icons.format_size, type: KeyType.special, flex: 2),
-          MKey(label: "Space", type: KeyType.aderence, flex: 5),
-          MKey(icon: Icons.keyboard_return, type: KeyType.special, flex: 2),
+          MKey(label: "Space", type: KeyType.aderence, flex: 5, specialKeyType: SpecialKeyType.space),
+          MKey(icon: Icons.keyboard_return, type: KeyType.special, flex: 2, specialKeyType: SpecialKeyType.enter),
         ],
       ];
 

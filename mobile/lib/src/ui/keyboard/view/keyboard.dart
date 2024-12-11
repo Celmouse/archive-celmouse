@@ -53,24 +53,35 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
                                 padding:
                                     EdgeInsets.all(widget.theme.keySpacing / 2),
                                 child: KeyButton(
-                                  keyItem: keyItem,
-                                  viewModel: widget.viewmodel,
-                                  theme: widget.theme,
-                                  keyHeight: _getKeyHeight(context),
-                                  keyWidth:
-                                      _getKeyWidth(keyItem.flex.toDouble()),
-                                  onPressed: () {
-                                    if (keyItem.type == KeyType.normal) {
-                                      widget.viewmodel.onCharPressed(
-                                        keyItem.label!,
-                                      );
-                                    } else {
-                                      widget.viewmodel.onSpecialKeyPressed(
-                                        _getSpecialKeyType(keyItem.icon),
-                                      );
-                                    }
-                                  },
-                                ),
+                                    keyItem: keyItem,
+                                    viewModel: widget.viewmodel,
+                                    theme: widget.theme,
+                                    keyHeight: _getKeyHeight(context),
+                                    keyWidth:
+                                        _getKeyWidth(keyItem.flex.toDouble()),
+                                    onPressed: () {
+                                      if (keyItem.type == KeyType.normal) {
+                                        widget.viewmodel.onCharPressed(
+                                          keyItem.label!,
+                                        );
+                                      } else {
+                                        widget.viewmodel.onSpecialKeyPressed(
+                                          keyItem.specialKeyType!,
+                                        );
+                                      }
+                                    },
+                                    onReleased: () {
+                                      if (keyItem.type == KeyType.normal) {
+                                        return;
+                                        // widget.viewmodel.onCharReleased(
+                                        //   keyItem.label!,
+                                        // );
+                                      } else {
+                                        widget.viewmodel.onSpecialKeyReleased(
+                                          keyItem.specialKeyType!,
+                                        );
+                                      }
+                                    }),
                               ),
                             );
                           }).toList(),
@@ -109,6 +120,7 @@ class KeyButton extends StatefulWidget {
   final double keyHeight;
   final double keyWidth;
   final VoidCallback onPressed;
+  final VoidCallback onReleased;
 
   const KeyButton({
     super.key,
@@ -118,6 +130,7 @@ class KeyButton extends StatefulWidget {
     required this.keyHeight,
     required this.keyWidth,
     required this.onPressed,
+    required this.onReleased,
   });
 
   @override
@@ -131,12 +144,13 @@ class KeyButtonState extends State<KeyButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
-        setState(() => _isPressed = true);
         HapticFeedback.lightImpact();
+        setState(() => _isPressed = true);
+        widget.onPressed();
       },
       onTapUp: (_) {
         setState(() => _isPressed = false);
-        widget.onPressed();
+        widget.onReleased();
       },
       onTapCancel: () {
         setState(() => _isPressed = false);

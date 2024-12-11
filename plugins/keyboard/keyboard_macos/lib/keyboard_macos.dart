@@ -3,15 +3,13 @@ import 'dart:ffi';
 import 'package:keyboard_platform_interface/keyboard_platform_interface.dart';
 import 'generated/bindings.dart';
 
-import 'src/convert_special_key.dart';
+import 'src/special_keys.dart';
 import 'src/keys.dart';
 
 class KeyboardMacOS extends KeyboardPlatform {
   static void registerWith() {
     KeyboardPlatform.instance = KeyboardMacOS();
   }
-
-  final keyConverter = ConvertSpecialKeyMacOS();
 
   @override
   void pressKey(String key) {
@@ -36,12 +34,12 @@ class KeyboardMacOS extends KeyboardPlatform {
 
   @override
   void pressSpecialKey(SpecialKeyType key) {
-    _bindings.pressKeyboardKey(ConvertSpecialKeyMacOS.toCode(key));
+    _bindings.pressKeyboardKey(key.code);
   }
 
   @override
   void releaseSpecialKey(SpecialKeyType key) {
-    _bindings.releaseKeyboardKey(ConvertSpecialKeyMacOS.toCode(key));
+    _bindings.releaseKeyboardKey(key.code);
   }
 }
 
