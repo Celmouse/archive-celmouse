@@ -47,7 +47,7 @@ class TrackPadViewModel extends ChangeNotifier {
     _mouseX = (_mouseX + deltaX).clamp(0.0, 400.0); // Ensure within bounds
     _mouseY = (_mouseY + deltaY).clamp(0.0, 400.0); // Ensure within bounds
     notifyListeners();
-    _trackPadRepository.handleDrag(_mouseX, _mouseY);
+    _trackPadRepository.handleDrag(_mouseX - 200, _mouseY - 200);
   }
 
   void stopDragging() {

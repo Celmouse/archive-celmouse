@@ -1,4 +1,7 @@
+import 'package:controller/getit.dart';
+import 'package:controller/src/data/models/vector2.dart';
 import 'package:controller/src/data/services/client_api_service.dart';
+import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:protocol/protocol.dart';
 
 class TrackPadRepository {
@@ -9,13 +12,17 @@ class TrackPadRepository {
   }) : _clientApiService = clientApiService;
 
   void handleDrag(double x, double y) {
+    final vector = Vector2D(x, y);
 
+    if (!vector.canNormalize) return;
+
+    Vector2D normalized = vector.normalized;
 
     _clientApiService.send(
       event: ProtocolEvents.mouseMove,
       data: MouseMovementProtocolData(
-        x: normalizedX,
-        y: normalizedY,
+        x: normalized.x,
+        y: normalized.y,
         intensity: 0.1, // You can adjust the intensity as needed
       ),
     );
