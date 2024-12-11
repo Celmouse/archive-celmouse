@@ -1,7 +1,7 @@
+import 'package:mouse_protocol/mouse_protocol.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'interface.dart';
-import 'types.dart';
 
 abstract class MousePlatform extends PlatformInterface
     implements MouseMovement {

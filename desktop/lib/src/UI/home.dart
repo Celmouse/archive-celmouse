@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:server/src/core/mouse.dart';
-import 'package:server/src/core/socket.dart';
+import 'package:server/src/data/services/mouse_service.dart';
+import 'package:server/src/data/socket_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../data/services/keyboard_service.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -37,7 +39,10 @@ class _HomeState extends State<Home> {
       }
     });
 
-    final SocketInterpreter interpreter = SocketInterpreter(mouse: Mouse());
+    final SocketRepository interpreter = SocketRepository(
+      mouse: MouseService(),
+      keyboard: KeyboardService(),
+    );
 
     await for (HttpRequest request in server) {
       final s = await WebSocketTransformer.upgrade(request);
@@ -46,7 +51,7 @@ class _HomeState extends State<Home> {
       });
       await DesktopWindow.setWindowSize(const Size(250, 150), animate: true);
 
-      print('Servidor em ws://${server.address.address}:7771');
+      debugPrint('Server: ws://${server.address.address}:7771');
 
       socket?.listen(interpreter.interpretEvents, onDone: () async {
         setState(() {
@@ -72,8 +77,9 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
             onPressed: () {
-              launchUrl(Uri.parse(
-                  "https://api.whatsapp.com/send?phone=5533997312898"));
+              launchUrl(
+                Uri.parse("https://api.whatsapp.com/send?phone=5533997312898"),
+              );
             },
             icon: const Icon(
               Icons.support_agent,
@@ -82,7 +88,9 @@ class _HomeState extends State<Home> {
           ),
           IconButton(
             onPressed: () {
-              launchUrl(Uri.parse("https://celmouse.com"));
+              launchUrl(
+                Uri.parse("https://celmouse.com"),
+              );
             },
             icon: const Icon(
               Icons.code_sharp,

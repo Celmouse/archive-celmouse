@@ -19,6 +19,7 @@ class LeftButtonViewmodel extends ChangeNotifier {
 
   Timer? doubleClickTimer;
 
+  //TODO: Fix double click instead of clicking
   void click() {
     _isPressed = true;
     notifyListeners();
@@ -29,7 +30,7 @@ class LeftButtonViewmodel extends ChangeNotifier {
     });
 
     if (doubleClickTimer?.isActive == false) {
-      _mouseRepository.click(ClickType.left);
+      _mouseRepository.click(MouseButton.left);
     } else {
       _mouseRepository.doubleClick();
     }

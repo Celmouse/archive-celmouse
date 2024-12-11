@@ -5,8 +5,9 @@ import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../utils/launch_site.dart';
-import 'connect_qr_code.dart';
+
 import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
@@ -25,12 +26,14 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
   @override
   void initState() {
     widget.viewmodel.addListener(_listener);
+    widget.viewmodel.startScan();
     super.initState();
   }
 
   @override
   void dispose() {
     widget.viewmodel.removeListener(_listener);
+    widget.viewmodel.stopScan();
     super.dispose();
   }
 
@@ -53,84 +56,88 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
       ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 32),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ExpansionTile(
-                  dense: true,
-                  tilePadding: EdgeInsets.zero,
-                  title: const Text(
-                    "How to use this app?",
-                  ),
-                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                  childrenPadding: const EdgeInsets.only(bottom: 16),
-                  expandedAlignment: Alignment.centerLeft,
-                  children: [
-                    const Text("1. Check if your phone supports gyroscope."),
-                    GestureDetector(
-                      onTap: () => launchSite(),
-                      child: const Text(
-                        '2. Download the HUB.',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
+        child: FutureBuilder(
+            future: MobileAds.instance.initialize(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ExpansionTile(
+                        dense: true,
+                        tilePadding: EdgeInsets.zero,
+                        title: const Text(
+                          "How to use this app?",
                         ),
-                        textAlign: TextAlign.start,
+                        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                        childrenPadding: const EdgeInsets.only(bottom: 16),
+                        expandedAlignment: Alignment.centerLeft,
+                        children: [
+                          const Text(
+                              "1. Check if your phone supports gyroscope."),
+                          GestureDetector(
+                            onTap: () => launchSite(),
+                            child: const Text(
+                              '2. Download the HUB.',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                                decorationColor: Colors.blue,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          const Text("3. Connect to the HUB."),
+                          const Text("4. Start moving your pointer."),
+                        ],
                       ),
-                    ),
-                    const Text("3. Connect to the HUB."),
-                    const Text("4. Start moving your pointer."),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Connection Options',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      const SizedBox(height: 20),
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Connection Options',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Divider(),
+                              DevicesScanner(viewmodel: widget.viewmodel),
+                              const Divider(),
+                              EnterHubIPTile(viewmodel: widget.viewmodel),
+                              const Divider(),
+                              ListTile(
+                                leading: const Icon(Icons.qr_code_scanner),
+                                title: const Text('Connect via QR Code'),
+                                onTap: () {
+                                  context.go(Routes.connectQRCode);
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        const Divider(),
-                        DevicesScanner(connectionViewmodel: widget.viewmodel),
-                        const Divider(),
-                        EnterHubIPTile(viewmodel: widget.viewmodel),
-                        const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.qr_code_scanner),
-                          title: const Text('Connect via QR Code'),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ConnectFromQrCodePage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ),
+              );
+            }),
       ),
     );
   }
