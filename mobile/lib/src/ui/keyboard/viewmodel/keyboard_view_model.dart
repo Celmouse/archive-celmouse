@@ -1,6 +1,7 @@
 import 'package:controller/src/data/repositories/keyboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:controller/src/UI/keyboard/model.dart';
+import 'package:protocol/protocol.dart';
 
 enum KeyboardLayout { main, special }
 
@@ -42,13 +43,9 @@ class KeyboardViewModel extends ChangeNotifier {
       case SpecialKeyType.backspace:
       case SpecialKeyType.specialChars:
       case SpecialKeyType.enter:
-        _keyboardRepository.specialKey(type);
-        break;
       case SpecialKeyType.space:
-        _keyboardRepository.type(" ");
-        break;
-      default:
         _keyboardRepository.specialKey(type);
+      default:
         break;
     }
   }

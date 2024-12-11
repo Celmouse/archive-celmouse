@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:keyboard/keyboard.dart';
+import 'package:protocol/protocol.dart';
 
 class KeyboardService {
   final keyboard = Keyboard();
@@ -12,7 +13,11 @@ class KeyboardService {
     });
   }
   
-  void typeSpecial(String key){
-    // keyboard.pressSpecialKey(key)
+  void typeSpecial(SpecialKeyType key){
+    keyboard.pressSpecialKey(key);
+    Timer(const Duration(milliseconds: 100), () {
+      keyboard.releaseSpecialKey(key);
+    });
   }
 }
+ 

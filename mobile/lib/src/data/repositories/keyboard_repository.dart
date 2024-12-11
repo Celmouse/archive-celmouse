@@ -18,18 +18,9 @@ class KeyboardRepository {
   void specialKey(SpecialKeyType type) {
     _clientApiService.send(
       event: KeyboardProtocolEvents.specialKeyPressed,
-      data: type.toString(),
+      data: KeyboardProtocolData(
+        key: type,
+      ),
     );
   }
-}
-
-//TODO: This guy should be located at protocol level if it has to be used in hub
-enum SpecialKeyType {
-  shift,
-  backspace,
-  specialChars,
-  space,
-  enter,
-  defaultLayout,
-  // Add other special key types here
 }

@@ -1,8 +1,8 @@
-import 'special_keys.dart';
+import 'package:keyboard_protocol/keyboard_protocol.dart';
 
 abstract class KeyboardInterface {
   void pressKey(String key);
   void releaseKey(String key);
-  void pressSpecialKey(SpecialKey key);
-  void releaseSpecialKey(SpecialKey key);
+  void pressSpecialKey(SpecialKeyType key);
+  void releaseSpecialKey(SpecialKeyType key);
 }

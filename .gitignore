@@ -20,8 +20,11 @@ pubspec_overrides.yaml
 melos_celmouse.iml
 
 /.idea
+
 **/.dart_tool
 **/pubspec.lock
+**/.vscode
+**/build
 
 *.map
 *.p8

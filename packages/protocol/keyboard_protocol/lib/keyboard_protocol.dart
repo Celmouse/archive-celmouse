@@ -4,3 +4,5 @@
 library;
 
 export 'src/events.dart';
+export 'src/special_keys.dart';
+export 'src/data.dart';

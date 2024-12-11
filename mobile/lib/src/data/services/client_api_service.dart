@@ -10,12 +10,13 @@ class ClientApiService {
   });
 
   void send({required ProtocolEvent event, dynamic data}) {
-    socket.sink.add(jsonEncode(
-      Protocol(
-        event: event,
-        data: data,
-        timestamp: DateTime.timestamp(),
-      ).toJson(),
-    ));
+    final protocol = Protocol(
+      event: event,
+      data: data,
+      timestamp: DateTime.timestamp(),
+    );
+    final map = protocol.toJson();
+    final json = jsonEncode(map);
+    socket.sink.add(json);
   }
 }

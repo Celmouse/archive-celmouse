@@ -35,13 +35,13 @@ class KeyboardMacOS extends KeyboardPlatform {
   }
 
   @override
-  void pressSpecialKey(SpecialKey key) {
-    _bindings.pressKeyboardKey(keyConverter.toCode(key));
+  void pressSpecialKey(SpecialKeyType key) {
+    _bindings.pressKeyboardKey(ConvertSpecialKeyMacOS.toCode(key));
   }
 
   @override
-  void releaseSpecialKey(SpecialKey key) {
-    _bindings.releaseKeyboardKey(keyConverter.toCode(key));
+  void releaseSpecialKey(SpecialKeyType key) {
+    _bindings.releaseKeyboardKey(ConvertSpecialKeyMacOS.toCode(key));
   }
 }
 
