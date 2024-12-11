@@ -1,5 +1,5 @@
 import 'package:controller/getit.dart';
-import 'package:controller/main.dart';
+import 'package:controller/src/UI/mouse_move/view/trackpad_page.dart';
 import 'package:controller/src/domain/models/button_settings.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
@@ -12,7 +12,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse/view/left_button.dart';
@@ -38,6 +37,9 @@ enum CursorKeysPressed {
 
 class _MoveMousePageState extends State<MoveMousePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  int _currentPageIndex = 0;
+  final PageController _pageController = PageController();
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +52,13 @@ class _MoveMousePageState extends State<MoveMousePage> {
     MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
+  }
+
+  void _onToggle(int index) {
+    setState(() {
+      _currentPageIndex = index;
+    });
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -126,114 +135,145 @@ class _MoveMousePageState extends State<MoveMousePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Visibility(
-              visible: kDebugMode,
-              child: MouseModeSwitch(),
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CursorFeatLabel("L Click", Colors.red),
-                    CursorFeatLabel("Toggle Move", Colors.green),
-                  ],
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CursorFeatLabel("R Click", Colors.blue),
-                    CursorFeatLabel("Hold Scroll", Colors.purple),
-                  ],
-                ),
-              ],
-            ),
-            const Spacer(),
-            ElevatedButton.icon(
-              onPressed: null,
-              icon: const Icon(Icons.rocket),
-              label: const Text('Game Mode'),
-            ),
-            const SizedBox(
-              height: 28,
-            ),
-            Flexible(
-              flex: 2,
-              child: SizedBox(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    LeftMouseButton(
-                      settings: ButtonSettings(
-                        width: size.width / 2 - 20,
-                        height: size.height * 0.3,
-                        color: Colors.red,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        ),
-                      ),
-                    ),
-                    RightMouseButton(
-                      settings: ButtonSettings(
-                        width: size.width / 2 - 20,
-                        height: size.height * 0.3,
-                        color: Colors.blue,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const Divider(),
-            Flexible(
-              flex: 2,
-              child: Row(
+            MouseModeSwitch(
+                onToggle: _onToggle, currentIndex: _currentPageIndex),
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(), // Add this line
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPageIndex = index;
+                  });
+                },
                 children: [
-                  Flexible(
-                    flex: 8,
-                    child: MoveMouseButton(
-                      settings: ButtonSettings(
-                        color: Colors.green,
-                        width: double.infinity,
-                        height: size.height * 0.13,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: ScrollMouseButton(
-                      settings: ButtonSettings(
-                        color: Colors.purple,
-                        width: double.infinity,
-                        height: size.height * 0.13,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                  ),
+                  _buildMovePage(size),
+                  const TrackpadPage(),
+                  _buildDragPage(size),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMovePage(Size size) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CursorFeatLabel("L Click", Colors.red),
+                CursorFeatLabel("Toggle Move", Colors.green),
+              ],
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CursorFeatLabel("R Click", Colors.blue),
+                CursorFeatLabel("Hold Scroll", Colors.purple),
+              ],
+            ),
+          ],
+        ),
+        const Spacer(),
+        ElevatedButton.icon(
+          onPressed: null,
+          icon: const Icon(Icons.rocket),
+          label: const Text('Game Mode'),
+        ),
+        const SizedBox(
+          height: 28,
+        ),
+        Flexible(
+          flex: 2,
+          child: SizedBox(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LeftMouseButton(
+                  settings: ButtonSettings(
+                    width: size.width / 2 - 20,
+                    height: size.height * 0.3,
+                    color: Colors.red,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
+                  ),
+                ),
+                RightMouseButton(
+                  settings: ButtonSettings(
+                    width: size.width / 2 - 20,
+                    height: size.height * 0.3,
+                    color: Colors.blue,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        const Divider(),
+        Flexible(
+          flex: 2,
+          child: Row(
+            children: [
+              Flexible(
+                flex: 8,
+                child: MoveMouseButton(
+                  settings: ButtonSettings(
+                    color: Colors.green,
+                    width: double.infinity,
+                    height: size.height * 0.13,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Flexible(
+                flex: 3,
+                child: ScrollMouseButton(
+                  settings: ButtonSettings(
+                    color: Colors.purple,
+                    width: double.infinity,
+                    height: size.height * 0.13,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDragPage(Size size) {
+    return const Center(
+      child: Hero(
+        tag: 'mouse-mode-switch',
+        child: Text('Drag Page'),
       ),
     );
   }

@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class MouseModeSwitch extends StatefulWidget {
-  const MouseModeSwitch({super.key});
+  final ValueChanged<int> onToggle;
+  final int currentIndex;
+
+  const MouseModeSwitch(
+      {super.key, required this.onToggle, required this.currentIndex});
 
   @override
-  State<MouseModeSwitch> createState() => _MouseModeSwitchState();
+  MouseModeSwitchState createState() => MouseModeSwitchState();
 }
 
-class _MouseModeSwitchState extends State<MouseModeSwitch> {
-  int _currentIndex = 0;
-
+class MouseModeSwitchState extends State<MouseModeSwitch> {
   @override
   Widget build(BuildContext context) {
     if (!kDebugMode) return const SizedBox(); // Hide in release mode
@@ -19,7 +21,7 @@ class _MouseModeSwitchState extends State<MouseModeSwitch> {
     return Hero(
       tag: 'mouse-mode-switch',
       child: ToggleSwitch(
-        initialLabelIndex: _currentIndex,
+        initialLabelIndex: widget.currentIndex,
         totalSwitches: 3,
         inactiveBgColor: Colors.deepPurpleAccent,
         activeBgColor: const [Colors.teal],
@@ -36,10 +38,7 @@ class _MouseModeSwitchState extends State<MouseModeSwitch> {
         ],
         onToggle: (index) {
           if (index != null) {
-            setState(() {
-              _currentIndex = index;
-            });
-            print('Switched to: $index');
+            widget.onToggle(index);
           }
         },
       ),
