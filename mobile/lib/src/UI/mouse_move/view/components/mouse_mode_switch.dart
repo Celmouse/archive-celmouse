@@ -6,8 +6,11 @@ class MouseModeSwitch extends StatefulWidget {
   final ValueChanged<int> onToggle;
   final int currentIndex;
 
-  const MouseModeSwitch(
-      {super.key, required this.onToggle, required this.currentIndex});
+  const MouseModeSwitch({
+    super.key,
+    required this.onToggle,
+    required this.currentIndex,
+  });
 
   @override
   MouseModeSwitchState createState() => MouseModeSwitchState();
