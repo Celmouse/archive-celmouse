@@ -4,13 +4,13 @@ class ConvertSpecialKeyMacOS {
   static int toCode(SpecialKeyType key) {
     switch (key) {
       case SpecialKeyType.space:
-        return 0x31;
+        return 49;
       case SpecialKeyType.backspace:
-        return 0x33;
+        return 51;
       case SpecialKeyType.shift:
-        return 0x56;
+        return 56;
       case SpecialKeyType.enter:
-        return 0x24;
+        return 36;
       default:
         throw UnimplementedError('Not implemented for $key');
     }

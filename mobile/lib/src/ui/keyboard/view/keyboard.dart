@@ -66,7 +66,7 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
                                         );
                                       } else {
                                         widget.viewmodel.onSpecialKeyPressed(
-                                          keyItem.type.specialKeyType!,
+                                          keyItem.specialKeyType!,
                                         );
                                       }
                                     },
@@ -78,7 +78,7 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
                                         // );
                                       } else {
                                         widget.viewmodel.onSpecialKeyReleased(
-                                          _getSpecialKeyType(keyItem.icon),
+                                          keyItem.specialKeyType!,
                                         );
                                       }
                                     }),
@@ -144,8 +144,8 @@ class KeyButtonState extends State<KeyButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
-        setState(() => _isPressed = true);
         HapticFeedback.lightImpact();
+        setState(() => _isPressed = true);
         widget.onPressed();
       },
       onTapUp: (_) {

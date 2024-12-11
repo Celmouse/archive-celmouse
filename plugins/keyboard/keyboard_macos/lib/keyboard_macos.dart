@@ -11,8 +11,6 @@ class KeyboardMacOS extends KeyboardPlatform {
     KeyboardPlatform.instance = KeyboardMacOS();
   }
 
-  final keyConverter = ConvertSpecialKeyMacOS();
-
   @override
   void pressKey(String key) {
     assert(key.length == 1);
@@ -36,7 +34,8 @@ class KeyboardMacOS extends KeyboardPlatform {
 
   @override
   void pressSpecialKey(SpecialKeyType key) {
-    _bindings.pressKeyboardKey(ConvertSpecialKeyMacOS.toCode(key));
+    final code = ConvertSpecialKeyMacOS.toCode(key);
+    _bindings.pressKeyboardKey(code);
   }
 
   @override

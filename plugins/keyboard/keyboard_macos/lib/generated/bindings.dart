@@ -29,7 +29,7 @@ class KeyboardMacosBindings {
 
   /// Sends a key press event to the system.
   ///
-  /// @param keyCode The key code of the key to press.
+  /// @param key The key code of the key to press.
   void pressKeyboardKey(
     int key,
   ) {
@@ -46,7 +46,7 @@ class KeyboardMacosBindings {
 
   /// Sends a key release event to the system.
   ///
-  /// @param keyCode The key code of the key to release.
+  /// @param key The key code of the key to release.
   void releaseKeyboardKey(
     int key,
   ) {
