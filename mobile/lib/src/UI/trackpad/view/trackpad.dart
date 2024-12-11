@@ -1,4 +1,5 @@
 import 'package:controller/src/UI/trackpad/viewmodel/trackpad_viewmodel.dart';
+import 'package:controller/src/data/repositories/trackpad_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,8 @@ class TrackPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrackPadViewModel viewModel = TrackPadViewModel();
+    final TrackPadRepository trackPadRepository = TrackPadRepository();
+    final TrackPadViewModel viewModel = TrackPadViewModel(trackPadRepository);
 
     return ChangeNotifierProvider(
       create: (_) => viewModel,
@@ -60,6 +62,18 @@ class TrackPad extends StatelessWidget {
             decoration: BoxDecoration(
               color: viewModel.backgroundColor,
               borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                const BoxShadow(
+                  color: Colors.white,
+                  offset: Offset(-5, -5),
+                  blurRadius: 10,
+                ),
+                BoxShadow(
+                  color: Colors.grey[300]!,
+                  offset: const Offset(5, 5),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             child: Stack(
               children: [

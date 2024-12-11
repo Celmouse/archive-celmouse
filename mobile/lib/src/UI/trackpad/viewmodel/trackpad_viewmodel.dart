@@ -1,6 +1,11 @@
+import 'package:controller/src/data/repositories/trackpad_repository.dart';
 import 'package:flutter/material.dart';
 
 class TrackPadViewModel extends ChangeNotifier {
+  final TrackPadRepository _trackPadRepository;
+
+  TrackPadViewModel(this._trackPadRepository);
+
   bool _isDragging = false;
   bool _isTapped = false;
   bool _isDoubleTapped = false;
@@ -16,19 +21,19 @@ class TrackPadViewModel extends ChangeNotifier {
   double get mouseY => _mouseY;
 
   Color get backgroundColor {
-    if (_isDragging) return Colors.green[100]!;
-    if (_isTapped) return Colors.red[100]!;
-    if (_isDoubleTapped) return Colors.purple[100]!;
+    if (_isDragging) return Colors.blue[100]!;
+    if (_isTapped) return Colors.green[100]!;
+    if (_isDoubleTapped) return Colors.red[100]!;
     if (_isTwoFingerTapped) return Colors.yellow[100]!;
     return Colors.grey[200]!;
   }
 
   Color get dotColor {
-    if (_isDragging) return Colors.green;
-    if (_isTapped) return Colors.red;
-    if (_isDoubleTapped) return Colors.purple;
+    if (_isDragging) return Colors.blue;
+    if (_isTapped) return Colors.green;
+    if (_isDoubleTapped) return Colors.red;
     if (_isTwoFingerTapped) return Colors.yellow;
-    return Colors.grey[300]!;
+    return Colors.grey[400]!;
   }
 
   void startDragging(double x, double y) {
@@ -41,6 +46,11 @@ class TrackPadViewModel extends ChangeNotifier {
   void updateDragging(double deltaX, double deltaY) {
     _mouseX = (_mouseX + deltaX).clamp(40.0, 360.0);
     _mouseY = (_mouseY + deltaY).clamp(40.0, 360.0);
+    _trackPadRepository.handleDrag(DragUpdateDetails(
+      delta: Offset(deltaX, deltaY),
+      localPosition: Offset(_mouseX, _mouseY),
+      globalPosition: Offset(_mouseX, _mouseY),
+    ));
     notifyListeners();
   }
 
@@ -58,6 +68,7 @@ class TrackPadViewModel extends ChangeNotifier {
       _isTapped = false;
       notifyListeners();
     });
+    _trackPadRepository.handleTap();
   }
 
   void handleDoubleTap() {
@@ -67,6 +78,7 @@ class TrackPadViewModel extends ChangeNotifier {
       _isDoubleTapped = false;
       notifyListeners();
     });
+    _trackPadRepository.handleDoubleTap();
   }
 
   void handleTwoFingerTap() {
@@ -76,5 +88,6 @@ class TrackPadViewModel extends ChangeNotifier {
       _isTwoFingerTapped = false;
       notifyListeners();
     });
+    _trackPadRepository.handleTwoFingerTap();
   }
 }
