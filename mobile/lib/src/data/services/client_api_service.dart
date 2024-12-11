@@ -9,7 +9,7 @@ class ClientApiService {
     required this.socket,
   });
 
-  void send({required ProtocolEvents event, dynamic data}) {
+  void send({required ProtocolEvent event, dynamic data}) {
     socket.sink.add(jsonEncode(
       Protocol(
         event: event,

@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:protocol_interface/protocol_interface.dart';
+
 part 'model.freezed.dart';
 part 'model.g.dart';
 
@@ -9,7 +11,7 @@ class Protocol with _$Protocol {
     createToJson: true,
   )
   const factory Protocol({
-    required ProtocolEvents event,
+    required ProtocolEvent event,
     required DateTime timestamp,
     required dynamic data,
   }) = _Protocol;
@@ -42,27 +44,27 @@ class MouseMovementProtocolData with _$MouseMovementProtocolData {
 }
 
 
-enum ProtocolEvents {
-  // Keyboard
-  keyPressed,
-  specialKeyPressed,
+// enum ProtocolEvent {
+//   // Keyboard
+//   keyPressed,
+//   specialKeyPressed,
   
-  // Mouse Movement
-  mouseMove,
-  mouseCenter,
-  mouseScroll,
-  // Mouse Buttons
-  mouseClick,
-  mouseDoubleClick,
-  mouseButtonHold,
-  mouseButtonReleased,
-}
+//   // Mouse Movement
+//   mouseMove,
+//   mouseCenter,
+//   mouseScroll,
+//   // Mouse Buttons
+//   mouseClick,
+//   mouseDoubleClick,
+//   mouseButtonHold,
+//   mouseButtonReleased,
+// }
 
-enum ClickType {
-  @JsonValue("left")
-  left,
-  @JsonValue("right")
-  right,
-  @JsonValue("center")
-  center;
-}
+// enum ClickType {
+//   @JsonValue("left")
+//   left,
+//   @JsonValue("right")
+//   right,
+//   @JsonValue("center")
+//   center;
+// }

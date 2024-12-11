@@ -25,7 +25,7 @@ class SocketRepository {
     final protocol = Protocol.fromJson(jsonDecode(data));
 
     switch (protocol.event) {
-      case ProtocolEvents.mouseMove:
+      case ProtocolEvent.mouseMove:
         final data = MouseMovementProtocolData.fromJson(protocol.data);
 
         double x = data.x;
@@ -34,7 +34,7 @@ class SocketRepository {
 
         return mouse.move(x, y, sense);
 
-      case ProtocolEvents.mouseScroll:
+      case ProtocolEvent.mouseScroll:
         final data = MouseMovementProtocolData.fromJson(protocol.data);
 
         mouse.scroll(
@@ -44,23 +44,23 @@ class SocketRepository {
         );
 
         break;
-      case ProtocolEvents.mouseClick:
+      case ProtocolEvent.mouseClick:
         final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.click(data.type.toMousePluginButton());
         break;
-      case ProtocolEvents.mouseDoubleClick:
+      case ProtocolEvent.mouseDoubleClick:
         final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.doubleClick(data.type.toMousePluginButton());
         break;
-      case ProtocolEvents.mouseButtonHold:
+      case ProtocolEvent.mouseButtonHold:
         // final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.holdLeftButton();
         break;
-      case ProtocolEvents.mouseButtonReleased:
+      case ProtocolEvent.mouseButtonReleased:
         // final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.releaseLeftButton();
         break;
-      case ProtocolEvents.keyPressed:
+      case ProtocolEvent.keyPressed:
         final data = protocol.data as String;
         keyboard.type(data);
         break;
