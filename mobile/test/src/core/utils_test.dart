@@ -1,4 +1,4 @@
-import 'package:controller/src/core/utils.dart';
+import 'package:controller/src/utils/functions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

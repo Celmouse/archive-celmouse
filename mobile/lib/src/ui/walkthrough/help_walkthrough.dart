@@ -1,4 +1,4 @@
-import 'package:controller/src/ui/components/support_button.dart';
+import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:flutter/material.dart';
 
 class MouseScreenHelpWalkthrough extends StatefulWidget {

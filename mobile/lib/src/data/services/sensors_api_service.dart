@@ -49,12 +49,6 @@ class SensorsApiService {
     final diffMS = timestamp.difference(tmpTimestamp!).inMicroseconds;
     tmpTimestamp = timestamp;
 
-    print(diffMS);
-
-    // Ensure no jumps
-    if (diffMS > 16300) {
-      return (0, 0);
-    }
 
     final seconds = diffMS / pow(10, 6);
 

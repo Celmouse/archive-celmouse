@@ -2,7 +2,6 @@ import 'package:controller/src/data/repositories/keyboard_repository.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 import '../../UI/keyboard/model.dart';
 import '../../UI/keyboard/keyboard_theme.dart';
@@ -11,9 +10,11 @@ class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
     super.key,
     this.theme = defaultKeyboardTheme,
+    required this.viewmodel,
   });
 
   final KeyboardTheme theme;
+  final KeyboardViewModel viewmodel;
 
   @override
   KeyboardTyppingPageState createState() => KeyboardTyppingPageState();
@@ -34,61 +35,49 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => KeyboardViewModel(
-        keyboardRepository: KeyboardRepository(
-          clientApiService: context.read(),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Consumer<KeyboardViewModel>(
-                builder: (context, viewModel, child) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: viewModel.keys
-                          .map<Row>((row) => Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: row.map<Widget>((keyItem) {
-                                  return Expanded(
-                                    flex: keyItem.flex,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          widget.theme.keySpacing / 2),
-                                      child: KeyButton(
-                                        keyItem: keyItem,
-                                        viewModel: viewModel,
-                                        theme: widget.theme,
-                                        keyHeight: _getKeyHeight(context),
-                                        keyWidth: _getKeyWidth(
-                                            keyItem.flex.toDouble()),
-                                        onPressed: () {
-                                          if (keyItem.label != null) {
-                                            viewModel
-                                                .onCharPressed(keyItem.label!);
-                                          } else if (keyItem.icon != null) {
-                                            viewModel.onSpecialKeyPressed(
-                                                _getSpecialKeyType(
-                                                    keyItem.icon!));
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ))
-                          .toList(),
-                    ),
-                  );
-                },
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: widget.viewmodel.keys
+                    .map<Row>((row) => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: row.map<Widget>((keyItem) {
+                            return Expanded(
+                              flex: keyItem.flex,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.all(widget.theme.keySpacing / 2),
+                                child: KeyButton(
+                                  keyItem: keyItem,
+                                  viewModel: widget.viewmodel,
+                                  theme: widget.theme,
+                                  keyHeight: _getKeyHeight(context),
+                                  keyWidth:
+                                      _getKeyWidth(keyItem.flex.toDouble()),
+                                  onPressed: () {
+                                    if (keyItem.label != null) {
+                                      widget.viewmodel
+                                          .onCharPressed(keyItem.label!);
+                                    } else if (keyItem.icon != null) {
+                                      widget.viewmodel.onSpecialKeyPressed(
+                                          _getSpecialKeyType(keyItem.icon!));
+                                    }
+                                  },
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ))
+                    .toList(),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

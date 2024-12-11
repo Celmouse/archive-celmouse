@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:controller/src/features/mouse/move/data/mouse_settings_model.dart';
+import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MouseSettingsPersistence {
+class MouseSettingsPersistenceService {
   static const String _key = 'current_mouse_move_settings';
 
   static Future<void> saveSettings(MouseSettings settings) async {

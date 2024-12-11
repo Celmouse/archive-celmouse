@@ -1,6 +1,6 @@
 import 'package:controller/getit.dart';
 import 'package:flutter/material.dart';
-import '../data/mouse_settings_model.dart';
+import '../../../domain/models/mouse_settings_model.dart';
 
 /// Page where you can change the cursor settings
 ///

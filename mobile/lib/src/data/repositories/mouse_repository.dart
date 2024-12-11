@@ -4,7 +4,7 @@ import 'package:controller/getit.dart';
 import 'package:controller/src/data/models/vector2.dart';
 import 'package:controller/src/data/services/client_api_service.dart';
 import 'package:controller/src/data/services/sensors_api_service.dart';
-import 'package:controller/src/features/mouse/move/data/mouse_settings_model.dart';
+import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:protocol/protocol.dart';
 
 class MouseRepository {

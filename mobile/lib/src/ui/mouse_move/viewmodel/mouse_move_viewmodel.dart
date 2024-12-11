@@ -8,7 +8,17 @@ class MouseMoveViewmodel extends ChangeNotifier {
     required MouseRepository mouseRepository,
   }) : _mouseRepository = mouseRepository;
 
-  void stopMouse(){
+  bool _isKeyboardOpen = false;
+
+  bool get isKeyboardOpen => _isKeyboardOpen;
+
+  bool keyboardOpenClose() {
+    _isKeyboardOpen = !_isKeyboardOpen;
+    notifyListeners();
+    return _isKeyboardOpen;
+  }
+
+  void stopMouse() {
     _mouseRepository.disableMovement();
     _mouseRepository.disableScrolling();
   }
