@@ -46,7 +46,6 @@ class _MoveMousePageState extends State<MoveMousePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    // TODO: Adicionar sistema de loading enquanto configura
     MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
