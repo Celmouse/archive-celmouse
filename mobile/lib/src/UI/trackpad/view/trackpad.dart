@@ -1,5 +1,6 @@
 import 'package:controller/src/UI/trackpad/viewmodel/trackpad_viewmodel.dart';
 import 'package:controller/src/data/repositories/trackpad_repository.dart';
+import 'package:controller/src/data/services/client_api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,9 @@ class TrackPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrackPadRepository trackPadRepository = TrackPadRepository();
+    final TrackPadRepository trackPadRepository = TrackPadRepository(
+      clientApiService: context.read<ClientApiService>(),
+    );
     final TrackPadViewModel viewModel = TrackPadViewModel(trackPadRepository);
 
     return ChangeNotifierProvider(
