@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:protocol/protocol.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'services/keyboard_service.dart';
+
+const ALLOW_PRINTING = true;
 
 class SocketRepository {
   final MouseService mouse;
@@ -16,49 +19,45 @@ class SocketRepository {
   interpretEvents(dynamic data) {
     final protocol = Protocol.fromJson(jsonDecode(data));
 
-    print(protocol);
+    final event = protocol.event.name;
 
-    switch (protocol.event) {
-      case MouseProtocolEvents.mouseMove:
-        final data = MouseMovementProtocolData.fromJson(protocol.data);
+    if (ALLOW_PRINTING && kDebugMode) {
+      debugPrint(event);
+      debugPrint(protocol.data.toString());
+      debugPrint(protocol.timestamp.toString());
+    }
 
-        double x = data.x;
-        double y = data.y;
-        double sense = data.intensity;
+    if (event == MouseProtocolEvents.mouseMove.name) {
+      final data = MouseMovementProtocolData.fromJson(protocol.data);
 
-        return mouse.move(x, y, sense);
+      double x = data.x;
+      double y = data.y;
+      double sense = data.intensity;
 
-      case MouseProtocolEvents.mouseScroll:
-        final data = MouseMovementProtocolData.fromJson(protocol.data);
+      return mouse.move(x, y, sense);
+    } else if (event == MouseProtocolEvents.mouseScroll.name) {
+      final data = MouseMovementProtocolData.fromJson(protocol.data);
 
-        mouse.scroll(
-          data.x.sign.ceil(),
-          data.y.sign.ceil(),
-          data.intensity.round(),
-        );
-
-        break;
-      case MouseProtocolEvents.mouseClick:
-        final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.click(data.type);
-        break;
-      case MouseProtocolEvents.mouseDoubleClick:
-        final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.doubleClick(data.type);
-        break;
-      case MouseProtocolEvents.mouseButtonHold:
-        // final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.holdLeftButton();
-        break;
-      case MouseProtocolEvents.mouseButtonReleased:
-        // final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.releaseLeftButton();
-        break;
-      case KeyboardProtocolEvents.keyPressed:
-        final data = protocol.data as String;
-        keyboard.type(data);
-        break;
-      default:
+      mouse.scroll(
+        data.x.sign.ceil(),
+        data.y.sign.ceil(),
+        data.intensity.round(),
+      );
+    } else if (event == MouseProtocolEvents.mouseClick.name) {
+      final data = MouseButtonProtocolData.fromJson(protocol.data);
+      mouse.click(data.type);
+    } else if (event == MouseProtocolEvents.mouseDoubleClick.name) {
+      final data = MouseButtonProtocolData.fromJson(protocol.data);
+      mouse.doubleClick(data.type);
+    } else if (event == MouseProtocolEvents.mouseButtonHold.name) {
+      // final data = MouseButtonProtocolData.fromJson(protocol.data);
+      mouse.holdLeftButton();
+    } else if (event == MouseProtocolEvents.mouseButtonReleased.name) {
+      // final data = MouseButtonProtocolData.fromJson(protocol.data);
+      mouse.releaseLeftButton();
+    } else if (event == KeyboardProtocolEvents.keyPressed.name) {
+      final data = protocol.data as String;
+      keyboard.type(data);
     }
   }
 }

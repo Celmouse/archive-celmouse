@@ -1,11 +1,12 @@
 class ProtocolEvent {
   static const none = ProtocolEvent('none');
 
-  const ProtocolEvent(this._event);
+  const ProtocolEvent(this.name);
 
-  final String _event;
+  final String name;
 
-  String toJson() => _event;
+  String toJson() => name;
 
-  ProtocolEvent.fromJson(String json) : _event = json;
+  ProtocolEvent.fromJson(String json) : name = json;
+
 }

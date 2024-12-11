@@ -19,6 +19,7 @@ class LeftButtonViewmodel extends ChangeNotifier {
 
   Timer? doubleClickTimer;
 
+  //TODO: Fix double click instead of clicking
   void click() {
     _isPressed = true;
     notifyListeners();
