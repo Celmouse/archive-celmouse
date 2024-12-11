@@ -15,13 +15,13 @@ server/.env
 
 
 pubspec_overrides.yaml
-**/pubspec.lock
 **/.metadata
 
 melos_celmouse.iml
 
 /.idea
 **/.dart_tool
+**/pubspec.lock
 
 *.map
 *.p8
