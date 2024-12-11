@@ -4,7 +4,7 @@ import 'package:controller/src/domain/models/button_settings.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_settings_page.dart';
-import 'package:controller/src/ui/keyboard/keyboard_type.dart';
+import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/mouse/view/right_button.dart';
 import 'package:controller/src/ui/mouse/view/scroll_button.dart';
 import 'package:controller/src/ui/mouse_move/viewmodel/mouse_move_viewmodel.dart';

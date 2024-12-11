@@ -7,5 +7,14 @@ class Keyboard extends KeyboardPlatform {
   void releaseKey(String key) => KeyboardPlatform.instance.releaseKey(key);
 
   @override
-   Future<String?> getPlatformVersion() => KeyboardPlatform.instance.getPlatformVersion();
+  void pressSpecialKey(SpecialKeyType key) =>
+      KeyboardPlatform.instance.pressSpecialKey(key);
+
+  @override
+  void releaseSpecialKey(SpecialKeyType key) =>
+      KeyboardPlatform.instance.releaseSpecialKey(key);
+
+  @override
+  Future<String?> getPlatformVersion() =>
+      KeyboardPlatform.instance.getPlatformVersion();
 }

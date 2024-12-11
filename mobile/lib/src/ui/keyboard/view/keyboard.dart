@@ -1,10 +1,10 @@
-import 'package:controller/src/data/repositories/keyboard_repository.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:protocol/protocol.dart';
 
-import '../../UI/keyboard/model.dart';
-import '../../UI/keyboard/keyboard_theme.dart';
+import '../../../UI/keyboard/model.dart';
+import '../../../UI/keyboard/keyboard_theme.dart';
 
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({
@@ -60,12 +60,14 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
                                   keyWidth:
                                       _getKeyWidth(keyItem.flex.toDouble()),
                                   onPressed: () {
-                                    if (keyItem.label != null) {
-                                      widget.viewmodel
-                                          .onCharPressed(keyItem.label!);
-                                    } else if (keyItem.icon != null) {
+                                    if (keyItem.type == KeyType.normal) {
+                                      widget.viewmodel.onCharPressed(
+                                        keyItem.label!,
+                                      );
+                                    } else {
                                       widget.viewmodel.onSpecialKeyPressed(
-                                          _getSpecialKeyType(keyItem.icon!));
+                                        _getSpecialKeyType(keyItem.icon),
+                                      );
                                     }
                                   },
                                 ),
@@ -82,7 +84,7 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
     );
   }
 
-  SpecialKeyType _getSpecialKeyType(IconData icon) {
+  SpecialKeyType _getSpecialKeyType(IconData? icon) {
     switch (icon) {
       case Icons.backspace:
         return SpecialKeyType.backspace;

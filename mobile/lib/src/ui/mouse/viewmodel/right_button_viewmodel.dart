@@ -21,7 +21,7 @@ class RightButtonViewmodel extends ChangeNotifier {
       notifyListeners();
     });
 
-    _mouseRepository.click(ClickType.right);
+    _mouseRepository.click(MouseButton.right);
 
   }
 }
