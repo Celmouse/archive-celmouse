@@ -1,17 +1,20 @@
 import 'package:controller/getit.dart';
+import 'package:controller/main.dart';
 import 'package:controller/src/domain/models/button_settings.dart';
+import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
-import 'package:controller/src/ui/mouse_move/view/right_button.dart';
-import 'package:controller/src/ui/mouse_move/view/scroll_button.dart';
-import 'package:controller/src/features/mouse/move/ui/mouse_move_settings_page.dart';
+import 'package:controller/src/ui/mouse_move/view/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/keyboard/keyboard_type.dart';
+import 'package:controller/src/ui/mouse/view/right_button.dart';
+import 'package:controller/src/ui/mouse/view/scroll_button.dart';
 import 'package:controller/src/ui/mouse_move/viewmodel/mouse_move_viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import '../../../features/mouse/move/data/mouse_settings_model.dart';
-import '../../../features/mouse/move/data/mouse_settings_persistence.dart';
+import '../../../domain/models/mouse_settings_model.dart';
+import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse/view/left_button.dart';
 
 class MoveMousePage extends StatefulWidget {
@@ -43,8 +46,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    // TODO: Adicionar sistema de loading enquanto configura
-    MouseSettingsPersistence.loadSettings().then((settings) {
+    MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
   }
@@ -58,7 +60,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
       endDrawer: const CursorSettingsPage(),
       onEndDrawerChanged: (isOpened) {
         if (!isOpened) {
-          MouseSettingsPersistence.saveSettings(getIt<MouseSettings>());
+          MouseSettingsPersistenceService.saveSettings(getIt<MouseSettings>());
         } else {
           widget.viewmodel.stopMouse();
         }
@@ -66,6 +68,7 @@ class _MoveMousePageState extends State<MoveMousePage> {
       appBar: AppBar(
         title: const Text('Mouse'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
         actions: [
           const Visibility(
             visible: kDebugMode,
@@ -79,19 +82,37 @@ class _MoveMousePageState extends State<MoveMousePage> {
           ),
           Visibility(
             visible: kDebugMode,
-            child: IconButton(
-              onPressed: () {
-                widget.viewmodel.stopMouse();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => KeyboardTyppingPage(),
-                    ));
-              },
-              icon: const Icon(
-                Icons.keyboard,
-              ),
-            ),
+            child: ListenableBuilder(
+                listenable: widget.viewmodel,
+                builder: (context, _) {
+                  return IconButton(
+                    onPressed: () {
+                      widget.viewmodel.stopMouse();
+                      if (widget.viewmodel.keyboardOpenClose()) {
+                        showBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return SizedBox(
+                              height: size.height * 0.4,
+                              child: KeyboardTyppingPage(
+                                viewmodel: KeyboardViewModel(
+                                  keyboardRepository: context.read(),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                    icon: Icon(
+                      widget.viewmodel.isKeyboardOpen
+                          ? Icons.keyboard_arrow_down
+                          : Icons.keyboard,
+                    ),
+                  );
+                }),
           ),
           IconButton(
             onPressed: () => scaffoldKey.currentState?.openEndDrawer(),

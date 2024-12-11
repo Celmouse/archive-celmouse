@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:controller/getit.dart';
 import 'package:controller/src/data/repositories/mouse_repository.dart';
-import 'package:controller/src/features/mouse/move/data/mouse_settings_model.dart';
+import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:protocol/protocol.dart';
 

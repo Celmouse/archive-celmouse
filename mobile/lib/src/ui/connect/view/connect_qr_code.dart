@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'package:controller/src/routing/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../../../core/connect.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
   const ConnectFromQrCodePage({super.key});
@@ -19,37 +16,37 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
   StreamSubscription<Object?>? _subscription;
 
   _handleBarcode(BarcodeCapture e) async {
-    final value = e.barcodes.first.rawValue ?? '';
-    setState(() {
-      _subscription?.pause();
-    });
-    try {
-      /// TODO check all ports not only 7771
-      await connectWS(value, 7771, (err) {
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(err),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ));
-      }, 2);
-      if (mounted) {
-        _subscription?.cancel();
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        //TODO: Fix this
-        context.go(Routes.mouse);
-      }
-    } finally {
-      if (mounted) {
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text("Invalid IP, try another!"),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ));
-      }
-      setState(() {
-        _subscription?.resume();
-      });
-    }
+  //   final value = e.barcodes.first.rawValue ?? '';
+  //   setState(() {
+  //     _subscription?.pause();
+  //   });
+  //   try {
+  //     /// TODO check all ports not only 7771
+  //     await connectWS(value, 7771, (err) {
+  //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         content: Text(err),
+  //         backgroundColor: Theme.of(context).colorScheme.error,
+  //       ));
+  //     }, 2);
+  //     if (mounted) {
+  //       _subscription?.cancel();
+  //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
+  //       //TODO: Fix this
+  //       context.go(Routes.mouse);
+  //     }
+  //   } finally {
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
+  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //         content: const Text("Invalid IP, try another!"),
+  //         backgroundColor: Theme.of(context).colorScheme.error,
+  //       ));
+  //     }
+  //     setState(() {
+  //       _subscription?.resume();
+  //     });
+  //   }
   }
 
   @override
