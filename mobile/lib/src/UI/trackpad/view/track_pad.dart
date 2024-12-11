@@ -1,4 +1,4 @@
-import 'package:controller/src/UI/trackpad/trackpad_viewmodel.dart';
+import 'package:controller/src/UI/trackpad/viewmodel/trackpad_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

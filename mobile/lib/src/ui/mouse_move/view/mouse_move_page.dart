@@ -1,5 +1,5 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/UI/mouse_move/view/trackpad_page.dart';
+import 'package:controller/src/UI/trackpad/trackpad_page.dart';
 import 'package:controller/src/domain/models/button_settings.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';

@@ -1,4 +1,4 @@
-import 'package:controller/src/UI/trackpad/track_pad.dart';
+import 'package:controller/src/UI/trackpad/view/track_pad.dart';
 import 'package:flutter/material.dart';
 
 class TrackpadPage extends StatelessWidget {
