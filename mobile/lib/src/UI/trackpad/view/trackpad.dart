@@ -31,20 +31,19 @@ class TrackPad extends StatelessWidget {
       create: (_) => viewModel,
       child: Consumer<TrackPadViewModel>(
         builder: (context, viewModel, child) => GestureDetector(
-          onScaleStart: (details) {
+          onPanStart: (details) {
             viewModel.startDragging(
-                details.localFocalPoint.dx, details.localFocalPoint.dy);
+                details.localPosition.dx, details.localPosition.dy);
           },
-          onScaleUpdate: (details) {
-            viewModel.updateDragging(
-                details.focalPointDelta.dx, details.focalPointDelta.dy);
+          onPanUpdate: (details) {
+            viewModel.updateDragging(details.delta.dx, details.delta.dy);
             onDragUpdate(DragUpdateDetails(
-              delta: details.focalPointDelta,
-              localPosition: details.localFocalPoint,
-              globalPosition: details.focalPoint,
+              delta: details.delta,
+              localPosition: details.localPosition,
+              globalPosition: details.globalPosition,
             ));
           },
-          onScaleEnd: (details) {
+          onPanEnd: (details) {
             viewModel.stopDragging();
           },
           onTap: () {

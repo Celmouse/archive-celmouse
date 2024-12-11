@@ -12,6 +12,8 @@ class TrackPadViewModel extends ChangeNotifier {
   bool _isTwoFingerTapped = false;
   double _mouseX = 200; // Initial center position
   double _mouseY = 200; // Initial center position
+  double _previousX = 200; // Previous position
+  double _previousY = 200; // Previous position
 
   bool get isDragging => _isDragging;
   bool get isTapped => _isTapped;
@@ -38,20 +40,26 @@ class TrackPadViewModel extends ChangeNotifier {
 
   void startDragging(double x, double y) {
     _isDragging = true;
+    _previousX = _mouseX;
+    _previousY = _mouseY;
     _mouseX = x;
     _mouseY = y;
     notifyListeners();
   }
 
   void updateDragging(double deltaX, double deltaY) {
-    _mouseX = (_mouseX + deltaX).clamp(0.0, 400.0); // Ensure within bounds
-    _mouseY = (_mouseY + deltaY).clamp(0.0, 400.0); // Ensure within bounds
+    _mouseX = (_previousX + deltaX).clamp(0.0, 400.0); // Ensure within bounds
+    _mouseY = (_previousY + deltaY).clamp(0.0, 400.0); // Ensure within bounds
+    _previousX = _mouseX;
+    _previousY = _mouseY;
     notifyListeners();
-    _trackPadRepository.handleDrag(_mouseX - 200, _mouseY - 200);
+    _trackPadRepository.handleDrag(deltaX, deltaY);
   }
 
   void stopDragging() {
     _isDragging = false;
+    _previousX = _mouseX;
+    _previousY = _mouseY;
     _mouseX = 200; // Re-center
     _mouseY = 200; // Re-center
     notifyListeners();
@@ -60,30 +68,36 @@ class TrackPadViewModel extends ChangeNotifier {
   void handleTap() {
     _isTapped = true;
     notifyListeners();
-    Future.delayed(const Duration(milliseconds: 200), () {
-      _isTapped = false;
-      notifyListeners();
-    });
     _trackPadRepository.handleTap();
+    _resetTapState();
   }
 
   void handleDoubleTap() {
     _isDoubleTapped = true;
     notifyListeners();
-    Future.delayed(const Duration(milliseconds: 200), () {
-      _isDoubleTapped = false;
-      notifyListeners();
-    });
     _trackPadRepository.handleDoubleTap();
+    _resetDoubleTapState();
   }
 
   void handleTwoFingerTap() {
     _isTwoFingerTapped = true;
     notifyListeners();
-    Future.delayed(const Duration(milliseconds: 200), () {
-      _isTwoFingerTapped = false;
-      notifyListeners();
-    });
     _trackPadRepository.handleTwoFingerTap();
+    _resetTwoFingerTapState();
+  }
+
+  void _resetTapState() {
+    _isTapped = false;
+    notifyListeners();
+  }
+
+  void _resetDoubleTapState() {
+    _isDoubleTapped = false;
+    notifyListeners();
+  }
+
+  void _resetTwoFingerTapState() {
+    _isTwoFingerTapped = false;
+    notifyListeners();
   }
 }

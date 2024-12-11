@@ -11,8 +11,10 @@ class TrackPadRepository {
     required ClientApiService clientApiService,
   }) : _clientApiService = clientApiService;
 
-  void handleDrag(double x, double y) {
-    final vector = Vector2D(x, y);
+  void handleDrag(double deltaX, double deltaY) {
+    final sensitivity = getIt.get<MouseSettings>().sensitivity;
+
+    final vector = Vector2D(deltaX, deltaY);
 
     if (!vector.canNormalize) return;
 
@@ -23,7 +25,7 @@ class TrackPadRepository {
       data: MouseMovementProtocolData(
         x: normalized.x,
         y: normalized.y,
-        intensity: 0.1, // You can adjust the intensity as needed
+        intensity: sensitivity * vector.length / 10,
       ),
     );
   }
