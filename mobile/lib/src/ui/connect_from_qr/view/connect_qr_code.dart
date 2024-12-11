@@ -1,9 +1,19 @@
 import 'dart:async';
+import 'package:controller/src/routing/routes.dart';
+import 'package:controller/src/ui/connect_from_qr/viewmodel/connect_qr_viewmodel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
-  const ConnectFromQrCodePage({super.key});
+  const ConnectFromQrCodePage({
+    super.key,
+    required this.viewmodel,
+  });
+
+  final ConnectQrViewmodel viewmodel;
 
   @override
   State<ConnectFromQrCodePage> createState() => _ConnectFromQrCodePageState();
@@ -16,46 +26,37 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
   StreamSubscription<Object?>? _subscription;
 
   _handleBarcode(BarcodeCapture e) async {
-  //   final value = e.barcodes.first.rawValue ?? '';
-  //   setState(() {
-  //     _subscription?.pause();
-  //   });
-  //   try {
-  //     /// TODO check all ports not only 7771
-  //     await connectWS(value, 7771, (err) {
-  //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         content: Text(err),
-  //         backgroundColor: Theme.of(context).colorScheme.error,
-  //       ));
-  //     }, 2);
-  //     if (mounted) {
-  //       _subscription?.cancel();
-  //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  //       //TODO: Fix this
-  //       context.go(Routes.mouse);
-  //     }
-  //   } finally {
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         content: const Text("Invalid IP, try another!"),
-  //         backgroundColor: Theme.of(context).colorScheme.error,
-  //       ));
-  //     }
-  //     setState(() {
-  //       _subscription?.resume();
-  //     });
-  //   }
+    if (e.barcodes.first.rawValue == null) return;
+    widget.viewmodel.connect(e.barcodes.first.rawValue!);
+  }
+
+  void _listener() {
+    if (widget.viewmodel.isConnected) {
+      context.go(Routes.mouse);
+    }
+    if (widget.viewmodel.isLoading) {
+      context.loaderOverlay.show();
+    } else {
+      context.loaderOverlay.hide();
+    }
+    if (widget.viewmodel.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Theme.of(context).colorScheme.error,
+          content: Text(widget.viewmodel.errorMessage!),
+        ),
+      );
+    }
   }
 
   @override
   void initState() {
     super.initState();
+
     controller = MobileScannerController(
       // required options for the scanner
-      detectionSpeed: DetectionSpeed.normal,
-      detectionTimeoutMs: 800,
+      detectionSpeed: DetectionSpeed.noDuplicates,
+      detectionTimeoutMs: 1000,
     );
 
     // Start listening to lifecycle changes.
@@ -63,6 +64,7 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
     // Start listening to the barcode events.
     _subscription = controller.barcodes.listen(_handleBarcode);
+    widget.viewmodel.addListener(_listener);
 
     // Finally, start the scanner itself.
     unawaited(controller.start());
@@ -98,6 +100,8 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
   @override
   Future<void> dispose() async {
+    widget.viewmodel.removeListener(_listener);
+
     // Stop listening to lifecycle changes.
     WidgetsBinding.instance.removeObserver(this);
     // Stop listening to the barcode events.
@@ -116,18 +120,29 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
         title: const Text('Connect from Qr Code'),
       ),
       body: SafeArea(
-        child: MobileScanner(
-          controller: controller,
-          overlayBuilder: (context, constraints) =>
-              _subscription?.isPaused == true
-                  ? Container(
-                      color: Colors.black.withOpacity(0.7),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : const SizedBox(),
-          // overlayBuilder: (context, constraints) => ScannerOverlay(scanWindow: ),
+        child: LoaderOverlay(
+          overlayWidgetBuilder: (progress) {
+            return Center(
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
+            );
+          },
+          overlayColor: Colors.black54,
+
+          child: MobileScanner(
+            controller: controller,
+            overlayBuilder: (context, constraints) =>
+                _subscription?.isPaused == true
+                    ? Container(
+                        color: Colors.black.withOpacity(0.7),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : const SizedBox(),
+            // overlayBuilder: (context, constraints) => ScannerOverlay(scanWindow: ),
+          ),
         ),
       ),
     );

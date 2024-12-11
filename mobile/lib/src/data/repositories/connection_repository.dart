@@ -20,7 +20,6 @@ class ConnectionRepository {
     // We are using port 7771 por now, so no need to pass it as a parameter
     try {
       _socket = await _connectionService.connect(ip, 7771);
-
       return const Result.ok(null);
     } on Exception catch (e) {
       return Result.error(e);
