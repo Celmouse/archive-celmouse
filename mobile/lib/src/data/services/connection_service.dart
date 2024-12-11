@@ -46,7 +46,6 @@ class ConnectionService {
 
   Future<void> startScan([int retryInterval = 5, int retryCount = 100]) async {
     for (int count = 0; count < retryCount; count++) {
-      print("Retry Attemp: $count");
       await _scan();
       await Future.delayed(Duration(seconds: retryInterval));
       if (_stopScan) break;
