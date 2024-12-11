@@ -16,6 +16,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse/view/left_button.dart';
+import 'components/mouse_mode_switch.dart';
 
 class MoveMousePage extends StatefulWidget {
   const MoveMousePage({
@@ -125,32 +126,9 @@ class _MoveMousePageState extends State<MoveMousePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Visibility(
+            const Visibility(
               visible: kDebugMode,
-              child: Hero(
-                tag: 'mouse-mode-switch',
-                child: ToggleSwitch(
-                  initialLabelIndex: 0,
-                  totalSwitches: 3,
-                  inactiveBgColor: Colors.deepPurpleAccent,
-                  activeBgColor: const [Colors.teal],
-                  states: const [true, false, false],
-                  minWidth: MediaQuery.of(context).size.width,
-                  icons: const [
-                    Icons.phonelink_ring_outlined,
-                    Icons.touch_app,
-                    Icons.mouse,
-                  ],
-                  labels: const [
-                    'Move',
-                    'Touch',
-                    'Drag',
-                  ],
-                  onToggle: (index) {
-                    print('switched to: $index');
-                  },
-                ),
-              ),
+              child: MouseModeSwitch(),
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
