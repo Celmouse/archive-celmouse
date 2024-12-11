@@ -34,6 +34,7 @@ class MouseMovementProtocolData with _$MouseMovementProtocolData {
   const factory MouseMovementProtocolData({
     required double x,
     required double y,
+    required double intensity,
   }) = _MouseMovementProtocolData;
 
   factory MouseMovementProtocolData.fromJson(Map<String, Object?> json) =>
@@ -64,6 +65,7 @@ enum ProtocolEvents {
   mouseDoubleClick,
   mouseButtonHold,
   mouseButtonReleased,
+  specialKeyPressed,
 }
 
 enum ClickType {
