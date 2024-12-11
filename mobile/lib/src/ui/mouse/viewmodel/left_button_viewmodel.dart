@@ -29,7 +29,7 @@ class LeftButtonViewmodel extends ChangeNotifier {
     });
 
     if (doubleClickTimer?.isActive == false) {
-      _mouseRepository.click(ClickType.left);
+      _mouseRepository.click(MouseButton.left);
     } else {
       _mouseRepository.doubleClick();
     }

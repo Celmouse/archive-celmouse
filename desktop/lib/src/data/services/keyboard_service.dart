@@ -13,6 +13,6 @@ class KeyboardService {
   }
   
   void typeSpecial(String key){
-    keyboard.pressSpecialKey(key)
+    // keyboard.pressSpecialKey(key)
   }
 }

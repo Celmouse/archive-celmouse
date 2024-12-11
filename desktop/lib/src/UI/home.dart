@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
       });
       await DesktopWindow.setWindowSize(const Size(250, 150), animate: true);
 
-      print('Servidor em ws://${server.address.address}:7771');
+      debugPrint('Server: ws://${server.address.address}:7771');
 
       socket?.listen(interpreter.interpretEvents, onDone: () async {
         setState(() {

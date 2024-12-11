@@ -3,6 +3,4 @@
 /// More dartdocs go here.
 library;
 
-export 'src/keyboard_protocol_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/events.dart';

@@ -1,9 +1,7 @@
-import 'package:protocol/protocol.dart';
 import 'dart:convert';
 
-import 'package:server/src/core/mouse_protocol_translation.dart';
+import 'package:protocol/protocol.dart';
 import 'package:server/src/data/services/mouse_service.dart';
-
 import 'services/keyboard_service.dart';
 
 class SocketRepository {
@@ -15,17 +13,13 @@ class SocketRepository {
     required this.keyboard,
   });
 
-  start() {
-    //TODO: trazer os requisitos para conectar o socket para cá;
-  }
-
-  DateTime? lastRequestTimestemp;
-
   interpretEvents(dynamic data) {
     final protocol = Protocol.fromJson(jsonDecode(data));
 
+    print(protocol);
+
     switch (protocol.event) {
-      case ProtocolEvent.mouseMove:
+      case MouseProtocolEvents.mouseMove:
         final data = MouseMovementProtocolData.fromJson(protocol.data);
 
         double x = data.x;
@@ -34,7 +28,7 @@ class SocketRepository {
 
         return mouse.move(x, y, sense);
 
-      case ProtocolEvent.mouseScroll:
+      case MouseProtocolEvents.mouseScroll:
         final data = MouseMovementProtocolData.fromJson(protocol.data);
 
         mouse.scroll(
@@ -44,23 +38,23 @@ class SocketRepository {
         );
 
         break;
-      case ProtocolEvent.mouseClick:
+      case MouseProtocolEvents.mouseClick:
         final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.click(data.type.toMousePluginButton());
+        mouse.click(data.type);
         break;
-      case ProtocolEvent.mouseDoubleClick:
+      case MouseProtocolEvents.mouseDoubleClick:
         final data = MouseButtonProtocolData.fromJson(protocol.data);
-        mouse.doubleClick(data.type.toMousePluginButton());
+        mouse.doubleClick(data.type);
         break;
-      case ProtocolEvent.mouseButtonHold:
+      case MouseProtocolEvents.mouseButtonHold:
         // final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.holdLeftButton();
         break;
-      case ProtocolEvent.mouseButtonReleased:
+      case MouseProtocolEvents.mouseButtonReleased:
         // final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.releaseLeftButton();
         break;
-      case ProtocolEvent.keyPressed:
+      case KeyboardProtocolEvents.keyPressed:
         final data = protocol.data as String;
         keyboard.type(data);
         break;

@@ -48,7 +48,7 @@ class MouseRepository {
         Vector2D normalized = vector.normalized;
 
         _clientApiService.send(
-          event: ProtocolEvent.mouseMove,
+          event: MouseProtocolEvents.mouseMove,
           data: MouseMovementProtocolData(
             x: normalized.x,
             y: normalized.y,
@@ -64,17 +64,17 @@ class MouseRepository {
     // movementSubscription = null;
   }
 
-  void click(ClickType type) {
+  void click(MouseButton type) {
     _clientApiService.send(
-      event: ProtocolEvent.mouseClick,
+      event: MouseProtocolEvents.mouseClick,
       data: MouseButtonProtocolData(type: type),
     );
   }
 
   void doubleClick() {
     _clientApiService.send(
-      event: ProtocolEvent.mouseDoubleClick,
-      data: const MouseButtonProtocolData(type: ClickType.left),
+      event: MouseProtocolEvents.mouseDoubleClick,
+      data: const MouseButtonProtocolData(type: MouseButton.left),
     );
   }
 
@@ -115,7 +115,7 @@ class MouseRepository {
         Vector2D normalized = vector.normalized;
 
         _clientApiService.send(
-          event: ProtocolEvent.mouseScroll,
+          event: MouseProtocolEvents.mouseScroll,
           data: MouseMovementProtocolData(
             x: normalized.x,
             y: normalized.y,

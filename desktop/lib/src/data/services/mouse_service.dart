@@ -1,4 +1,5 @@
-import 'package:mouse/mouse.dart' as plugin;
+import 'package:mouse/mouse.dart';
+import 'package:protocol/protocol.dart';
 
 /// Multipliers to make movement viable
 /// [yMultiplier] represents the screen size on the vertical axis.
@@ -7,7 +8,7 @@ const yMultiplier = 21;
 const xMultiplier = 27;
 
 class MouseService {
-  final mouse = plugin.Mouse();
+  final mouse = Mouse();
 
   MouseService();
 
@@ -20,11 +21,11 @@ class MouseService {
 
   get screenSize => mouse.getScreenSize();
 
-  void click(plugin.MouseButton button) {
+  void click(MouseButton button) {
     mouse.click(button);
   }
 
-  void doubleClick(plugin.MouseButton button) {
+  void doubleClick(MouseButton button) {
     mouse.doubleClick();
   }
 
