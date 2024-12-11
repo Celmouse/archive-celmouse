@@ -45,7 +45,7 @@ class KeyboardViewModel extends ChangeNotifier {
         _keyboardRepository.specialKey(type);
         break;
       case SpecialKeyType.space:
-        _keyboardRepository.type(' ');
+        _keyboardRepository.type(" ");
         break;
       default:
         _keyboardRepository.specialKey(type);

@@ -1,14 +1,18 @@
 import 'package:protocol/protocol.dart';
-import 'package:server/src/core/mouse.dart';
 import 'dart:convert';
 
 import 'package:server/src/core/mouse_protocol_translation.dart';
+import 'package:server/src/data/services/mouse_service.dart';
 
-class SocketInterpreter {
-  final Mouse mouse;
+import 'services/keyboard_service.dart';
 
-  SocketInterpreter({
+class SocketRepository {
+  final MouseService mouse;
+  final KeyboardService keyboard;
+
+  SocketRepository({
     required this.mouse,
+    required this.keyboard,
   });
 
   start() {
@@ -29,7 +33,7 @@ class SocketInterpreter {
         double sense = data.intensity;
 
         return mouse.move(x, y, sense);
-    
+
       case ProtocolEvents.mouseScroll:
         final data = MouseMovementProtocolData.fromJson(protocol.data);
 
@@ -55,6 +59,10 @@ class SocketInterpreter {
       case ProtocolEvents.mouseButtonReleased:
         // final data = MouseButtonProtocolData.fromJson(protocol.data);
         mouse.releaseLeftButton();
+        break;
+      case ProtocolEvents.keyPressed:
+        final data = protocol.data as String;
+        keyboard.type(data);
         break;
       default:
     }

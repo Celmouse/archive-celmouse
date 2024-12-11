@@ -3,8 +3,8 @@ import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../UI/keyboard/model.dart';
-import '../../UI/keyboard/keyboard_theme.dart';
+import '../../../UI/keyboard/model.dart';
+import '../../../UI/keyboard/keyboard_theme.dart';
 
 class KeyboardTyppingPage extends StatefulWidget {
   const KeyboardTyppingPage({

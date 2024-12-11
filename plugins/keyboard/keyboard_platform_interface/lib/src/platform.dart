@@ -1,3 +1,4 @@
+import 'package:keyboard_platform_interface/src/special_keys.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'interface.dart';
@@ -38,4 +39,10 @@ abstract class KeyboardPlatform extends PlatformInterface
 
   @override
   void releaseKey(String key);
+
+  @override
+  void pressSpecialKey(SpecialKey key);
+
+  @override
+  void releaseSpecialKey(SpecialKey key);
 }

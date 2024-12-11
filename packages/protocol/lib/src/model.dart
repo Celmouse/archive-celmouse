@@ -41,31 +41,21 @@ class MouseMovementProtocolData with _$MouseMovementProtocolData {
       _$MouseMovementProtocolDataFromJson(json);
 }
 
-@freezed
-class MouseScrollProtocolData with _$MouseScrollProtocolData {
-  const factory MouseScrollProtocolData({
-    required ScrollDirections direction,
-  }) = _MouseScrollProtocolData;
-
-  factory MouseScrollProtocolData.fromJson(Map<String, Object?> json) =>
-      _$MouseScrollProtocolDataFromJson(json);
-}
 
 enum ProtocolEvents {
   // Keyboard
   keyPressed,
-  changeSensitivity,
-  changeScrollSensitivity,
-  // Movement
+  specialKeyPressed,
+  
+  // Mouse Movement
   mouseMove,
   mouseCenter,
   mouseScroll,
-  // Clicks
+  // Mouse Buttons
   mouseClick,
   mouseDoubleClick,
   mouseButtonHold,
   mouseButtonReleased,
-  specialKeyPressed,
 }
 
 enum ClickType {
@@ -75,30 +65,4 @@ enum ClickType {
   right,
   @JsonValue("center")
   center;
-}
-
-enum ScrollDirections {
-  up("up"), // -y
-  left("left"), // -x
-  right("right"), // +x
-  down("down"); // +y
-
-  const ScrollDirections(this.value);
-
-  final String value;
-}
-
-extension EScrollDirection on MouseScrollProtocolData {
-  (int x, int y) fromProtocolData() {
-    switch (direction) {
-      case ScrollDirections.left:
-        return (-1, 0);
-      case ScrollDirections.up:
-        return (0, -1);
-      case ScrollDirections.right:
-        return (1, 0);
-      case ScrollDirections.down:
-        return (0, 1);
-    }
-  }
 }
