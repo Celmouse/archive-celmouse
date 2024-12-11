@@ -21,7 +21,7 @@ pubspec_overrides.yaml
 melos_celmouse.iml
 
 /.idea
-/.dart_tool
+**/.dart_tool
 
 *.map
 *.p8
