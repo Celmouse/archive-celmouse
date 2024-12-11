@@ -1,25 +1,17 @@
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
-import 'package:controller/src/ui/connect/viewmodel/devices_scanner_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
 
 class DevicesScanner extends StatelessWidget {
   const DevicesScanner({
     super.key,
-    required this.connectionViewmodel,
+    required this.viewmodel,
   });
 
-  final ConnectHUBViewmodel connectionViewmodel;
+  final ConnectHUBViewmodel viewmodel;
 
   @override
   Widget build(BuildContext context) {
-    final viewmodel = DevicesScannerViewmodel(
-      connectionRepository: context.read(),
-    );
-
-    viewmodel.startScan();
-
     return ListenableBuilder(
       listenable: viewmodel,
       builder: (BuildContext context, Widget? child) {
@@ -64,7 +56,7 @@ class DevicesScanner extends StatelessWidget {
                 ),
                 onTap: () {
                   viewmodel.stopScan();
-                  connectionViewmodel.connect(device.ip);
+                  viewmodel.connect(device.ip);
                 },
               );
             }),

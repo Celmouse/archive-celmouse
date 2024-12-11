@@ -6,7 +6,7 @@ import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../utils/launch_site.dart';
-import 'connect_qr_code.dart';
+
 import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
@@ -25,12 +25,14 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
   @override
   void initState() {
     widget.viewmodel.addListener(_listener);
+    widget.viewmodel.startScan();
     super.initState();
   }
 
   @override
   void dispose() {
     widget.viewmodel.removeListener(_listener);
+    widget.viewmodel.stopScan();
     super.dispose();
   }
 
@@ -105,7 +107,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                           ),
                         ),
                         const Divider(),
-                        DevicesScanner(connectionViewmodel: widget.viewmodel),
+                        DevicesScanner(viewmodel: widget.viewmodel),
                         const Divider(),
                         EnterHubIPTile(viewmodel: widget.viewmodel),
                         const Divider(),
@@ -113,13 +115,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                           leading: const Icon(Icons.qr_code_scanner),
                           title: const Text('Connect via QR Code'),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ConnectFromQrCodePage(),
-                              ),
-                            );
+                            context.go(Routes.connectQRCode);
                           },
                         ),
                       ],
