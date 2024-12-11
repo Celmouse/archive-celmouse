@@ -21,7 +21,7 @@ class TrackPadRepository {
     Vector2D normalized = vector.normalized;
 
     _clientApiService.send(
-      event: ProtocolEvents.mouseMove,
+      event: MouseProtocolEvents.mouseMove,
       data: MouseMovementProtocolData(
         x: normalized.x,
         y: normalized.y,
@@ -32,22 +32,22 @@ class TrackPadRepository {
 
   void handleTap() {
     _clientApiService.send(
-      event: ProtocolEvents.mouseClick,
-      data: const MouseButtonProtocolData(type: ClickType.left),
+      event: MouseProtocolEvents.mouseClick,
+      data: const MouseButtonProtocolData(type: MouseButton.left),
     );
   }
 
   void handleDoubleTap() {
     _clientApiService.send(
-      event: ProtocolEvents.mouseDoubleClick,
-      data: const MouseButtonProtocolData(type: ClickType.left),
+      event: MouseProtocolEvents.mouseDoubleClick,
+      data: const MouseButtonProtocolData(type: MouseButton.left),
     );
   }
 
   void handleTwoFingerTap() {
     _clientApiService.send(
-      event: ProtocolEvents.mouseClick,
-      data: const MouseButtonProtocolData(type: ClickType.right),
+      event: MouseProtocolEvents.mouseClick,
+      data: const MouseButtonProtocolData(type: MouseButton.right),
     );
   }
 }
