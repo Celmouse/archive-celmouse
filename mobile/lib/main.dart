@@ -1,8 +1,7 @@
+import 'package:controller/app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'app.dart';
 import 'src/config/dependencies.dart'; // Import the getit.dart file
 
 void main() async {
@@ -11,7 +10,9 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: defaultProvider,
+      providers: [
+        ...defaultProvider,
+      ],
       child: const MyApp(),
     ),
   );
