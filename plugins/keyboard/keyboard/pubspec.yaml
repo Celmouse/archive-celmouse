@@ -25,10 +25,11 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
-      linux:
-        pluginClass: KeyboardPlugin
+    # TODO: Implement linux and windows
+      # linux:
+      #   pluginClass: KeyboardPlugin
       macos:
         default_package: keyboard_macos
         pluginClass: KeyboardPlugin
-      windows:
-        pluginClass: KeyboardPluginCApi
+      # windows:
+      #   pluginClass: KeyboardPluginCApi
