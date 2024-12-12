@@ -1,10 +1,10 @@
 import 'package:controller/src/data/repositories/mouse_repository.dart';
 import 'package:flutter/material.dart';
 
-class MouseMoveViewmodel extends ChangeNotifier {
+class MouseViewmodel extends ChangeNotifier {
   final MouseRepository _mouseRepository;
 
-  MouseMoveViewmodel({
+  MouseViewmodel({
     required MouseRepository mouseRepository,
   }) : _mouseRepository = mouseRepository;
 
