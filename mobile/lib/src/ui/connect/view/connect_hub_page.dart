@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../utils/launch_site.dart';
 
-import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
   const ConnectHUBPage({
@@ -26,14 +25,14 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
   @override
   void initState() {
     widget.viewmodel.addListener(_listener);
-    widget.viewmodel.startScan();
+    // widget.viewmodel.startScan();
     super.initState();
   }
 
   @override
   void dispose() {
     widget.viewmodel.removeListener(_listener);
-    widget.viewmodel.stopScan();
+    // widget.viewmodel.stopScan();
     super.dispose();
   }
 
@@ -117,7 +116,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                                 ),
                               ),
                               const Divider(),
-                              DevicesScanner(viewmodel: widget.viewmodel),
+                              // DevicesScanner(viewmodel: widget.viewmodel),
                               const Divider(),
                               EnterHubIPTile(viewmodel: widget.viewmodel),
                               const Divider(),
