@@ -1,3 +1,4 @@
+
 import 'dart:async';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -17,7 +18,7 @@ class ConsentManager {
   /// Helper variable to determine if the privacy options form is required.
   Future<bool> isPrivacyOptionsRequired() async {
     return await ConsentInformation.instance
-            .getPrivacyOptionsRequirementStatus() ==
+        .getPrivacyOptionsRequirementStatus() ==
         PrivacyOptionsRequirementStatus.required;
   }
 
@@ -27,10 +28,10 @@ class ConsentManager {
       OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
     // For testing purposes, you can force a DebugGeography of Eea or NotEea.
     ConsentDebugSettings debugSettings = ConsentDebugSettings(
-        // debugGeography: DebugGeography.debugGeographyEea,
-        );
+      // debugGeography: DebugGeography.debugGeographyEea,
+    );
     ConsentRequestParameters params =
-        ConsentRequestParameters(consentDebugSettings: debugSettings);
+    ConsentRequestParameters(consentDebugSettings: debugSettings);
 
     // Requesting an update to consent information should be called on every app launch.
     ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
