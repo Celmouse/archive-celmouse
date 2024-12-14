@@ -29,7 +29,9 @@ class GoogleAdsService {
     MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
       testDeviceIds: [
         '651c98e0-3e36-4896-89a5-a97019682056',
-        '065B54BCE7DA1E8C3D14F610E151507D'
+        '36e2a439-001d-4afb-966d-f7221a95cdaa',
+        '9785EF7F-73AB-4205-9F95-69C9F7423D94',
+        '065B54BCE7DA1E8C3D14F610E151507D',
       ],
     ));
   }
