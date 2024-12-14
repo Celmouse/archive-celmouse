@@ -18,7 +18,7 @@ class GoogleAdsService {
 
   final String _adUnitId = Platform.isAndroid
       ? dotenv.env['ADMOB_BANNER_ID_ANDROID']!
-      : dotenv.env['ADMOB_BANNER_ID_IOS']!;
+      : dotenv.env['ADMOB_BANNER_ID']!;
 
   Future<void> initializeAds() async {
     await dotenv.load(fileName: ".env");
