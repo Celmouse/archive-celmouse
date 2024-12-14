@@ -33,3 +33,4 @@ melos_celmouse.iml
 *.g.dart
 *.freezed.dart
 /builds
+/mobile/.vscode
