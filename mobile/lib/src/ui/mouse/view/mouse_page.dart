@@ -92,7 +92,7 @@ class _MousePageState extends State<MousePage> {
   }
 
   Widget get _drawer {
-    if (_currentPageIndex == 1) {
+    if (_currentPageIndex == 0) {
       return const CursorSettingsPage();
     }
     return Container(
@@ -174,9 +174,12 @@ class _MousePageState extends State<MousePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            MouseModeSwitch(
-              onToggle: _onToggle,
-              currentIndex: _currentPageIndex,
+            Visibility(
+              visible: kDebugMode,
+              child: MouseModeSwitch(
+                onToggle: _onToggle,
+                currentIndex: _currentPageIndex,
+              ),
             ),
             const SizedBox(
               height: 12,
