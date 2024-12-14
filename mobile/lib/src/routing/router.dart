@@ -32,7 +32,6 @@ GoRouter router = GoRouter(
       builder: (context, state) => MousePage(
         viewmodel: MouseViewmodel(
           mouseRepository: context.read(),
-          adsRepository: context.read(),
         ),
       ),
     ),
