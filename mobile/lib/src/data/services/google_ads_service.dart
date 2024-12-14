@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:controller/src/config/enviroment.dart';
 import 'package:controller/src/data/services/consent_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 typedef OnConsentGatheringCompleteListener = void Function(FormError? error);
 
@@ -14,8 +14,15 @@ class GoogleAdsService {
   bool _isPrivacyOptionsRequired = false;
   BannerAd? _bannerAd;
   bool _isLoaded = false;
+  // Orientation? _currentOrientation;
+
+  final String _adUnitId = Platform.isAndroid
+      ? dotenv.env['ADMOB_BANNER_ID_ANDROID']!
+      : dotenv.env['ADMOB_BANNER_ID']!;
 
   Future<void> initializeAds() async {
+    await dotenv.load(fileName: ".env");
+
     WidgetsFlutterBinding.ensureInitialized();
     MobileAds.instance.initialize();
 
@@ -92,7 +99,7 @@ class GoogleAdsService {
     }
 
     BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
+      adUnitId: _adUnitId,
       request: const AdRequest(),
       size: size,
       listener: BannerAdListener(
@@ -126,19 +133,5 @@ class GoogleAdsService {
 
   void dispose() {
     _bannerAd?.dispose();
-  }
-}
-
-class AdHelper {
-  static String get bannerAdUnitId {
-    if (Platform.isAndroid) {
-      print("KEY ==== ${EnviromentVariables.admobBannerIdAndroid}");
-      return EnviromentVariables.admobAppIdAndroid;
-    } else if (Platform.isIOS) {
-      return EnviromentVariables.admobBannerId;
-    } else {
-      print("UNSUPPORTED PLATFORM");
-      throw UnsupportedError("Unsupported platform");
-    }
   }
 }
