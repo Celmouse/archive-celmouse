@@ -14,7 +14,7 @@ class GoogleAdsService {
   bool _isPrivacyOptionsRequired = false;
   BannerAd? _bannerAd;
   bool _isLoaded = false;
-  Orientation? _currentOrientation;
+  // Orientation? _currentOrientation;
 
   final String _adUnitId = Platform.isAndroid
       ? dotenv.env['ADMOB_BANNER_ID_ANDROID']!
