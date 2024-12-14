@@ -13,6 +13,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
+import '../../../data/services/google_ads_service.dart';
 import '../../mouse_move/view/components/mouse_mode_switch.dart';
 import 'package:controller/src/data/repositories/connection_repository.dart';
 
@@ -41,8 +42,6 @@ class _MousePageState extends State<MousePage> {
   late ConnectionRepository _connectionRepository;
   late LifecycleService _lifecycleService;
 
-  BannerAd? _ad;
-
   @override
   void initState() {
     super.initState();
@@ -58,28 +57,22 @@ class _MousePageState extends State<MousePage> {
       getIt.registerSingleton<MouseSettings>(settings);
     });
 
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _ad = ad as BannerAd;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    ).load();
+    final googleAdsService =
+        Provider.of<GoogleAdsService>(context, listen: false);
+    googleAdsService.gatherConsent((consentGatheringError) {
+      if (consentGatheringError != null) {
+        // Consent not obtained in current session.
+        debugPrint(
+            "${consentGatheringError.errorCode}: ${consentGatheringError.message}");
+      }
+    });
   }
 
   @override
   void dispose() {
-    _lifecycleService.dispose();
-    _ad?.dispose();
+    final googleAdsService =
+        Provider.of<GoogleAdsService>(context, listen: false);
+    googleAdsService.dispose();
     super.dispose();
   }
 
@@ -103,6 +96,7 @@ class _MousePageState extends State<MousePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final googleAdsService = Provider.of<GoogleAdsService>(context);
 
     return Scaffold(
       key: scaffoldKey,
@@ -203,12 +197,12 @@ class _MousePageState extends State<MousePage> {
             const SizedBox(
               height: 12,
             ),
-            if (_ad != null)
+            if (googleAdsService.isLoaded)
               Container(
-                width: _ad!.size.width.toDouble(),
+                width: googleAdsService.bannerAd!.size.width.toDouble(),
                 height: 72.0,
                 alignment: Alignment.center,
-                child: AdWidget(ad: _ad!),
+                child: AdWidget(ad: googleAdsService.bannerAd!),
               )
           ],
         ),
