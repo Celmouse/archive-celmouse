@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:controller/src/data/services/consent_manager.dart';
+import 'package:controller/src/config/enviroment.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,21 +10,20 @@ typedef OnConsentGatheringCompleteListener = void Function(FormError? error);
 
 class GoogleAdsService {
   final ConsentManager _consentManager = ConsentManager();
+
+  Completer adReadyCompleter = Completer();
+
   bool _isMobileAdsInitializeCalled = false;
   bool _isPrivacyOptionsRequired = false;
   BannerAd? _bannerAd;
-  bool _isLoaded = false;
   // Orientation? _currentOrientation;
 
   final String _adUnitId = Platform.isAndroid
       ? dotenv.env['ADMOB_BANNER_ID_ANDROID']!
       : dotenv.env['ADMOB_BANNER_ID']!;
 
-  Future<void> initializeAds() async {
-    await dotenv.load(fileName: ".env");
-
-    WidgetsFlutterBinding.ensureInitialized();
-    MobileAds.instance.initialize();
+  Future<void> initializeAds(Function(bool) onInitializationCompleted) async {
+    await MobileAds.instance.initialize();
 
     MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
       testDeviceIds: [
@@ -34,15 +33,17 @@ class GoogleAdsService {
         '065B54BCE7DA1E8C3D14F610E151507D',
       ],
     ));
+
+    onInitializationCompleted(true);
   }
 
-  void gatherConsent(
-      OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
+  void gatherConsent() {
     _consentManager.gatherConsent((consentGatheringError) {
       if (consentGatheringError != null) {
         // Consent not obtained in current session.
         debugPrint(
-            "${consentGatheringError.errorCode}: ${consentGatheringError.message}");
+          "${consentGatheringError.errorCode}: ${consentGatheringError.message}",
+        );
       }
 
       // Check if a privacy options entry point is required.
@@ -69,13 +70,17 @@ class GoogleAdsService {
 
     if (await _consentManager.canRequestAds()) {
       _isMobileAdsInitializeCalled = true;
+    }
+  }
 
-      // Initialize the Mobile Ads SDK.
-      MobileAds.instance.initialize();
-
-      // Load an ad.
+  Future<BannerAd> loadBanner() async {
+    if (_bannerAd == null) {
       _loadAd();
     }
+
+    await adReadyCompleter.future;
+
+    return _bannerAd!;
   }
 
   void _loadAd() async {
@@ -83,6 +88,7 @@ class GoogleAdsService {
     // the app's configured messages.
     var canRequestAds = await _consentManager.canRequestAds();
     if (!canRequestAds) {
+      adReadyCompleter.completeError('Consent not obtained');
       return;
     }
 
@@ -94,7 +100,8 @@ class GoogleAdsService {
             .truncate());
 
     if (size == null) {
-      // Unable to get width of anchored banner.
+      adReadyCompleter.completeError(
+          'Unable to get width of anchored banner.'); // Unable to get width of anchored banner.
       return;
     }
 
@@ -106,11 +113,12 @@ class GoogleAdsService {
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           _bannerAd = ad as BannerAd;
-          _isLoaded = true;
+          adReadyCompleter.complete();
         },
         // Called when an ad request failed.
         onAdFailedToLoad: (ad, err) {
           ad.dispose();
+          adReadyCompleter.completeError('Failed to load an ad: $err');
         },
         // Called when an ad opens an overlay that covers the screen.
         onAdOpened: (Ad ad) {},
@@ -123,7 +131,6 @@ class GoogleAdsService {
   }
 
   BannerAd? get bannerAd => _bannerAd;
-  bool get isLoaded => _isLoaded;
   bool get isPrivacyOptionsRequired => _isPrivacyOptionsRequired;
 
   void showPrivacyOptionsForm(
@@ -133,5 +140,63 @@ class GoogleAdsService {
 
   void dispose() {
     _bannerAd?.dispose();
+  }
+}
+
+class AdHelper {
+  static String get bannerAdUnitId {
+    if (Platform.isAndroid) {
+      return EnviromentVariables.admobAppIdAndroid;
+    } else if (Platform.isIOS) {
+      return EnviromentVariables.admobBannerId;
+    } else {
+      throw UnsupportedError("Unsupported platform");
+    }
+  }
+}
+
+/// The Google Mobile Ads SDK provides the User Messaging Platform (Google's IAB
+/// Certified consent management platform) as one solution to capture consent for
+/// users in GDPR impacted countries. This is an example and you can choose
+/// another consent management platform to capture consent.
+class ConsentManager {
+  /// Helper variable to determine if the app can request ads.
+  Future<bool> canRequestAds() async {
+    return await ConsentInformation.instance.canRequestAds();
+  }
+
+  /// Helper variable to determine if the privacy options form is required.
+  Future<bool> isPrivacyOptionsRequired() async {
+    return await ConsentInformation.instance
+            .getPrivacyOptionsRequirementStatus() ==
+        PrivacyOptionsRequirementStatus.required;
+  }
+
+  /// Helper method to call the Mobile Ads SDK to request consent information
+  /// and load/show a consent form if necessary.
+  void gatherConsent(
+      OnConsentGatheringCompleteListener onConsentGatheringCompleteListener) {
+    // For testing purposes, you can force a DebugGeography of Eea or NotEea.
+    ConsentDebugSettings debugSettings = ConsentDebugSettings(
+        // debugGeography: DebugGeography.debugGeographyEea,
+        );
+    ConsentRequestParameters params =
+        ConsentRequestParameters(consentDebugSettings: debugSettings);
+
+    // Requesting an update to consent information should be called on every app launch.
+    ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
+      ConsentForm.loadAndShowConsentFormIfRequired((loadAndShowError) {
+        // Consent has been gathered.
+        onConsentGatheringCompleteListener(loadAndShowError);
+      });
+    }, (FormError formError) {
+      onConsentGatheringCompleteListener(formError);
+    });
+  }
+
+  /// Helper method to call the Mobile Ads SDK method to show the privacy options form.
+  void showPrivacyOptionsForm(
+      OnConsentFormDismissedListener onConsentFormDismissedListener) {
+    ConsentForm.showPrivacyOptionsForm(onConsentFormDismissedListener);
   }
 }

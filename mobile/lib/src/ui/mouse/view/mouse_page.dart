@@ -1,7 +1,6 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/UI/trackpad/trackpad_page.dart';
 import 'package:controller/src/data/services/lifecycle_service.dart';
-import 'package:controller/src/helpers/ad_helper.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
@@ -57,15 +56,7 @@ class _MousePageState extends State<MousePage> {
       getIt.registerSingleton<MouseSettings>(settings);
     });
 
-    final googleAdsService =
-        Provider.of<GoogleAdsService>(context, listen: false);
-    googleAdsService.gatherConsent((consentGatheringError) {
-      if (consentGatheringError != null) {
-        // Consent not obtained in current session.
-        debugPrint(
-            "${consentGatheringError.errorCode}: ${consentGatheringError.message}");
-      }
-    });
+    widget.viewmodel.loadAds();
   }
 
   @override
@@ -96,7 +87,6 @@ class _MousePageState extends State<MousePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final googleAdsService = Provider.of<GoogleAdsService>(context);
 
     return Scaffold(
       key: scaffoldKey,
@@ -197,13 +187,19 @@ class _MousePageState extends State<MousePage> {
             const SizedBox(
               height: 12,
             ),
-            if (googleAdsService.isLoaded)
-              Container(
-                width: googleAdsService.bannerAd!.size.width.toDouble(),
-                height: 72.0,
-                alignment: Alignment.center,
-                child: AdWidget(ad: googleAdsService.bannerAd!),
-              )
+            ListenableBuilder(
+                listenable: widget.viewmodel,
+                builder: (context, child) {
+                  if (widget.viewmodel.loadingAdsStatus == AdsStatus.loaded) {
+                    return Container(
+                      width: widget.viewmodel.bannerAd.size.width.toDouble(),
+                      height: 72.0,
+                      alignment: Alignment.center,
+                      child: AdWidget(ad: widget.viewmodel.bannerAd),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                })
           ],
         ),
       ),
