@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_window
-  keyboard
   url_launcher_windows
 )
 
