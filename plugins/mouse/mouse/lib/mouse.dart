@@ -1,5 +1,4 @@
 import 'package:mouse_platform_interface/mouse_platform_interface.dart';
-export 'package:mouse_platform_interface/src/types.dart';
 
 class Mouse extends MousePlatform {
   @override

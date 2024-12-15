@@ -1,7 +1,7 @@
 name: mouse_linux
 description: "A new Flutter FFI plugin project."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: ^3.5.3
@@ -39,7 +39,11 @@ flutter:
   plugin:
     platforms:
       linux:
+        fileName: mouse_linux.dart
+        dartPluginClass: MouseLinux
         ffiPlugin: true
+
+ 
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

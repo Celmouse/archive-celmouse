@@ -14,12 +14,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late int sumResult;
-
   @override
   void initState() {
     super.initState();
-     mouse_macos.MouseMacOS().move(1, 2);
   }
 
   @override
@@ -31,6 +28,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Native Packages'),
         ),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+          mouse_macos.MouseMacOS().move(1, 2);
+        }),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(10),
@@ -44,12 +44,11 @@ class _MyAppState extends State<MyApp> {
                 ),
                 spacerSmall,
                 Text(
-                  'sum(1, 2) = $sumResult',
+                  'sum(1, 2) = 2',
                   style: textStyle,
                   textAlign: TextAlign.center,
                 ),
                 spacerSmall,
-                
               ],
             ),
           ),

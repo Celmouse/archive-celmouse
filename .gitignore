@@ -15,13 +15,16 @@ server/.env
 
 
 pubspec_overrides.yaml
-**/pubspec.lock
 **/.metadata
 
 melos_celmouse.iml
 
 /.idea
-/.dart_tool
+
+**/.dart_tool
+**/pubspec.lock
+**/.vscode
+**/build
 
 *.map
 *.p8
@@ -30,3 +33,4 @@ melos_celmouse.iml
 *.g.dart
 *.freezed.dart
 /builds
+/mobile/.vscode

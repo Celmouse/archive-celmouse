@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'src/UI/home.dart';
+import 'src/ui/home.dart';
 import 'package:desktop_window/desktop_window.dart';
 
 Future<void> main() async {

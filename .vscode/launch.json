@@ -5,8 +5,7 @@
       "name": "Mobile",
       "type": "dart",
       "request": "launch",
-      "program": "mobile/lib/main.dart",
-      "deviceId": "iPhone",
+      "program": "mobile/lib/main.dart"
     },
     {
       "name": "Desktop",

@@ -1,0 +1,35 @@
+name: keyboard
+description: "A new Flutter plugin project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.5.4
+  flutter: ">=3.3.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  keyboard_platform_interface:
+    path: ../keyboard_platform_interface
+
+  keyboard_macos:
+    path: ../keyboard_macos
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  plugin:
+    platforms:
+    # TODO: Implement linux and windows
+      # linux:
+      #   pluginClass: KeyboardPlugin
+      macos:
+        default_package: keyboard_macos
+        pluginClass: KeyboardPlugin
+      # windows:
+      #   pluginClass: KeyboardPluginCApi

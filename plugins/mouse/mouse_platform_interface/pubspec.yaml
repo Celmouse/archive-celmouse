@@ -12,6 +12,9 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
+  mouse_protocol:
+    path: ../../../packages/protocol/mouse_protocol
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

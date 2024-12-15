@@ -1,32 +1,18 @@
-import 'package:controller/src/UI/connect/connect_server.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'app.dart';
+import 'src/config/dependencies.dart'; // Import the getit.dart file
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Celmouse',
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-        sliderTheme: const SliderThemeData(
-          showValueIndicator: ShowValueIndicator.always,
-        ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const ConnectToServerPage(),
-      // home: kDebugMode ? MenuPage() :  const ConnectToServerPage(),
-      // home:  Container(color: Colors.red,),
-    );
-  }
+  runApp(
+    MultiProvider(
+      providers: defaultProvider,
+      child: const MyApp(),
+    ),
+  );
 }
