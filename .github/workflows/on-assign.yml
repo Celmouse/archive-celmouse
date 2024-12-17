@@ -14,4 +14,3 @@ jobs:
     with:
       project-url: 'https://github.com/users/cl0v/projects/3' # Replace with your Project URL
       column-name: 'In Progress'
-      token: ${{ secrets.GITHUB_TOKEN }}
