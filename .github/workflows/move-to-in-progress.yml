@@ -1,0 +1,66 @@
+name: Move to In Progress on Assignment
+
+on:
+  workflow_call: # Makes the workflow reusable
+    inputs:
+      project-url:
+        description: 'The URL of the GitHub Project'
+        required: true
+        type: string
+      column-name:
+        description: 'The name of the Project column (e.g., In Progress)'
+        required: true
+        type: string
+      token:
+        description: 'GitHub token for authentication'
+        required: true
+        type: string
+
+jobs:
+  move-to-in-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Move item to In Progress column
+        env:
+          GH_TOKEN: ${{ inputs.token }}
+          PROJECT_URL: ${{ inputs.project-url }}
+          COLUMN_NAME: ${{ inputs.column-name }}
+        run: |
+          # Fetch the assigned issue or PR
+          ITEM_ID=$(gh issue view ${{ github.event.issue.number }} --json id --jq '.id')
+          
+          # Fetch the project's ID
+          PROJECT_ID=$(gh api graphql -f query='
+            query {
+              organization(login: "${{ github.repository_owner }}") {
+                projectV2(number: 1) {
+                  id
+                  fields(first: 20) {
+                    nodes {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            }' --jq '.data.organization.projectV2.id')
+
+          echo "Moving issue/PR ID: $ITEM_ID to column $COLUMN_NAME in project $PROJECT_ID"
+
+          # Add the item to the project (adjust logic for REST API if needed)
+          gh api graphql -f query='
+            mutation {
+              addProjectV2ItemById(input: {projectId: $PROJECT_ID, contentId: $ITEM_ID}) {
+                item {
+                  id
+                }
+              }
+            }'
