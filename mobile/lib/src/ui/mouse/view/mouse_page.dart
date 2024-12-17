@@ -8,11 +8,14 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse_move/view/components/mouse_mode_switch.dart';
+import 'package:controller/src/data/repositories/connection_repository.dart';
+import 'package:controller/src/data/repositories/mouse_repository.dart';
 
 class MousePage extends StatefulWidget {
   const MousePage({
@@ -26,38 +29,82 @@ class MousePage extends StatefulWidget {
   State<MousePage> createState() => _MousePageState();
 }
 
-class _MousePageState extends State<MousePage> {
+class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentPageIndex = 0;
   final PageController _pageController = PageController();
 
+  BannerAd? _ad;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
 
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
   }
 
   @override
   void dispose() {
-    widget.viewmodel.dispose();
-    _pageController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _ad?.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // App has resumed
+      print('App has resumed');
+      widget.viewmodel.reconnect();
+      widget.viewmodel.enableMouse();
+    } else if (state == AppLifecycleState.paused) {
+      // App has paused (gone to background)
+      print('App has paused');
+      widget.viewmodel.disconnect();
+      widget.viewmodel.disableMouse();
+    } else if (state == AppLifecycleState.inactive) {
+      // App is inactive (e.g., when the phone is locked)
+      print('App is inactive');
+    } else if (state == AppLifecycleState.detached) {
+      // App is detached (e.g., when the app is terminated)
+      print('App is detached');
+      widget.viewmodel.disableMouse();
+    }
   }
 
   void _onToggle(int index) {
     setState(() {
       _currentPageIndex = index;
     });
-    widget.viewmodel.stopMouse();
+    widget.viewmodel.disableMouse();
     _pageController.jumpToPage(index);
+    if (index != 1) {
+      widget.viewmodel.enableMouse();
+    }
   }
 
   Widget get _drawer {
-    if (_currentPageIndex == 0) {
+    if (_currentPageIndex == 1) {
       return const CursorSettingsPage();
     }
     return Container(
@@ -76,7 +123,7 @@ class _MousePageState extends State<MousePage> {
         if (!isOpened) {
           MouseSettingsPersistenceService.saveSettings(getIt<MouseSettings>());
         } else {
-          widget.viewmodel.stopMouse();
+          widget.viewmodel.disableMouse();
         }
       },
       appBar: AppBar(
@@ -101,7 +148,7 @@ class _MousePageState extends State<MousePage> {
                 builder: (context, _) {
                   return IconButton(
                     onPressed: () {
-                      widget.viewmodel.stopMouse();
+                      widget.viewmodel.disableMouse();
                       if (widget.viewmodel.keyboardOpenClose()) {
                         showBottomSheet(
                           context: context,
@@ -139,12 +186,9 @@ class _MousePageState extends State<MousePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Visibility(
-              visible: kDebugMode,
-              child: MouseModeSwitch(
-                onToggle: _onToggle,
-                currentIndex: _currentPageIndex,
-              ),
+            MouseModeSwitch(
+              onToggle: _onToggle,
+              currentIndex: _currentPageIndex,
             ),
             const SizedBox(
               height: 12,
@@ -168,7 +212,13 @@ class _MousePageState extends State<MousePage> {
             const SizedBox(
               height: 12,
             ),
-            const BannerAdWidget(),
+            if (_ad != null)
+              Container(
+                width: _ad!.size.width.toDouble(),
+                height: 72.0,
+                alignment: Alignment.center,
+                child: AdWidget(ad: _ad!),
+              )
           ],
         ),
       ),
@@ -183,6 +233,4 @@ class _MousePageState extends State<MousePage> {
       ),
     );
   }
-
- 
 }

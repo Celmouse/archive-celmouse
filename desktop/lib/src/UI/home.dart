@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:server/src/data/services/info_service.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'package:server/src/data/socket_repository.dart';
+import 'package:server/src/data/models/device_info_model.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../data/services/keyboard_service.dart';
 
 class Home extends StatefulWidget {
@@ -18,14 +20,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<String> availableIPS = [];
+  WebSocket? socket;
+  DeviceInfo? deviceInfo;
+
   @override
   void initState() {
     super.initState();
     initWebSocket();
+    fetchDeviceInfo();
   }
 
-  List<String> availableIPS = [];
-  WebSocket? socket;
+  Future<void> fetchDeviceInfo() async {
+    final info = await InfoService.getDeviceInfo();
+    setState(() {
+      deviceInfo = info;
+    });
+    // print('Device Info: ${deviceInfo?.toMap()}'); // Debug print to verify info
+  }
 
   initWebSocket() async {
     final server = await HttpServer.bind('0.0.0.0', 7771);
@@ -53,6 +65,10 @@ class _HomeState extends State<Home> {
 
       debugPrint('Server: ws://${server.address.address}:7771');
 
+      // Send device info on connection
+      final deviceInfo = await InfoService.getDeviceInfo();
+      socket?.add(jsonEncode(deviceInfo.toMap()));
+
       socket?.listen(interpreter.interpretEvents, onDone: () async {
         setState(() {
           socket = null;
@@ -75,6 +91,18 @@ class _HomeState extends State<Home> {
         ),
         centerTitle: false,
         actions: [
+          /// display version here in little and
+          /// gray
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "v${deviceInfo?.version}",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: Colors.grey),
+            ),
+          ),
           IconButton(
             onPressed: () {
               launchUrl(
@@ -107,7 +135,6 @@ class _HomeState extends State<Home> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    // mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.circle,
@@ -129,6 +156,29 @@ class _HomeState extends State<Home> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (deviceInfo != null)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                deviceInfo!.deviceName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                deviceInfo!.deviceOS,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
                       Text(
                         "IPs: ",
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -136,7 +186,6 @@ class _HomeState extends State<Home> {
                             ),
                       ),
                       ListView.separated(
-                        // scrollDirection: Axis.horizontal,
                         itemCount: availableIPS.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {

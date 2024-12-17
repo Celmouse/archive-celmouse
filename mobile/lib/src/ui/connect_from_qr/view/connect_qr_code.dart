@@ -122,14 +122,13 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
       body: SafeArea(
         child: LoaderOverlay(
           overlayWidgetBuilder: (progress) {
-            return Center(
+            return const Center(
               child: CupertinoActivityIndicator(
                 color: Colors.white,
               ),
             );
           },
           overlayColor: Colors.black54,
-
           child: MobileScanner(
             controller: controller,
             overlayBuilder: (context, constraints) =>
