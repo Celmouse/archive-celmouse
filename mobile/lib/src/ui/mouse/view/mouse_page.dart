@@ -1,11 +1,11 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/UI/trackpad/trackpad_page.dart';
-import 'package:controller/src/helpers/ad_helper.dart';
+import 'package:controller/src/ui/ads/ui/banner.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
+import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -27,12 +27,6 @@ class MousePage extends StatefulWidget {
 
   @override
   State<MousePage> createState() => _MousePageState();
-}
-
-enum CursorKeysPressed {
-  none,
-  leftClick,
-  rightClick,
 }
 
 class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
