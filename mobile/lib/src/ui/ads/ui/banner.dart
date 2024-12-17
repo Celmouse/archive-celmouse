@@ -15,7 +15,8 @@ class BannerAdWidget extends StatefulWidget {
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   final _consentManager = ConsentManager();
   var _isMobileAdsInitializeCalled = false;
-  var _isPrivacyOptionsRequired = false;// TODO: Add this [https://github.com/googleads/googleads-mobile-flutter/tree/main/samples/admob/banner_example]
+  // TODO: Add this [https://github.com/googleads/googleads-mobile-flutter/tree/main/samples/admob/banner_example]
+  // var _isPrivacyOptionsRequired = false;
   BannerAd? _bannerAd;
   bool _isLoaded = false;
 
@@ -98,12 +99,12 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         onAdFailedToLoad: (ad, err) {
           ad.dispose();
         },
-        // Called when an ad opens an overlay that covers the screen.
-        onAdOpened: (Ad ad) {},
-        // Called when an ad removes an overlay that covers the screen.
-        onAdClosed: (Ad ad) {},
-        // Called when an impression occurs on the ad.
-        onAdImpression: (Ad ad) {},
+        // // Called when an ad opens an overlay that covers the screen.
+        // onAdOpened: (Ad ad) {},
+        // // Called when an ad removes an overlay that covers the screen.
+        // onAdClosed: (Ad ad) {},
+        // // Called when an impression occurs on the ad.
+        // onAdImpression: (Ad ad) {},
       ),
     ).load();
   }
@@ -112,7 +113,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   void _getIsPrivacyOptionsRequired() async {
     if (await _consentManager.isPrivacyOptionsRequired()) {
       setState(() {
-        _isPrivacyOptionsRequired = true;
+        // _isPrivacyOptionsRequired = true;
       });
     }
   }
