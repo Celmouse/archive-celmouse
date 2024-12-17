@@ -18,20 +18,16 @@ class LifecycleService with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // App has resumed
-      print('App has resumed');
       _connectionRepository.reconnect();
       _mouseViewmodel.enableMouse();
     } else if (state == AppLifecycleState.paused) {
       // App has paused (gone to background)
-      print('App has paused');
       _connectionRepository.disconnect();
       _mouseViewmodel.disableMouse();
     } else if (state == AppLifecycleState.inactive) {
       // App is inactive (e.g., when the phone is locked)
-      print('App is inactive');
     } else if (state == AppLifecycleState.detached) {
       // App is detached (e.g., when the app is terminated)
-      print('App is detached');
       _mouseViewmodel.reset();
     }
   }
