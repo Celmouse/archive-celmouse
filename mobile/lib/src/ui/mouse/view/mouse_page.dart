@@ -1,5 +1,6 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/UI/trackpad/trackpad_page.dart';
+import 'package:controller/src/data/services/lifecycle_service.dart';
 import 'package:controller/src/helpers/ad_helper.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
@@ -14,6 +15,7 @@ import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse_move/view/components/mouse_mode_switch.dart';
 import 'package:controller/src/data/repositories/connection_repository.dart';
+import 'package:controller/src/data/repositories/mouse_repository.dart';
 
 class MousePage extends StatefulWidget {
   const MousePage({
@@ -33,21 +35,26 @@ enum CursorKeysPressed {
   rightClick,
 }
 
-class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
+class _MousePageState extends State<MousePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentPageIndex = 0;
   final PageController _pageController = PageController();
   late ConnectionRepository _connectionRepository;
+  late LifecycleService _lifecycleService;
 
   BannerAd? _ad;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
 
-    _connectionRepository =
-        Provider.of<ConnectionRepository>(context, listen: false);
+    _connectionRepository = Provider.of<ConnectionRepository>(context, listen: false);
+    final mouseRepository = Provider.of<MouseRepository>(context, listen: false);
+    _lifecycleService = LifecycleService(
+      connectionRepository: _connectionRepository,
+      mouseViewmodel: widget.viewmodel,
+      mouseRepository: mouseRepository,
+    );
 
     MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
@@ -73,29 +80,9 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    _lifecycleService.dispose();
     _ad?.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // App has resumed
-      print('App has resumed');
-      _connectionRepository.reconnect();
-    } else if (state == AppLifecycleState.paused) {
-      // App has paused (gone to background)
-      print('App has paused');
-      _connectionRepository.disconnect();
-      widget.viewmodel.stopMouse();
-    } else if (state == AppLifecycleState.inactive) {
-      // App is inactive (e.g., when the phone is locked)
-      print('App is inactive');
-    } else if (state == AppLifecycleState.detached) {
-      // App is detached (e.g., when the app is terminated)
-      print('App is detached');
-    }
   }
 
   void _onToggle(int index) {

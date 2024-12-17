@@ -59,9 +59,4 @@ class ConnectionRepository {
       _clientApiService.setChannel(_socket!);
     }
   }
-
-  void resetState() {
-    _socket = null;
-    _clientApiService.clearChannel();
-  }
 }
