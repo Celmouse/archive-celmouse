@@ -1,15 +1,14 @@
 #include "keyboard_macos.h"
-#include <stdio.h>
-
+// #include <CoreFoundation/CoreFoundation.h>
+// #include <Carbon/Carbon.h> 
 #include <ApplicationServices/ApplicationServices.h>
+// #include <CoreGraphics/CGEvent.h> // Correct include for CGEvent.h
 
-FFI_PLUGIN_EXPORT void pressKeyboardKey(char key)
+
+FFI_PLUGIN_EXPORT void pressKeyboardKey(int key)
 {
-  // Cria os eventos de pressionar e soltar a tecla
-  printf("Pressing key %d\n", key);
   CGEventRef keyDown = CGEventCreateKeyboardEvent(NULL, key, true);
 
-  // Envia o evento de pressionar a tecla
   CGEventPost(kCGHIDEventTap, keyDown);
   CFRelease(keyDown);
 }
@@ -17,9 +16,50 @@ FFI_PLUGIN_EXPORT void pressKeyboardKey(char key)
 FFI_PLUGIN_EXPORT void releaseKeyboardKey(int key)
 {
   CGEventRef keyUp = CGEventCreateKeyboardEvent(NULL, key, false);
-  // Envia o evento de soltar a tecla
-  CGEventPost(kCGHIDEventTap, keyUp);
 
-  // Libera os eventos criados
+  CGEventPost(kCGHIDEventTap, keyUp);
   CFRelease(keyUp);
+}
+
+FFI_PLUGIN_EXPORT CGKeyCode keyCodeForChar(const char c)
+{
+  static CFMutableDictionaryRef charToCodeDict = NULL;
+  CGKeyCode code;
+  UniChar character = c;
+  CFStringRef charStr = NULL;
+
+  /* Generate table of keycodes and characters. */
+  if (charToCodeDict == NULL)
+  {
+    size_t i;
+    charToCodeDict = CFDictionaryCreateMutable(kCFAllocatorDefault,
+                                               128,
+                                               &kCFCopyStringDictionaryKeyCallBacks,
+                                               NULL);
+    if (charToCodeDict == NULL)
+      return UINT16_MAX;
+
+    /* Loop through every keycode (0 - 127) to find its current mapping. */
+    for (i = 0; i < 128; ++i)
+    {
+      CFStringRef string = createStringForKey((CGKeyCode)i);
+      if (string != NULL)
+      {
+        CFDictionaryAddValue(charToCodeDict, string, (const void *)i);
+        CFRelease(string);
+      }
+    }
+  }
+
+  charStr = CFStringCreateWithCharacters(kCFAllocatorDefault, &character, 1);
+
+  /* Our values may be NULL (0), so we need to use this function. */
+  if (!CFDictionaryGetValueIfPresent(charToCodeDict, charStr,
+                                     (const void **)&code))
+  {
+    code = UINT16_MAX;
+  }
+
+  CFRelease(charStr);
+  return code;
 }

@@ -8,7 +8,10 @@ output: 'lib/generated/bindings.dart'
 headers:
   entry-points:
     - 'src/keyboard_macos.h'
+    - '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/ApplicationServices.framework/Headers/ApplicationServices.h'
   include-directives:
+    # - '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/ApplicationServices.framework/Headers/ApplicationServices.h'
+    # - '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/ApplicationServices.framework/Headers/'
     - 'src/keyboard_macos.h'
 preamble: |
   // ignore_for_file: always_specify_types
@@ -21,3 +24,14 @@ functions:
   leaf:
     include: 
       - '.*'
+linker-opts:
+  - '-framework'
+  - 'ApplicationServices'
+# compiler-opts:
+#   - "-F/System/Library/Frameworks -framework ApplicationServices -Iinclude"
+  # macos:
+  # # Add the ApplicationServices framework
+  # - '-framework'
+  # - 'ApplicationServices'
+  # # Include the path to the ApplicationServices headers if necessary
+  # - '-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/ApplicationServices.framework/Headers'

@@ -14,4 +14,9 @@ set_target_properties(keyboard_macos PROPERTIES
   OUTPUT_NAME "keyboard_macos"
 )
 
+# # Adiciona o framework ApplicationServices
+# target_link_libraries(keyboard_macos
+#   "-framework ApplicationServices"
+# )
+
 target_compile_definitions(keyboard_macos PUBLIC DART_SHARED_LIB)

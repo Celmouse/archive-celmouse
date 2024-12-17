@@ -39,7 +39,7 @@ class KeyboardMacosBindings {
   }
 
   late final _pressKeyboardKeyPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Char)>>(
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>(
           'pressKeyboardKey');
   late final _pressKeyboardKey =
       _pressKeyboardKeyPtr.asFunction<void Function(int)>(isLeaf: true);
@@ -60,4 +60,18 @@ class KeyboardMacosBindings {
           'releaseKeyboardKey');
   late final _releaseKeyboardKey =
       _releaseKeyboardKeyPtr.asFunction<void Function(int)>(isLeaf: true);
+
+  void keyCodeForChar(
+    int c,
+  ) {
+    return _keyCodeForChar(
+      c,
+    );
+  }
+
+  late final _keyCodeForCharPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Char)>>(
+          'keyCodeForChar');
+  late final _keyCodeForChar =
+      _keyCodeForCharPtr.asFunction<void Function(int)>(isLeaf: true);
 }
