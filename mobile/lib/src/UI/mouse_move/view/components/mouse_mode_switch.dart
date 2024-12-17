@@ -25,19 +25,19 @@ class MouseModeSwitchState extends State<MouseModeSwitch> {
       tag: 'mouse-mode-switch',
       child: ToggleSwitch(
         initialLabelIndex: widget.currentIndex,
-        totalSwitches: 3,
+        totalSwitches: 2,
         inactiveBgColor: Colors.deepPurpleAccent,
         activeBgColor: const [Colors.teal],
         minWidth: MediaQuery.of(context).size.width,
         icons: const [
           Icons.phonelink_ring_outlined,
           Icons.touch_app,
-          Icons.mouse,
+          // Icons.mouse,
         ],
         labels: const [
           'Move',
           'Touch',
-          'Drag',
+          // 'Drag',
         ],
         onToggle: (index) {
           if (index != null) {

@@ -1,14 +1,15 @@
 import 'package:controller/src/routing/routes.dart';
+import 'package:controller/src/ui/connect/view/devices_scanner.dart';
 import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../utils/launch_site.dart';
 
-import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
   const ConnectHUBPage({
@@ -26,14 +27,18 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
   @override
   void initState() {
     widget.viewmodel.addListener(_listener);
-    widget.viewmodel.startScan();
+    if (kDebugMode) {
+      widget.viewmodel.startScan();
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     widget.viewmodel.removeListener(_listener);
-    widget.viewmodel.stopScan();
+    if (kDebugMode) {
+      widget.viewmodel.stopScan();
+    }
     super.dispose();
   }
 
@@ -117,7 +122,8 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                                 ),
                               ),
                               const Divider(),
-                              DevicesScanner(viewmodel: widget.viewmodel),
+                              if (kDebugMode)
+                                DevicesScanner(viewmodel: widget.viewmodel),
                               const Divider(),
                               EnterHubIPTile(viewmodel: widget.viewmodel),
                               const Divider(),
