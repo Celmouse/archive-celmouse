@@ -28,7 +28,7 @@ class LifecycleService with WidgetsBindingObserver {
       // App is inactive (e.g., when the phone is locked)
     } else if (state == AppLifecycleState.detached) {
       // App is detached (e.g., when the app is terminated)
-      _mouseViewmodel.reset();
+      _mouseViewmodel.disableMouse();
     }
   }
 

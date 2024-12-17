@@ -6,7 +6,7 @@ class MouseViewmodel extends ChangeNotifier {
 
   MouseViewmodel({
     required MouseRepository mouseRepository,
-  })  : _mouseRepository = mouseRepository;
+  }) : _mouseRepository = mouseRepository;
 
   bool _isKeyboardOpen = false;
   bool _isActive = false;
@@ -27,13 +27,6 @@ class MouseViewmodel extends ChangeNotifier {
   }
 
   void disableMouse() {
-    _isActive = false;
-    _mouseRepository.disableMovement();
-    _mouseRepository.disableScrolling();
-    notifyListeners();
-  }
-
-  void reset() {
     _isActive = false;
     _mouseRepository.disableMovement();
     _mouseRepository.disableScrolling();
