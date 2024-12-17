@@ -79,13 +79,11 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
     }
   }
 
-  Widget get _drawer {
-    if (_currentPageIndex == 1) {
+  Widget? get _drawer {
+    if (_currentPageIndex == 0) {
       return const CursorSettingsPage();
     }
-    return Container(
-      color: Colors.red,
-    );
+    return null;
   }
 
   @override
@@ -120,40 +118,44 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
           Visibility(
             visible: kDebugMode,
             child: ListenableBuilder(
-                listenable: widget.viewmodel,
-                builder: (context, _) {
-                  return IconButton(
-                    onPressed: () {
-                      widget.viewmodel.disableMouse();
-                      if (widget.viewmodel.keyboardOpenClose()) {
-                        showBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return SizedBox(
-                              height: size.height * 0.4,
-                              child: KeyboardTyppingPage(
-                                viewmodel: KeyboardViewModel(
-                                  keyboardRepository: context.read(),
-                                ),
+              listenable: widget.viewmodel,
+              builder: (context, _) {
+                return IconButton(
+                  onPressed: () {
+                    widget.viewmodel.disableMouse();
+                    if (widget.viewmodel.keyboardOpenClose()) {
+                      showBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: size.height * 0.4,
+                            child: KeyboardTyppingPage(
+                              viewmodel: KeyboardViewModel(
+                                keyboardRepository: context.read(),
                               ),
-                            );
-                          },
-                        );
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                    icon: Icon(
-                      widget.viewmodel.isKeyboardOpen
-                          ? Icons.keyboard_arrow_down
-                          : Icons.keyboard,
-                    ),
-                  );
-                }),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: Icon(
+                    widget.viewmodel.isKeyboardOpen
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard,
+                  ),
+                );
+              },
+            ),
           ),
-          IconButton(
-            onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
-            icon: const Icon(Icons.settings),
+          Visibility(
+            visible: _currentPageIndex == 0,
+            child: IconButton(
+              onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
+              icon: const Icon(Icons.settings),
+            ),
           )
         ],
       ),
