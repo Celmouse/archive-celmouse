@@ -1,5 +1,5 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/ui/ads/ui/banner.dart';
+import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
@@ -8,14 +8,10 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse_move/view/components/mouse_mode_switch.dart';
-import 'package:controller/src/data/repositories/connection_repository.dart';
-import 'package:controller/src/data/repositories/mouse_repository.dart';
 
 class MousePage extends StatefulWidget {
   const MousePage({
