@@ -85,7 +85,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
       // App has paused (gone to background)
       print('App has paused');
       _connectionRepository.disconnect();
-      widget.viewmodel.disableMouse();
+      widget.viewmodel.reset();
     } else if (state == AppLifecycleState.inactive) {
       // App is inactive (e.g., when the phone is locked)
       print('App is inactive');
