@@ -1,4 +1,5 @@
 import 'package:controller/src/routing/routes.dart';
+import 'package:controller/src/ui/connect/view/devices_scanner.dart';
 import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
