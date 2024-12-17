@@ -1,4 +1,5 @@
 #include <ApplicationServices/ApplicationServices.h>
+
 #define FFI_PLUGIN_EXPORT
 
 /**
@@ -15,4 +16,4 @@ FFI_PLUGIN_EXPORT void pressKeyboardKey(int key);
 FFI_PLUGIN_EXPORT void releaseKeyboardKey(int key);
 
 
-// FFI_PLUGIN_EXPORT void keyCodeForChar(const char c);
+FFI_PLUGIN_EXPORT CGKeyCode keyCodeForChar(const char c);
