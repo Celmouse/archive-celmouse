@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
     setState(() {
       deviceInfo = info;
     });
-    print('Device Info: ${deviceInfo?.toMap()}'); // Debug print to verify info
+    // print('Device Info: ${deviceInfo?.toMap()}'); // Debug print to verify info
   }
 
   initWebSocket() async {

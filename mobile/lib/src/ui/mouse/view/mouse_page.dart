@@ -15,7 +15,6 @@ import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse_move/view/components/mouse_mode_switch.dart';
 import 'package:controller/src/data/repositories/connection_repository.dart';
-import 'package:controller/src/data/repositories/mouse_repository.dart';
 
 class MousePage extends StatefulWidget {
   const MousePage({
