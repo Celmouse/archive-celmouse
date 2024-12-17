@@ -1,7 +1,7 @@
 import 'package:controller/src/routing/router.dart';
 import 'package:flutter/material.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override

@@ -6,7 +6,7 @@ class MouseViewmodel extends ChangeNotifier {
 
   MouseViewmodel({
     required MouseRepository mouseRepository,
-  }) : _mouseRepository = mouseRepository;
+  })  : _mouseRepository = mouseRepository;
 
   bool _isKeyboardOpen = false;
   bool _isActive = false;

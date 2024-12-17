@@ -10,7 +10,6 @@ import 'package:controller/src/ui/mouse_move/view/mouse_move_settings_page.dart'
 import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/models/mouse_settings_model.dart';
@@ -230,4 +229,6 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
       ),
     );
   }
+
+ 
 }
