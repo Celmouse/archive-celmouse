@@ -24,6 +24,8 @@ dependencies:
   qr_flutter: ^4.1.0
   desktop_window: ^0.4.2
   icons_launcher: ^3.0.0
+  device_info_plus: ^11.2.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,13 @@
-import 'package:controller/src/data/repositories/trackpad_repository.dart';
+import 'package:controller/src/data/repositories/mouse_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:protocol/protocol.dart';
 
 class TrackPadViewModel extends ChangeNotifier {
-  final TrackPadRepository _trackPadRepository;
+  final MouseRepository _mouseRepository;
 
-  TrackPadViewModel(this._trackPadRepository);
+  TrackPadViewModel({
+    required MouseRepository mouseRepository,
+  }) : _mouseRepository = mouseRepository; // Previous position
 
   bool _isDragging = false;
   bool _isTapped = false;
@@ -13,7 +16,7 @@ class TrackPadViewModel extends ChangeNotifier {
   double _mouseX = 200; // Initial center position
   double _mouseY = 200; // Initial center position
   double _previousX = 200; // Previous position
-  double _previousY = 200; // Previous position
+  double _previousY = 200;
 
   bool get isDragging => _isDragging;
   bool get isTapped => _isTapped;
@@ -53,7 +56,7 @@ class TrackPadViewModel extends ChangeNotifier {
     _previousX = _mouseX;
     _previousY = _mouseY;
     notifyListeners();
-    _trackPadRepository.handleDrag(deltaX, deltaY);
+    _mouseRepository.handleDrag(deltaX, deltaY);
   }
 
   void stopDragging() {
@@ -68,21 +71,21 @@ class TrackPadViewModel extends ChangeNotifier {
   void handleTap() {
     _isTapped = true;
     notifyListeners();
-    _trackPadRepository.handleTap();
+    _mouseRepository.click(MouseButton.left);
     _resetTapState();
   }
 
   void handleDoubleTap() {
     _isDoubleTapped = true;
     notifyListeners();
-    _trackPadRepository.handleDoubleTap();
+    _mouseRepository.doubleClick();
     _resetDoubleTapState();
   }
 
   void handleTwoFingerTap() {
     _isTwoFingerTapped = true;
     notifyListeners();
-    _trackPadRepository.handleTwoFingerTap();
+    _mouseRepository.click(MouseButton.right);
     _resetTwoFingerTapState();
   }
 
