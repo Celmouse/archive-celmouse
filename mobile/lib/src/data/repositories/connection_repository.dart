@@ -4,7 +4,6 @@ import 'package:controller/src/data/services/client_api_service.dart';
 import 'package:controller/src/domain/models/devices.dart';
 import 'package:controller/src/utils/result.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:controller/src/domain/models/devices.dart';
 
 class ConnectionRepository {
   final ConnectionService _connectionService;
@@ -17,8 +16,6 @@ class ConnectionRepository {
         _clientApiService = clientApiService;
 
   WebSocketChannel? _socket;
-  String? _lastIp;
-  int? _lastPort;
 
   WebSocketChannel get socket => _socket!;
 
@@ -61,5 +58,10 @@ class ConnectionRepository {
     if (_socket != null) {
       _clientApiService.setChannel(_socket!);
     }
+  }
+
+  void resetState() {
+    _socket = null;
+    _clientApiService.clearChannel();
   }
 }

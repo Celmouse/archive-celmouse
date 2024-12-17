@@ -16,18 +16,6 @@ List<SingleChildWidget> get defaultProvider => [
           clientApiService: _.read<ClientApiService>(),
         ),
       ),
-      ProxyProvider<ConnectionService, ConnectionRepository>(
-        update: (_, connectionService, __) => ConnectionRepository(
-          connectionService: connectionService,
-        ),
-      ),
-      Provider(
-        create: (context) => SensorsApiService(),
-      ),
-      Provider(
-        lazy: true,
-        create: (context) => ClientApiService(),
-      ),
       Provider(create: (context) => SensorsApiService()),
       Provider(
         create: (context) => KeyboardRepository(
