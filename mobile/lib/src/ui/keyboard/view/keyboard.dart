@@ -1,7 +1,6 @@
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:protocol/protocol.dart';
 
 import '../../../UI/keyboard/model.dart';
 import '../../../UI/keyboard/keyboard_theme.dart';
@@ -93,23 +92,6 @@ class KeyboardTyppingPageState extends State<KeyboardTyppingPage> {
         ],
       ),
     );
-  }
-
-  SpecialKeyType _getSpecialKeyType(IconData? icon) {
-    switch (icon) {
-      case Icons.backspace:
-        return SpecialKeyType.backspace;
-      case Icons.emoji_symbols:
-        return SpecialKeyType.specialChars;
-
-      case Icons.format_size:
-        return SpecialKeyType.defaultLayout;
-
-      case Icons.keyboard_return:
-        return SpecialKeyType.enter;
-      default:
-        return SpecialKeyType.space;
-    }
   }
 }
 

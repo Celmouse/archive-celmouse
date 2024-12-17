@@ -27,21 +27,13 @@ class MouseRepository {
     final bool invertY = getIt.get<MouseSettings>().invertedPointerY;
     final sensitivity = getIt.get<MouseSettings>().sensitivity;
 
-    if (movementSubscription?.isPaused ?? false) {
-      movementSubscription?.resume();
-      return;
-    }
+   
 
-    movementSubscription ??= _sensorsService
-        .gyroscope(
+    movementSubscription ??= _sensorsService.gyroscope(
       invertX,
       invertY,
       threshold,
-    )
-        .listen(
-      (event) {
-        var (x, y) = event;
-
+      (double x, double y) {
         final vector = Vector2D(x, y);
 
         if (!vector.canNormalize) return;
@@ -60,8 +52,8 @@ class MouseRepository {
   }
 
   void disableMovement() {
-    movementSubscription?.pause(); // .cancel();
-    // movementSubscription = null;
+    movementSubscription?.cancel(); // .cancel();
+    movementSubscription = null;
   }
 
   void click(MouseButton type) {
@@ -79,7 +71,8 @@ class MouseRepository {
   }
 
   void disableScrolling() {
-    scrollingSubscription?.pause();
+    scrollingSubscription?.cancel();
+    scrollingSubscription = null;
   }
 
   void enableScrolling() {
@@ -89,21 +82,13 @@ class MouseRepository {
     final bool invertX = getIt.get<MouseSettings>().invertedScrollX;
     final bool invertY = getIt.get<MouseSettings>().invertedScrollY;
 
-    if (scrollingSubscription?.isPaused ?? false) {
-      scrollingSubscription?.resume();
-      return;
-    }
+   
 
-    scrollingSubscription ??= _sensorsService
-        .gyroscope(
+    scrollingSubscription ??= _sensorsService.gyroscope(
       invertX,
       invertY,
       threshold,
-    )
-        .listen(
-      (event) {
-        var (x, y) = event;
-
+      (double x, double y) {
         if (x.abs() > y.abs()) {
           y = 0;
         } else {
@@ -123,6 +108,25 @@ class MouseRepository {
           ),
         );
       },
+    );
+  }
+
+  void handleDrag(double deltaX, double deltaY) {
+    final sensitivity = getIt.get<MouseSettings>().sensitivity;
+
+    final vector = Vector2D(deltaX, deltaY);
+
+    if (!vector.canNormalize) return;
+
+    Vector2D normalized = vector.normalized;
+
+    _clientApiService.send(
+      event: MouseProtocolEvents.mouseMove,
+      data: MouseMovementProtocolData(
+        x: normalized.x,
+        y: normalized.y,
+        intensity: sensitivity * vector.length / 10,
+      ),
     );
   }
 }
