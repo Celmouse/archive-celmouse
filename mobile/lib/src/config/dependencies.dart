@@ -9,35 +9,24 @@ import 'package:provider/single_child_widget.dart';
 
 List<SingleChildWidget> get defaultProvider => [
       Provider(create: (context) => ConnectionService()),
-      Provider(
-        create: (context) => ConnectionRepository(
-          connectionService: context.read(),
-        ),
-      ),
+      Provider(create: (context) => ClientApiService()),
       ProxyProvider<ConnectionService, ConnectionRepository>(
         update: (_, connectionService, __) => ConnectionRepository(
           connectionService: connectionService,
+          clientApiService: _.read<ClientApiService>(),
         ),
       ),
-      Provider(
-        create: (context) => SensorsApiService(),
-      ),
-      Provider(
-        lazy: true,
-        create: (context) => ClientApiService(
-          socket: context.read<ConnectionRepository>().socket,
-        ),
-      ),
+      Provider(create: (context) => SensorsApiService()),
       Provider(
         create: (context) => KeyboardRepository(
-          clientApiService: context.read(),
+          clientApiService: context.read<ClientApiService>(),
         ),
       ),
       Provider(
         lazy: true,
         create: (context) => MouseRepository(
-          clientApiService: context.read(),
-          sensorsService: context.read(),
+          clientApiService: context.read<ClientApiService>(),
+          sensorsService: context.read<SensorsApiService>(),
         ),
       ),
     ];

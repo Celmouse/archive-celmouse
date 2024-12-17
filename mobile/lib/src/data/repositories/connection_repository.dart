@@ -1,28 +1,28 @@
 import 'dart:async';
-
 import 'package:controller/src/data/services/connection_service.dart';
+import 'package:controller/src/data/services/client_api_service.dart';
+import 'package:controller/src/domain/models/devices.dart';
 import 'package:controller/src/utils/result.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:controller/src/domain/models/devices.dart';
 
 class ConnectionRepository {
   final ConnectionService _connectionService;
+  final ClientApiService _clientApiService;
 
   ConnectionRepository({
     required ConnectionService connectionService,
-  }) : _connectionService = connectionService;
+    required ClientApiService clientApiService,
+  })  : _connectionService = connectionService,
+        _clientApiService = clientApiService;
 
   WebSocketChannel? _socket;
-  String? _lastIp;
-  int? _lastPort;
 
   WebSocketChannel get socket => _socket!;
 
-  Future<Result<void>> connect(String ip, {int port = 7771}) async {
+  Future<Result<void>> connect(String ip) async {
     try {
-      _socket = await _connectionService.connect(ip, port);
-      _lastIp = ip;
-      _lastPort = port;
+      _socket = await _connectionService.connect(ip, 7771);
+      _clientApiService.setChannel(_socket!);
       return const Result.ok(null);
     } on Exception catch (e) {
       return Result.error(e);
@@ -33,6 +33,7 @@ class ConnectionRepository {
     if (!await isConnected) return Result.error(Exception('Not connected'));
     try {
       await _connectionService.disconnect(_socket!);
+      _clientApiService.clearChannel();
       _socket = null;
       return const Result.ok(null);
     } on Exception catch (e) {
@@ -45,17 +46,22 @@ class ConnectionRepository {
     return _socket != null;
   }
 
-  Future<Result<void>> reconnect() async {
-    if (_lastIp == null || _lastPort == null) {
-      return Result.error(Exception('No previous connection details'));
-    }
-    await disconnect();
-    return await connect(_lastIp!, port: _lastPort!);
-  }
-
-  Stream<List<Device>> scanDevices() => _connectionService.scan();
+  Stream<List<Device>> scanDevices() => _connectionService.scanStream;
 
   void startScan() => _connectionService.startScan();
 
   void stopScan() => _connectionService.stopScan();
+
+  Future<void> reconnect() async {
+    if (_socket != null) return;
+    _socket = await _connectionService.reconnect();
+    if (_socket != null) {
+      _clientApiService.setChannel(_socket!);
+    }
+  }
+
+  void resetState() {
+    _socket = null;
+    _clientApiService.clearChannel();
+  }
 }
