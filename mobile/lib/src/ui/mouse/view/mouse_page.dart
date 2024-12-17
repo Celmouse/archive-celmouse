@@ -48,7 +48,8 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _connectionRepository = Provider.of<ConnectionRepository>(context, listen: false);
+    _connectionRepository =
+        Provider.of<ConnectionRepository>(context, listen: false);
     widget.viewmodel.setConnectionRepository(_connectionRepository);
 
     MouseSettingsPersistenceService.loadSettings().then((settings) {

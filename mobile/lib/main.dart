@@ -10,9 +10,7 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: [
-        ...defaultProvider,
-      ],
+      providers: defaultProvider,
       child: const MyApp(),
     ),
   );

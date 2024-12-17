@@ -11,9 +11,9 @@ List<SingleChildWidget> get defaultProvider => [
       Provider(create: (context) => ConnectionService()),
       Provider(create: (context) => ClientApiService()),
       ProxyProvider<ConnectionService, ConnectionRepository>(
-        update: (_, connectionService, __) => ConnectionRepository(
+        update: (context, connectionService, previous) => ConnectionRepository(
           connectionService: connectionService,
-          clientApiService: _.read<ClientApiService>(),
+          clientApiService: context.read<ClientApiService>(),
         ),
       ),
       Provider(create: (context) => SensorsApiService()),
