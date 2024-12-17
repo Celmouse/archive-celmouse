@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../utils/launch_site.dart';
 
-import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
   const ConnectHUBPage({
