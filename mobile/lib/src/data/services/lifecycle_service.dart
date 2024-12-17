@@ -4,13 +4,11 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 
 class LifecycleService with WidgetsBindingObserver {
   final ConnectionRepository _connectionRepository;
-  final MouseViewmodel _mouseViewmodel;
 
   LifecycleService({
     required ConnectionRepository connectionRepository,
     required MouseViewmodel mouseViewmodel,
-  })  : _connectionRepository = connectionRepository,
-        _mouseViewmodel = mouseViewmodel {
+  }) : _connectionRepository = connectionRepository {
     WidgetsBinding.instance.addObserver(this);
   }
 
