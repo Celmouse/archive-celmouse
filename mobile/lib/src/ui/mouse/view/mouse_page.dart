@@ -1,5 +1,5 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/ui/ads/ui/banner.dart';
+import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
@@ -8,14 +8,10 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
 import '../../mouse_move/view/components/mouse_mode_switch.dart';
-import 'package:controller/src/data/repositories/connection_repository.dart';
-import 'package:controller/src/data/repositories/mouse_repository.dart';
 
 class MousePage extends StatefulWidget {
   const MousePage({
@@ -34,8 +30,6 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   int _currentPageIndex = 0;
   final PageController _pageController = PageController();
 
-  BannerAd? _ad;
-
   @override
   void initState() {
     super.initState();
@@ -44,29 +38,11 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
     MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
     });
-
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _ad = ad as BannerAd;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    ).load();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _ad?.dispose();
     super.dispose();
   }
 
@@ -212,13 +188,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
             const SizedBox(
               height: 12,
             ),
-            if (_ad != null)
-              Container(
-                width: _ad!.size.width.toDouble(),
-                height: 72.0,
-                alignment: Alignment.center,
-                child: AdWidget(ad: _ad!),
-              )
+            const BannerAdWidget(),
           ],
         ),
       ),
