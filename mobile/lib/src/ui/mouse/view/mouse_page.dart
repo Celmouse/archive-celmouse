@@ -48,12 +48,11 @@ class _MousePageState extends State<MousePage> {
   void initState() {
     super.initState();
 
-    _connectionRepository = Provider.of<ConnectionRepository>(context, listen: false);
-    final mouseRepository = Provider.of<MouseRepository>(context, listen: false);
+    _connectionRepository =
+        Provider.of<ConnectionRepository>(context, listen: false);
     _lifecycleService = LifecycleService(
       connectionRepository: _connectionRepository,
       mouseViewmodel: widget.viewmodel,
-      mouseRepository: mouseRepository,
     );
 
     MouseSettingsPersistenceService.loadSettings().then((settings) {
@@ -89,7 +88,7 @@ class _MousePageState extends State<MousePage> {
     setState(() {
       _currentPageIndex = index;
     });
-    widget.viewmodel.stopMouse();
+    widget.viewmodel.disableMouse();
     _pageController.jumpToPage(index);
   }
 
@@ -113,7 +112,7 @@ class _MousePageState extends State<MousePage> {
         if (!isOpened) {
           MouseSettingsPersistenceService.saveSettings(getIt<MouseSettings>());
         } else {
-          widget.viewmodel.stopMouse();
+          widget.viewmodel.disableMouse();
         }
       },
       appBar: AppBar(
@@ -138,7 +137,7 @@ class _MousePageState extends State<MousePage> {
                 builder: (context, _) {
                   return IconButton(
                     onPressed: () {
-                      widget.viewmodel.stopMouse();
+                      widget.viewmodel.disableMouse();
                       if (widget.viewmodel.keyboardOpenClose()) {
                         showBottomSheet(
                           context: context,

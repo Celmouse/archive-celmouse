@@ -21,4 +21,10 @@ class MoveMouseButtonViewmodel extends ChangeNotifier {
       _mouseRepository.disableMovement();
     }
   }
+
+  void reset() {
+    _isActive = false;
+    _mouseRepository.disableMovement();
+    notifyListeners();
+  }
 }
