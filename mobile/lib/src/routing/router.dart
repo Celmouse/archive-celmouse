@@ -1,3 +1,5 @@
+import 'package:controller/src/data/repositories/connection_repository.dart';
+import 'package:controller/src/data/repositories/mouse_repository.dart';
 import 'package:controller/src/routing/routes.dart';
 import 'package:controller/src/ui/connect/view/connect_hub_page.dart';
 import 'package:controller/src/ui/connect_from_qr/view/connect_qr_code.dart';
@@ -31,7 +33,8 @@ GoRouter router = GoRouter(
       path: Routes.mouse,
       builder: (context, state) => MousePage(
         viewmodel: MouseViewmodel(
-          mouseRepository: context.read(),
+          context.read<ConnectionRepository>(),
+          mouseRepository: context.read<MouseRepository>(),
         ),
       ),
     ),

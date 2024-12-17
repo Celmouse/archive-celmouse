@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 class MouseViewmodel extends ChangeNotifier {
   final MouseRepository _mouseRepository;
-  late ConnectionRepository _connectionRepository;
+  final ConnectionRepository _connectionRepository;
 
-  MouseViewmodel({
+  MouseViewmodel(
+    this._connectionRepository, {
     required MouseRepository mouseRepository,
   }) : _mouseRepository = mouseRepository;
 
@@ -20,10 +21,6 @@ class MouseViewmodel extends ChangeNotifier {
     _isKeyboardOpen = !_isKeyboardOpen;
     notifyListeners();
     return _isKeyboardOpen;
-  }
-
-  void setConnectionRepository(ConnectionRepository connectionRepository) {
-    _connectionRepository = connectionRepository;
   }
 
   void enableMouse() {

@@ -39,7 +39,6 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentPageIndex = 0;
   final PageController _pageController = PageController();
-  late ConnectionRepository _connectionRepository;
 
   BannerAd? _ad;
 
@@ -47,10 +46,6 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    _connectionRepository =
-        Provider.of<ConnectionRepository>(context, listen: false);
-    widget.viewmodel.setConnectionRepository(_connectionRepository);
 
     MouseSettingsPersistenceService.loadSettings().then((settings) {
       getIt.registerSingleton<MouseSettings>(settings);
