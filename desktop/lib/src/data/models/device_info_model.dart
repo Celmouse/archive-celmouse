@@ -1,27 +1,32 @@
+import 'package:protocol/protocol.dart';
+
 class DeviceInfo {
-  final String version;
   final String deviceName;
-  final String deviceOS;
+  final DeviceOS deviceOS;
+  final String versionNumber;
 
   DeviceInfo({
-    required this.version,
     required this.deviceName,
     required this.deviceOS,
+    required this.versionNumber,
   });
 
   factory DeviceInfo.fromMap(Map<String, String> map) {
     return DeviceInfo(
-      version: map['version'] ?? 'Unknown',
       deviceName: map['deviceName'] ?? 'Unknown',
-      deviceOS: map['deviceOS'] ?? 'Unknown',
+      deviceOS: DeviceOS.values.firstWhere(
+        (e) => e.toString() == 'DeviceOS.${map['deviceOS']}',
+        orElse: () => DeviceOS.unknown,
+      ),
+      versionNumber: map['versionNumber'] ?? 'Unknown',
     );
   }
 
   Map<String, String> toMap() {
     return {
-      'version': version,
       'deviceName': deviceName,
-      'deviceOS': deviceOS,
+      'deviceOS': deviceOS.toString().split('.').last,
+      'versionNumber': versionNumber,
     };
   }
 }

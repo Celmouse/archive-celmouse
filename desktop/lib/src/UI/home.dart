@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:server/src/data/services/info_service.dart';
+import 'package:server/src/data/services/connection_service.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'package:server/src/data/socket_repository.dart';
 import 'package:server/src/data/models/device_info_model.dart';
@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> fetchDeviceInfo() async {
-    final info = await InfoService.getDeviceInfo();
+    final info = await ConnectionService.getDeviceInfo();
     setState(() {
       deviceInfo = info;
     });
@@ -54,6 +54,7 @@ class _HomeState extends State<Home> {
     final SocketRepository interpreter = SocketRepository(
       mouse: MouseService(),
       keyboard: KeyboardService(),
+      connection: ConnectionService(),
     );
 
     await for (HttpRequest request in server) {
@@ -66,7 +67,7 @@ class _HomeState extends State<Home> {
       debugPrint('Server: ws://${server.address.address}:7771');
 
       // Send device info on connection
-      final deviceInfo = await InfoService.getDeviceInfo();
+      final deviceInfo = await ConnectionService.getDeviceInfo();
       socket?.add(jsonEncode(deviceInfo.toMap()));
 
       socket?.listen(interpreter.interpretEvents, onDone: () async {
@@ -96,7 +97,7 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "v${deviceInfo?.version}",
+              "v${deviceInfo?.versionNumber}",
               style: Theme.of(context)
                   .textTheme
                   .labelMedium
@@ -170,7 +171,7 @@ class _HomeState extends State<Home> {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                deviceInfo!.deviceOS,
+                                deviceInfo!.deviceOS.name,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge

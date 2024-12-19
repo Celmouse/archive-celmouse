@@ -6,5 +6,7 @@ enum DeviceOS {
   @JsonValue("linux")
   linux,
   @JsonValue("macos")
-  macos;
+  macos,
+  @JsonValue("unknown")
+  unknown;
 }

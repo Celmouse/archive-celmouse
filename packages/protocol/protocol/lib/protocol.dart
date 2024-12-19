@@ -6,3 +6,4 @@ export 'package:protocol_interface/protocol_interface.dart';
 
 export 'package:mouse_protocol/mouse_protocol.dart';
 export 'package:keyboard_protocol/keyboard_protocol.dart';
+export 'package:protocol/src/connection/connection_protocol.dart';

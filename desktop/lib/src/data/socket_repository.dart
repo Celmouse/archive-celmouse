@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:protocol/protocol.dart';
+import 'package:server/src/data/services/connection_service.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'services/keyboard_service.dart';
 
@@ -10,10 +11,12 @@ const ALLOW_PRINTING = true;
 class SocketRepository {
   final MouseService mouse;
   final KeyboardService keyboard;
+  final ConnectionService connection;
 
   SocketRepository({
     required this.mouse,
     required this.keyboard,
+    required this.connection,
   });
 
   interpretEvents(dynamic data) {
