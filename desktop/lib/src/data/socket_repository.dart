@@ -67,6 +67,9 @@ class SocketRepository {
     } else if (event == KeyboardProtocolEvents.specialKeyReleased.name) {
       final data = KeyboardProtocolData.fromJson(protocol.data);
       keyboard.releaseSpecial(data.key);
+    } else if (event == ConnectionProtocolEvents.connectionInfo.name) {
+      final data = ConnectionInfoProtocolData.fromJson(protocol.data);
+      connection.updateConnectionInfo(data);
     }
   }
 }

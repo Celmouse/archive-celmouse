@@ -6,9 +6,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:server/src/data/services/connection_service.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'package:server/src/data/socket_repository.dart';
-import 'package:server/src/data/models/device_info_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/services/keyboard_service.dart';
+import 'package:protocol/protocol.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -22,7 +22,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<String> availableIPS = [];
   WebSocket? socket;
-  DeviceInfo? deviceInfo;
+  ConnectionInfoProtocolData? deviceInfo;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
     setState(() {
       deviceInfo = info;
     });
-    // print('Device Info: ${deviceInfo?.toMap()}'); // Debug print to verify info
+    print('Device Info: $deviceInfo'); // Debug print to verify info
   }
 
   initWebSocket() async {
@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
 
       // Send device info on connection
       final deviceInfo = await ConnectionService.getDeviceInfo();
-      socket?.add(jsonEncode(deviceInfo.toMap()));
+      socket?.add(jsonEncode(deviceInfo));
 
       socket?.listen(interpreter.interpretEvents, onDone: () async {
         setState(() {

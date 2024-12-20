@@ -1,35 +1,46 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:protocol/protocol.dart';
-import 'package:server/src/data/models/device_info_model.dart';
+import 'package:protocol/src/connection/device_os.dart'; // Import the DeviceOS enum
 
 class ConnectionService {
-  static Future<DeviceInfo> getDeviceInfo() async {
+  static Future<ConnectionInfoProtocolData> getDeviceInfo() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
 
     if (Platform.isWindows) {
       final windowsInfo = await deviceInfoPlugin.windowsInfo;
-      return DeviceInfo(
-        deviceName: windowsInfo.computerName,
+      return ConnectionInfoProtocolData(
+        deviceName: windowsInfo.computerName ?? 'Unknown',
         deviceOS: DeviceOS.windows,
-        versionNumber: windowsInfo.displayVersion,
+        versionNumber: windowsInfo.displayVersion ?? 'Unknown',
       );
     } else if (Platform.isLinux) {
       final linuxInfo = await deviceInfoPlugin.linuxInfo;
-      return DeviceInfo(
-        deviceName: linuxInfo.name,
+      return ConnectionInfoProtocolData(
+        deviceName: linuxInfo.name ?? 'Unknown',
         deviceOS: DeviceOS.linux,
         versionNumber: linuxInfo.version ?? 'Unknown',
       );
     } else if (Platform.isMacOS) {
       final macOsInfo = await deviceInfoPlugin.macOsInfo;
-      return DeviceInfo(
-        deviceName: macOsInfo.model,
+      return ConnectionInfoProtocolData(
+        deviceName: macOsInfo.model ?? 'Unknown',
         deviceOS: DeviceOS.macos,
-        versionNumber: macOsInfo.osRelease,
+        versionNumber: macOsInfo.osRelease ?? 'Unknown',
       );
     } else {
-      throw UnsupportedError('Unsupported platform');
+      return const ConnectionInfoProtocolData(
+        deviceName: 'Unknown',
+        deviceOS: DeviceOS.unknown,
+        versionNumber: 'Unknown',
+      );
     }
+  }
+
+  void updateConnectionInfo(ConnectionInfoProtocolData data) {
+    // send data to the host phone
+    print('Device Name: ${data.deviceName}');
+    print('Device OS: ${data.deviceOS}');
+    print('Version Number: ${data.versionNumber}');
   }
 }
