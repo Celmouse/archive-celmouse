@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   List<String> availableIPS = [];
   WebSocket? socket;
   ConnectionInfoProtocolData? deviceInfo;
-
+  final appVersion = '1.0.0';
   @override
   void initState() {
     super.initState();
@@ -92,12 +92,10 @@ class _HomeState extends State<Home> {
         ),
         centerTitle: false,
         actions: [
-          /// display version here in little and
-          /// gray
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "v${deviceInfo?.versionNumber}",
+              "v$appVersion",
               style: Theme.of(context)
                   .textTheme
                   .labelMedium
@@ -144,11 +142,14 @@ class _HomeState extends State<Home> {
                       const SizedBox(
                         width: 12,
                       ),
-                      Text(
-                        "Connected",
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                      Expanded(
+                        child: Text(
+                          "Connected",
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
                       ),
                     ],
                   ),
@@ -164,14 +165,29 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                deviceInfo!.deviceName,
+                                'Device Information',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                'Device Name: ${deviceInfo!.deviceName}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                deviceInfo!.deviceOS.name,
+                                'Device OS: ${deviceInfo!.deviceOS.name}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'Version: ${deviceInfo!.versionNumber}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
@@ -180,38 +196,44 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                         ),
+                      const SizedBox(height: 16.0),
                       Text(
-                        "IPs: ",
+                        "Available IPs",
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      ListView.separated(
+                      const SizedBox(height: 8.0),
+                      ListView.builder(
                         itemCount: availableIPS.length,
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "- ${availableIPS[index]}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                          return Card(
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'IP Address: ${availableIPS[index]}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  Center(
+                                    child: QrImageView(
+                                      data: availableIPS[index],
+                                      version: QrVersions.auto,
+                                      size: 160.0,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              QrImageView(
-                                data: availableIPS[index],
-                                version: QrVersions.auto,
-                                size: 160.0,
-                              )
-                            ],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            width: 28,
+                            ),
                           );
                         },
                       ),
