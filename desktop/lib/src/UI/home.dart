@@ -22,21 +22,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<String> availableIPS = [];
   WebSocket? socket;
-  ConnectionInfoProtocolData? deviceInfo;
   @override
   void initState() {
     super.initState();
     initWebSocket();
-    fetchDeviceInfo();
   }
 
-  Future<void> fetchDeviceInfo() async {
-    final info = await ConnectionService.getDeviceInfo();
-    setState(() {
-      deviceInfo = info;
-    });
-    print('Device Info: $deviceInfo'); // Debug print to verify info
-  }
+ 
 
   initWebSocket() async {
     final server = await HttpServer.bind('0.0.0.0', 7771);
@@ -147,47 +139,6 @@ class _HomeState extends State<Home> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (deviceInfo != null)
-                        Visibility(
-                          visible: false,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Device Information',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  'Device Name: ${deviceInfo!.deviceName}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'Device OS: ${deviceInfo!.deviceOS.name}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'Version: ${deviceInfo!.versionNumber}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       const SizedBox(height: 16.0),
                       Text(
                         "Available IPs",
