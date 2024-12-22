@@ -5,7 +5,7 @@ import 'package:desktop_window/desktop_window.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setWindowSize(const Size(250, 400), animate: true);
+  await DesktopWindow.setWindowSize(const Size(300, 470), animate: true);
   runApp(const MyApp());
 }
 
