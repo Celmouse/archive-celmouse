@@ -1,4 +1,5 @@
 import 'package:controller/getit.dart';
+import 'package:controller/src/routing/routes.dart';
 import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
@@ -8,6 +9,7 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
@@ -104,6 +106,13 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         title: const Text('Mouse'),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            context.go(Routes.connect);
+            widget.viewmodel.disconnect();
+          },
+          icon: Icon(Icons.exit_to_app, color: Colors.red),
+        ),
         actions: [
           const Visibility(
             visible: kDebugMode,

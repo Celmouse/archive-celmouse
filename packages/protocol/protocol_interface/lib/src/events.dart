@@ -2,18 +2,22 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 enum ProtocolEvent {
   // Connection
-  @JsonValue('ConnectionInfo')
-  connectionInfo,
-  @JsonValue('ConnectionStatus')
-  connectionStatus,
   @JsonValue('ConnectionConnect')
   connect,
   @JsonValue('ConnectionDisconnect')
   disconnect,
-  @JsonValue('DesktopToMobileData')
-  desktopToMobileData,
-  @JsonValue('MobileToDesktopData')
-  mobileToDesktopData,
+  @JsonValue('ConnectionPing')
+  /// Send information to the device.
+  ping,
+  // // Delete those
+  // @JsonValue('ConnectionInfo')
+  // connectionInfo,
+  // @JsonValue('ConnectionStatus')
+  // connectionStatus,
+  // @JsonValue('DesktopToMobileData')
+  // desktopToMobileData,
+  // @JsonValue('MobileToDesktopData')
+  // mobileToDesktopData,
 
   // Mouse
   @JsonValue('MouseMove')

@@ -17,16 +17,6 @@ class ConnectionInfoProtocolData with _$ConnectionInfoProtocolData {
 }
 
 @freezed
-class ConnectionStatusProtocolData with _$ConnectionStatusProtocolData {
-  const factory ConnectionStatusProtocolData({
-    required bool isConnected,
-  }) = _ConnectionStatusProtocolData;
-
-  factory ConnectionStatusProtocolData.fromJson(Map<String, Object?> json) =>
-      _$ConnectionStatusProtocolDataFromJson(json);
-}
-
-@freezed
 class DesktopToMobileData with _$DesktopToMobileData {
   const factory DesktopToMobileData({
     required String message,
@@ -41,7 +31,6 @@ class DesktopToMobileData with _$DesktopToMobileData {
 class MobileToDesktopData with _$MobileToDesktopData {
   const factory MobileToDesktopData({
     required String message,
-    required DateTime timestamp,
   }) = _MobileToDesktopData;
 
   factory MobileToDesktopData.fromJson(Map<String, Object?> json) =>

@@ -25,6 +25,7 @@ dependencies:
   desktop_window: ^0.4.2
   icons_launcher: ^3.0.0
   device_info_plus: ^11.2.0
+  result_dart: ^2.0.0
 
 
 dev_dependencies:

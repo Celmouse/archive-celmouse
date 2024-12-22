@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:controller/src/domain/models/devices.dart';
 import 'package:network_info_plus/network_info_plus.dart';
+import 'package:protocol/protocol.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ConnectionService {
@@ -39,14 +41,7 @@ class ConnectionService {
     final subnet = ip?.substring(0, ip.lastIndexOf('.'));
     for (int i = 2; i < 255; i++) {
       final host = '$subnet.$i';
-      pingServer(host, port).then((isAvailable) {
-        if (isAvailable) {
-          _addDevice(Device(
-            name: 'Device $i',
-            ip: host,
-            port: port,
-          ));
-        }
+      pingServer(host, port).then((_) {
         sum -= i;
         if (sum <= 0) {
           completer.complete();
@@ -65,12 +60,25 @@ class ConnectionService {
   Future<WebSocketChannel> connect(String ip, int port) async {
     final uri = Uri.parse('ws://$ip:$port');
     final channel = WebSocketChannel.connect(uri);
+    // Services doesn't have state! REMOVE THIS
+    channel.sink.add(jsonEncode(
+      const Protocol(
+        event: ProtocolEvent.connect,
+        data: null,
+      ).toJson(),
+    ));
     _lastIp = ip;
     _lastPort = port;
     return channel;
   }
 
   Future<void> disconnect(WebSocketChannel channel) async {
+    channel.sink.add(jsonEncode(
+      const Protocol(
+        event: ProtocolEvent.disconnect,
+        data: null,
+      ).toJson(),
+    ));
     await channel.sink.close();
   }
 
@@ -81,15 +89,24 @@ class ConnectionService {
     return connect(_lastIp!, _lastPort!);
   }
 
-  Future<bool> pingServer(String ip, int port) async {
-    try {
-      final con = WebSocketChannel.connect(Uri.parse('ws://$ip:$port'));
-      await con.ready.timeout(const Duration(seconds: 4));
-      con.sink.close();
-      return true;
-    } catch (e) {
-      return false;
-    }
+  Future<void> pingServer(String ip, int port) async {
+    final con = WebSocketChannel.connect(Uri.parse('ws://$ip:$port'));
+    await con.ready.timeout(const Duration(seconds: 4));
+    con.sink.add(jsonEncode(
+      Protocol(
+        event: ProtocolEvent.ping,
+        data: const MobileToDesktopData(message: 'Testando 23213124').toJson(),
+      ).toJson(),
+    ));
+    con.stream.listen((event) {
+      final p = Protocol.fromJson(jsonDecode(event));
+      final e = ConnectionInfoProtocolData.fromJson(p.data);
+      _addDevice(Device(
+        name: e.deviceName,
+        ip: ip,
+        port: port,
+      ));
+    });
   }
 
   void _addDevice(Device device) {
