@@ -19,8 +19,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  //TODO: Implement viewmodel
   List<String> availableIPS = [];
   WebSocket? socket;
+
   @override
   void initState() {
     super.initState();

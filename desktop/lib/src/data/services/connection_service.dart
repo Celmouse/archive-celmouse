@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:protocol/protocol.dart';
-import 'package:protocol/src/connection/device_os.dart'; // Import the DeviceOS enum
+import 'package:device_info_plus/device_info_plus.dart';
 
 class ConnectionService {
   static Future<ConnectionInfoProtocolData> getDeviceInfo() async {
@@ -10,23 +9,23 @@ class ConnectionService {
     if (Platform.isWindows) {
       final windowsInfo = await deviceInfoPlugin.windowsInfo;
       return ConnectionInfoProtocolData(
-        deviceName: windowsInfo.computerName ?? 'Unknown',
+        deviceName: windowsInfo.computerName,
         deviceOS: DeviceOS.windows,
-        versionNumber: windowsInfo.displayVersion ?? 'Unknown',
+        versionNumber: windowsInfo.displayVersion,
       );
     } else if (Platform.isLinux) {
       final linuxInfo = await deviceInfoPlugin.linuxInfo;
       return ConnectionInfoProtocolData(
-        deviceName: linuxInfo.name ?? 'Unknown',
+        deviceName: linuxInfo.name,
         deviceOS: DeviceOS.linux,
         versionNumber: linuxInfo.version ?? 'Unknown',
       );
     } else if (Platform.isMacOS) {
       final macOsInfo = await deviceInfoPlugin.macOsInfo;
       return ConnectionInfoProtocolData(
-        deviceName: macOsInfo.model ?? 'Unknown',
+        deviceName: macOsInfo.model,
         deviceOS: DeviceOS.macos,
-        versionNumber: macOsInfo.osRelease ?? 'Unknown',
+        versionNumber: macOsInfo.osRelease,
       );
     } else {
       return const ConnectionInfoProtocolData(

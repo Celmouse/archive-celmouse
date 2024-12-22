@@ -6,7 +6,7 @@ import 'package:server/src/data/services/connection_service.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'services/keyboard_service.dart';
 
-const ALLOW_PRINTING = true;
+const ALLOW_PRINTING = false;
 
 class SocketRepository {
   final MouseService mouse;
@@ -22,54 +22,91 @@ class SocketRepository {
   interpretEvents(dynamic data) {
     final protocol = Protocol.fromJson(jsonDecode(data));
 
-    final event = protocol.event.name;
+    final event = protocol.event;
 
     if (ALLOW_PRINTING && kDebugMode) {
-      debugPrint(event);
+      debugPrint(event.toString());
       debugPrint(protocol.data.toString());
       debugPrint(protocol.timestamp.toString());
     }
 
-    if (event == MouseProtocolEvents.mouseMove.name) {
-      final data = MouseMovementProtocolData.fromJson(protocol.data);
+    switch (event) {
+      case ProtocolEvent.connectionInfo:
+        {
+          final data = ConnectionInfoProtocolData.fromJson(protocol.data);
+          connection.updateConnectionInfo(data);
+        }
+      case ProtocolEvent.connectionStatus:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case ProtocolEvent.desktopToMobileData:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case ProtocolEvent.mobileToDesktopData:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case ProtocolEvent.mouseMove:
+        {
+          final data = MouseMovementProtocolData.fromJson(protocol.data);
 
-      double x = data.x;
-      double y = data.y;
-      double sense = data.intensity;
+          double x = data.x;
+          double y = data.y;
+          double sense = data.intensity;
 
-      return mouse.move(x, y, sense);
-    } else if (event == MouseProtocolEvents.mouseScroll.name) {
-      final data = MouseMovementProtocolData.fromJson(protocol.data);
+          return mouse.move(x, y, sense);
+        }
+      case ProtocolEvent.mouseCenter:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case ProtocolEvent.mouseScroll:
+        {
+          final data = MouseMovementProtocolData.fromJson(protocol.data);
 
-      mouse.scroll(
-        data.x.sign.ceil(),
-        data.y.sign.ceil(),
-        data.intensity.round(),
-      );
-    } else if (event == MouseProtocolEvents.mouseClick.name) {
-      final data = MouseButtonProtocolData.fromJson(protocol.data);
-      mouse.click(data.type);
-    } else if (event == MouseProtocolEvents.mouseDoubleClick.name) {
-      final data = MouseButtonProtocolData.fromJson(protocol.data);
-      mouse.doubleClick(data.type);
-    } else if (event == MouseProtocolEvents.mouseButtonHold.name) {
-      // final data = MouseButtonProtocolData.fromJson(protocol.data);
-      mouse.holdLeftButton();
-    } else if (event == MouseProtocolEvents.mouseButtonReleased.name) {
-      // final data = MouseButtonProtocolData.fromJson(protocol.data);
-      mouse.releaseLeftButton();
-    } else if (event == KeyboardProtocolEvents.keyPressed.name) {
-      final data = protocol.data as String;
-      keyboard.type(data);
-    } else if (event == KeyboardProtocolEvents.specialKeyPressed.name) {
-      final data = KeyboardProtocolData.fromJson(protocol.data);
-      keyboard.pressSpecial(data.key);
-    } else if (event == KeyboardProtocolEvents.specialKeyReleased.name) {
-      final data = KeyboardProtocolData.fromJson(protocol.data);
-      keyboard.releaseSpecial(data.key);
-    } else if (event == ConnectionProtocolEvents.connectionInfo.name) {
-      final data = ConnectionInfoProtocolData.fromJson(protocol.data);
-      connection.updateConnectionInfo(data);
+          mouse.scroll(
+            data.x.sign.ceil(),
+            data.y.sign.ceil(),
+            data.intensity.round(),
+          );
+        }
+      case ProtocolEvent.mouseClick:
+        {
+          final data = MouseButtonProtocolData.fromJson(protocol.data);
+          mouse.click(data.type);
+        }
+      case ProtocolEvent.mouseDoubleClick:
+        {
+          final data = MouseButtonProtocolData.fromJson(protocol.data);
+          mouse.doubleClick(data.type);
+        }
+      case ProtocolEvent.mouseButtonHold:
+        {
+          mouse.holdLeftButton();
+        }
+      case ProtocolEvent.mouseButtonReleased:
+        {
+          mouse.releaseLeftButton();
+        }
+      case ProtocolEvent.keyPressed:
+        {
+          final data = protocol.data as String;
+          keyboard.type(data);
+        }
+      case ProtocolEvent.specialKeyPressed:
+        {
+          final data = KeyboardProtocolData.fromJson(protocol.data);
+          keyboard.pressSpecial(data.key);
+        }
+      case ProtocolEvent.specialKeyReleased:
+        {
+          final data = KeyboardProtocolData.fromJson(protocol.data);
+          keyboard.releaseSpecial(data.key);
+        }
+      case ProtocolEvent.connect:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case ProtocolEvent.disconnect:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }
