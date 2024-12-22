@@ -8,7 +8,6 @@ import 'package:server/src/data/services/mouse_service.dart';
 import 'package:server/src/data/socket_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/services/keyboard_service.dart';
-import 'package:protocol/protocol.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -27,8 +26,6 @@ class _HomeState extends State<Home> {
     super.initState();
     initWebSocket();
   }
-
- 
 
   initWebSocket() async {
     final server = await HttpServer.bind('0.0.0.0', 7771);
@@ -139,13 +136,6 @@ class _HomeState extends State<Home> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 16.0),
-                      Text(
-                        "Available IPs",
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
                       const SizedBox(height: 8.0),
                       ListView.builder(
                         itemCount: availableIPS.length,
