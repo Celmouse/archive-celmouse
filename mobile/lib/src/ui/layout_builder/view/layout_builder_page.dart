@@ -1,3 +1,6 @@
+import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
+import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const bool extendsBodyBehindAppBar = false;
@@ -14,100 +17,112 @@ class LayoutBuilderPage extends StatefulWidget {
 }
 
 class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
-  List<LayoutBuilderItem> items = [];
+  final LayoutBuilderViewmodel viewmodel = LayoutBuilderViewmodel();
+
+  final GlobalKey _widgetKey = GlobalKey();
 
   addItem(Offset offset) {
-    setState(() {
-      final id = items.length.toString();
-      items.add(LayoutBuilderItem(
+    final id = UniqueKey().toString();
+    print(id);
+
+    viewmodel.addItem(
+      LayoutButtonProperties(
         id: id,
         x: offset.dx,
         y: offset.dy,
         size: 50,
-      ));
-    });
+      ),
+    );
   }
 
-  changeItemPosition(String id, double x, double y) {}
+  onPositionChanged(String id, double x, double y) {}
+
+  void _checkTouch(PointerEvent event) {
+    if (!viewmodel.isItemSelected) {
+      return;
+    }
+
+    final RenderBox? renderBox =
+        _widgetKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) {
+      return;
+    }
+    final Offset widgetPosition = renderBox.localToGlobal(Offset.zero);
+    final Size widgetSize = renderBox.size;
+
+    // Define the widget boundaries
+    final Rect widgetRect = Rect.fromLTWH(
+      widgetPosition.dx,
+      widgetPosition.dy,
+      widgetSize.width,
+      widgetSize.height,
+    );
+
+    viewmodel.changeHoveringDeletion(widgetRect.contains(event.position));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tap to Place Container'),
-      ),
-      extendBodyBehindAppBar: extendsBodyBehindAppBar,
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTapDown: (TapDownDetails details) {
-              addItem(details.localPosition);
-            },
+        title: const Text('Build Custom Layout'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: const Icon(Icons.visibility),
+              onPressed: () {},
+            ),
           ),
-          ...items
         ],
       ),
-    );
-  }
-}
-
-class LayoutBuilderItem extends StatefulWidget {
-  const LayoutBuilderItem({
-    super.key,
-    required this.id,
-    required this.x,
-    required this.y,
-    required this.size,
-  });
-
-  final String id;
-  final double x;
-  final double y;
-  final double size;
-
-  @override
-  State<LayoutBuilderItem> createState() => _LayoutBuilderItemState();
-}
-
-class _LayoutBuilderItemState extends State<LayoutBuilderItem> {
-  late double x;
-  late double y;
-
-  @override
-  void initState() {
-    x = widget.x - widget.size / 2;
-    y = widget.y - widget.size / 2;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: y,
-      left: x,
-      child: Draggable(
-        rootOverlay: true,
-        onDragEnd: (details) {
-          double appBarHeight = 0;
-          if (Scaffold.of(context).hasAppBar && !extendsBodyBehindAppBar) {
-            appBarHeight = Scaffold.of(context).appBarMaxHeight ?? 0;
-          }
-
-          setState(() {
-            x = details.offset.dx;
-            y = details.offset.dy - appBarHeight.toDouble();
-          });
-        },
-        feedback: Container(
-          width: widget.size,
-          height: widget.size,
-          color: Colors.blue.withValues(alpha: .5),
-        ),
-        childWhenDragging: Container(),
-        child: Container(
-          width: widget.size,
-          height: widget.size,
-          color: Colors.blue,
+      extendBodyBehindAppBar: extendsBodyBehindAppBar,
+      body: Listener(
+        onPointerMove: _checkTouch,
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTapDown: (TapDownDetails details) {
+                addItem(details.localPosition);
+              },
+            ),
+            ListenableBuilder(
+              listenable: viewmodel,
+              builder: (context, _) {
+                return Stack(
+                  children: viewmodel.items.map(
+                    (item) {
+                      return LayoutBuilderItem(
+                        properties: item,
+                        viewmodel: viewmodel,
+                      );
+                    },
+                  ).toList(),
+                );
+              },
+            ),
+            Align(
+              alignment: const Alignment(0, 0.9),
+              child: ListenableBuilder(
+                listenable: viewmodel,
+                builder: (context, _) {
+                  return Visibility(
+                    visible: viewmodel.isItemSelected,
+                    child: CircleAvatar(
+                      key: _widgetKey,
+                      radius: viewmodel.isHovering ? 42 : 32,
+                      backgroundColor:
+                          viewmodel.isHovering ? Colors.red.shade200 : null,
+                      child: const Icon(
+                        CupertinoIcons.trash,
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
