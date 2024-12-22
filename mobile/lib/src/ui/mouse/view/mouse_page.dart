@@ -7,7 +7,6 @@ import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -114,7 +113,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         ),
         actions: [
           Visibility(
-            visible: kDebugMode,
+            visible: true,
             child: ListenableBuilder(
               listenable: widget.viewmodel.isKeyboardOpen,
               builder: (context, _) {

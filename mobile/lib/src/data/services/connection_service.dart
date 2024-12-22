@@ -95,13 +95,6 @@ class ConnectionService {
     final channel = getChannel(ip, port);
     await channel.ready.timeout(const Duration(seconds: 4));
 
-    channel.sink.add(jsonEncode(
-      const Protocol(
-        event: ProtocolEvent.ping,
-        data: null, // MobileToDesktopData(message: ''),
-      ),
-    ));
-
     channel.stream.listen((event) {
       final p = Protocol.fromJson(jsonDecode(event));
       final e = ConnectionInfoProtocolData.fromJson(p.data);
@@ -110,6 +103,17 @@ class ConnectionService {
         ip: ip,
         port: port,
       ));
+    });
+
+    channel.sink.add(jsonEncode(
+      const Protocol(
+        event: ProtocolEvent.ping,
+        data: null, // MobileToDesktopData(message: ''),
+      ),
+    ));
+
+    Timer(const Duration(seconds: 1) ,(){
+      channel.sink.close();
     });
   }
 
