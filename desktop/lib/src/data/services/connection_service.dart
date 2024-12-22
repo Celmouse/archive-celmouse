@@ -26,6 +26,10 @@ class ConnectionService {
     required Function(MouseMovementProtocolData) onMouseMove,
     required Function(MouseMovementProtocolData) onMouseScroll,
     required Function(MouseButtonProtocolData) onMouseClick,
+    required Function(MouseButtonProtocolData) onMouseDoubleClick,
+    required Function(String) onKeyPressed,
+    required Function(KeyboardProtocolData) onSpecialKeyPressed,
+    required Function(KeyboardProtocolData) onSpecialKeyReleased,
   }) {
     final protocol = Protocol.fromJson(jsonDecode(eventData));
     final event = protocol.event;
@@ -69,35 +73,44 @@ class ConnectionService {
       case ProtocolEvent.mouseClick:
         {
           final data = MouseButtonProtocolData.fromJson(protocol.data);
+
           return onMouseClick(data);
         }
       case ProtocolEvent.mouseDoubleClick:
         {
           final data = MouseButtonProtocolData.fromJson(protocol.data);
-          mouse.doubleClick(data.type);
+
+          return onMouseDoubleClick(data);
         }
       case ProtocolEvent.mouseButtonHold:
         {
-          mouse.holdLeftButton();
+          throw UnimplementedError();
+
+          // mouse.holdLeftButton();
         }
       case ProtocolEvent.mouseButtonReleased:
         {
-          mouse.releaseLeftButton();
+          throw UnimplementedError();
+
+          // mouse.releaseLeftButton();
         }
       case ProtocolEvent.keyPressed:
         {
           final data = protocol.data as String;
-          keyboard.type(data);
+
+          return onKeyPressed(data);
         }
       case ProtocolEvent.specialKeyPressed:
         {
           final data = KeyboardProtocolData.fromJson(protocol.data);
-          keyboard.pressSpecial(data.key);
+
+          return onSpecialKeyPressed(data);
         }
       case ProtocolEvent.specialKeyReleased:
         {
           final data = KeyboardProtocolData.fromJson(protocol.data);
-          keyboard.releaseSpecial(data.key);
+
+          return onSpecialKeyReleased(data);
         }
       case ProtocolEvent.connect:
         // TODO: Handle this case.
