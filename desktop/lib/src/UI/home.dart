@@ -23,7 +23,6 @@ class _HomeState extends State<Home> {
   List<String> availableIPS = [];
   WebSocket? socket;
   ConnectionInfoProtocolData? deviceInfo;
-  final appVersion = '1.0.0';
   @override
   void initState() {
     super.initState();
@@ -92,16 +91,6 @@ class _HomeState extends State<Home> {
         ),
         centerTitle: false,
         actions: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(
-          //     "v$appVersion",
-          //     style: Theme.of(context)
-          //         .textTheme
-          //         .labelMedium
-          //         ?.copyWith(color: Colors.grey),
-          //   ),
-          // ),
           IconButton(
             onPressed: () {
               launchUrl(
