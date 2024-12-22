@@ -12,10 +12,8 @@ class MouseViewmodel extends ChangeNotifier {
   }) : _mouseRepository = mouseRepository;
 
   bool _isKeyboardOpen = false;
-  bool _isActive = false;
 
   bool get isKeyboardOpen => _isKeyboardOpen;
-  bool get isActive => _isActive;
 
   bool keyboardOpenClose() {
     _isKeyboardOpen = !_isKeyboardOpen;
@@ -23,17 +21,10 @@ class MouseViewmodel extends ChangeNotifier {
     return _isKeyboardOpen;
   }
 
-  void enableMouse() {
-    _isActive = true;
-    _mouseRepository.enableMovement();
-    notifyListeners();
-  }
 
   void disableMouse() {
-    _isActive = false;
     _mouseRepository.disableMovement();
     _mouseRepository.disableScrolling();
-    notifyListeners();
   }
 
   void reconnect() {
@@ -45,7 +36,6 @@ class MouseViewmodel extends ChangeNotifier {
   }
 
   void reset() {
-    _isActive = false;
     _mouseRepository.disableMovement();
     _mouseRepository.disableScrolling();
     notifyListeners();

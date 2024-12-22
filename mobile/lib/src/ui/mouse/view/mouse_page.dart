@@ -51,23 +51,15 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // App has resumed
-      print('App has resumed');
-      widget.viewmodel.reconnect();
-      widget.viewmodel.enableMouse();
-    } else if (state == AppLifecycleState.paused) {
-      // App has paused (gone to background)
-      print('App has paused');
-      widget.viewmodel.disconnect();
-      widget.viewmodel.disableMouse();
-    } else if (state == AppLifecycleState.inactive) {
-      // App is inactive (e.g., when the phone is locked)
-      print('App is inactive');
-    } else if (state == AppLifecycleState.detached) {
-      // App is detached (e.g., when the app is terminated)
-      print('App is detached');
-      widget.viewmodel.disableMouse();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        widget.viewmodel.reconnect();
+        break;
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        widget.viewmodel.disableMouse();
     }
   }
 
@@ -78,7 +70,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
     widget.viewmodel.disableMouse();
     _pageController.jumpToPage(index);
     if (index != 1) {
-      widget.viewmodel.enableMouse();
+      // widget.viewmodel.enableMouse();
     }
   }
 
