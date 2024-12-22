@@ -2,7 +2,7 @@ import 'package:controller/src/data/repositories/connection_repository.dart';
 import 'package:controller/src/data/repositories/mouse_repository.dart';
 import 'package:flutter/material.dart';
 
-class MouseViewmodel extends ChangeNotifier {
+class MouseViewmodel {
   final MouseRepository _mouseRepository;
   final ConnectionRepository _connectionRepository;
 
@@ -11,16 +11,16 @@ class MouseViewmodel extends ChangeNotifier {
     required MouseRepository mouseRepository,
   }) : _mouseRepository = mouseRepository;
 
-  bool _isKeyboardOpen = false;
+  ValueNotifier<bool> get isKeyboardOpen => _isKeyboardOpen;
+  final ValueNotifier<bool> _isKeyboardOpen = ValueNotifier(false);
 
-  bool get isKeyboardOpen => _isKeyboardOpen;
-
-  bool keyboardOpenClose() {
-    _isKeyboardOpen = !_isKeyboardOpen;
-    notifyListeners();
-    return _isKeyboardOpen;
+  void closeKeyboard() {
+    isKeyboardOpen.value = false;
   }
 
+  void openKeyboard() {
+    isKeyboardOpen.value = true;
+  }
 
   void disableMouse() {
     _mouseRepository.disableMovement();
@@ -35,9 +35,8 @@ class MouseViewmodel extends ChangeNotifier {
     _connectionRepository.disconnect();
   }
 
-  void reset() {
-    _mouseRepository.disableMovement();
-    _mouseRepository.disableScrolling();
-    notifyListeners();
+  void dispose() {
+    _isKeyboardOpen.dispose();
   }
+
 }

@@ -64,10 +64,12 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   }
 
   void _onToggle(int index) {
+    widget.viewmodel.disableMouse();
+    widget.viewmodel.closeKeyboard();
+
     setState(() {
       _currentPageIndex = index;
     });
-    widget.viewmodel.disableMouse();
     _pageController.jumpToPage(index);
     if (index != 1) {
       // widget.viewmodel.enableMouse();
@@ -93,6 +95,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
           MouseSettingsPersistenceService.saveSettings(getIt<MouseSettings>());
         } else {
           widget.viewmodel.disableMouse();
+          widget.viewmodel.closeKeyboard();
         }
       },
       appBar: AppBar(
@@ -104,47 +107,50 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
             widget.viewmodel.disconnect();
             context.go(Routes.connect);
           },
-          icon: const Icon(Icons.exit_to_app, color: Colors.red),
+          icon: const Icon(
+            Icons.exit_to_app,
+            color: Colors.red,
+          ),
         ),
         actions: [
-          const Visibility(
-            visible: kDebugMode,
-            child: IconButton(
-              onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
-              icon: Icon(
-                Icons.mic,
-                color: null, // isMicOn ? Colors.greenAccent : null,
-              ),
-            ),
-          ),
           Visibility(
             visible: kDebugMode,
             child: ListenableBuilder(
-              listenable: widget.viewmodel,
+              listenable: widget.viewmodel.isKeyboardOpen,
               builder: (context, _) {
                 return IconButton(
                   onPressed: () {
                     widget.viewmodel.disableMouse();
-                    if (widget.viewmodel.keyboardOpenClose()) {
+                    if (!widget.viewmodel.isKeyboardOpen.value) {
+                      widget.viewmodel.openKeyboard();
                       showBottomSheet(
                         context: context,
                         builder: (context) {
-                          return SizedBox(
-                            height: size.height * 0.4,
-                            child: KeyboardTyppingPage(
-                              viewmodel: KeyboardViewModel(
-                                keyboardRepository: context.read(),
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text('Keyboard is experimental'),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                child: KeyboardTyppingPage(
+                                  viewmodel: KeyboardViewModel(
+                                    keyboardRepository: context.read(),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           );
                         },
                       );
                     } else {
-                      Navigator.pop(context);
+                      widget.viewmodel.closeKeyboard();
+                      Navigator.of(context).pop();
                     }
                   },
                   icon: Icon(
-                    widget.viewmodel.isKeyboardOpen
+                    widget.viewmodel.isKeyboardOpen.value
                         ? Icons.keyboard_arrow_down
                         : Icons.keyboard,
                   ),
