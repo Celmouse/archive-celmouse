@@ -1,4 +1,4 @@
-import 'types.dart';
+import 'package:mouse_protocol/mouse_protocol.dart';
 
 abstract class MouseMovement {
   void move(double x, double y);

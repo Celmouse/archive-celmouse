@@ -1,13 +1,14 @@
 import 'dart:ffi';
-import 'generated/bindings.dart';
-import 'package:keyboard_platform_interface/keyboard_platform_interface.dart'
-    as i;
 
+import 'package:keyboard_platform_interface/keyboard_platform_interface.dart';
+import 'generated/bindings.dart';
+
+import 'src/special_keys.dart';
 import 'src/keys.dart';
 
-class KeyboardMacOS extends i.KeyboardPlatform {
+class KeyboardMacOS extends KeyboardPlatform {
   static void registerWith() {
-    i.KeyboardPlatform.instance = KeyboardMacOS();
+    KeyboardPlatform.instance = KeyboardMacOS();
   }
 
   @override
@@ -29,6 +30,16 @@ class KeyboardMacOS extends i.KeyboardPlatform {
   @override
   Future<String?> getPlatformVersion() async {
     return "MacOS: 1.0.0";
+  }
+
+  @override
+  void pressSpecialKey(SpecialKeyType key) {
+    _bindings.pressKeyboardKey(key.code);
+  }
+
+  @override
+  void releaseSpecialKey(SpecialKeyType key) {
+    _bindings.releaseKeyboardKey(key.code);
   }
 }
 
