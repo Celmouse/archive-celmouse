@@ -90,7 +90,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                           GestureDetector(
                             onTap: () => launchSite(),
                             child: const Text(
-                              '2. Download the HUB.',
+                              '2. Download the HUB (Version 2.2.0)',
                               style: TextStyle(
                                 color: Colors.blue,
                                 decoration: TextDecoration.underline,
