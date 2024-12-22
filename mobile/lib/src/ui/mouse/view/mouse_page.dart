@@ -45,6 +45,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    widget.viewmodel.dispose();
     super.dispose();
   }
 
@@ -108,10 +109,10 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () {
-            context.go(Routes.connect);
             widget.viewmodel.disconnect();
+            context.go(Routes.connect);
           },
-          icon: Icon(Icons.exit_to_app, color: Colors.red),
+          icon: const Icon(Icons.exit_to_app, color: Colors.red),
         ),
         actions: [
           const Visibility(

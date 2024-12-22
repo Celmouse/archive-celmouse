@@ -12,7 +12,9 @@ class ConnectionService {
   Stream<List<Device>> get scanStream => _scanController.stream;
 
   bool _stopScan = false;
+  @Deprecated("ÏServices doesn't have state! REMOVE THIS")
   String? _lastIp;
+  @Deprecated("ÏServices doesn't have state! REMOVE THIS")
   int? _lastPort;
 
   Future<void> stopScan() async {
@@ -58,15 +60,15 @@ class ConnectionService {
   }
 
   Future<WebSocketChannel> connect(String ip, int port) async {
-    final uri = Uri.parse('ws://$ip:$port');
-    final channel = WebSocketChannel.connect(uri);
-    // Services doesn't have state! REMOVE THIS
+    final channel = getChannel(ip, port);
+
     channel.sink.add(jsonEncode(
       const Protocol(
         event: ProtocolEvent.connect,
         data: null,
       ).toJson(),
     ));
+
     _lastIp = ip;
     _lastPort = port;
     return channel;
@@ -90,15 +92,17 @@ class ConnectionService {
   }
 
   Future<void> pingServer(String ip, int port) async {
-    final con = WebSocketChannel.connect(Uri.parse('ws://$ip:$port'));
-    await con.ready.timeout(const Duration(seconds: 4));
-    con.sink.add(jsonEncode(
-      Protocol(
+    final channel = getChannel(ip, port);
+    await channel.ready.timeout(const Duration(seconds: 4));
+
+    channel.sink.add(jsonEncode(
+      const Protocol(
         event: ProtocolEvent.ping,
-        data: const MobileToDesktopData(message: 'Testando 23213124').toJson(),
-      ).toJson(),
+        data: null, // MobileToDesktopData(message: ''),
+      ),
     ));
-    con.stream.listen((event) {
+
+    channel.stream.listen((event) {
       final p = Protocol.fromJson(jsonDecode(event));
       final e = ConnectionInfoProtocolData.fromJson(p.data);
       _addDevice(Device(
@@ -120,5 +124,11 @@ class ConnectionService {
       return min;
     }
     return port + sumPort(port - 1, min);
+  }
+
+  WebSocketChannel getChannel(String ip, int port) {
+    final uri = Uri.parse('ws://$ip:$port');
+    final con = WebSocketChannel.connect(uri);
+    return con;
   }
 }
