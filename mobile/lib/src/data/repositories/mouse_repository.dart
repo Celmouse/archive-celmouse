@@ -5,9 +5,10 @@ import 'package:controller/src/data/models/vector2.dart';
 import 'package:controller/src/data/services/client_api_service.dart';
 import 'package:controller/src/data/services/sensors_api_service.dart';
 import 'package:controller/src/domain/models/mouse_settings_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:protocol/protocol.dart';
 
-class MouseRepository {
+class MouseRepository  {
   final ClientApiService _clientApiService;
   final SensorsApiService _sensorsService;
 
@@ -17,8 +18,22 @@ class MouseRepository {
   })  : _clientApiService = clientApiService,
         _sensorsService = sensorsService;
 
-  StreamSubscription? movementSubscription;
-  StreamSubscription? scrollingSubscription;
+  void click(MouseButton type) {
+    _clientApiService.send(
+      event: ProtocolEvent.mouseClick,
+      data: MouseButtonProtocolData(type: type),
+    );
+  }
+
+  void doubleClick() {
+    _clientApiService.send(
+      event: ProtocolEvent.mouseDoubleClick,
+      data: const MouseButtonProtocolData(type: MouseButton.left),
+    );
+  }
+
+  ValueNotifier<StreamSubscription?> movementSubscription = ValueNotifier(null);
+  ValueNotifier<StreamSubscription?> scrollingSubscription = ValueNotifier(null);
 
   void enableMovement() {
     final double threshold =
@@ -27,9 +42,7 @@ class MouseRepository {
     final bool invertY = getIt.get<MouseSettings>().invertedPointerY;
     final sensitivity = getIt.get<MouseSettings>().sensitivity;
 
-   
-
-    movementSubscription ??= _sensorsService.gyroscope(
+    movementSubscription.value ??= _sensorsService.gyroscope(
       invertX,
       invertY,
       threshold,
@@ -40,7 +53,7 @@ class MouseRepository {
         Vector2D normalized = vector.normalized;
 
         _clientApiService.send(
-          event: MouseProtocolEvents.mouseMove,
+          event: ProtocolEvent.mouseMove,
           data: MouseMovementProtocolData(
             x: normalized.x,
             y: normalized.y,
@@ -52,27 +65,13 @@ class MouseRepository {
   }
 
   void disableMovement() {
-    movementSubscription?.cancel(); // .cancel();
-    movementSubscription = null;
-  }
-
-  void click(MouseButton type) {
-    _clientApiService.send(
-      event: MouseProtocolEvents.mouseClick,
-      data: MouseButtonProtocolData(type: type),
-    );
-  }
-
-  void doubleClick() {
-    _clientApiService.send(
-      event: MouseProtocolEvents.mouseDoubleClick,
-      data: const MouseButtonProtocolData(type: MouseButton.left),
-    );
+    movementSubscription.value?.cancel(); // .cancel();
+    movementSubscription.value = null;
   }
 
   void disableScrolling() {
-    scrollingSubscription?.cancel();
-    scrollingSubscription = null;
+    scrollingSubscription.value?.cancel();
+    scrollingSubscription.value = null;
   }
 
   void enableScrolling() {
@@ -82,9 +81,7 @@ class MouseRepository {
     final bool invertX = getIt.get<MouseSettings>().invertedScrollX;
     final bool invertY = getIt.get<MouseSettings>().invertedScrollY;
 
-   
-
-    scrollingSubscription ??= _sensorsService.gyroscope(
+    scrollingSubscription.value ??= _sensorsService.gyroscope(
       invertX,
       invertY,
       threshold,
@@ -100,7 +97,7 @@ class MouseRepository {
         Vector2D normalized = vector.normalized;
 
         _clientApiService.send(
-          event: MouseProtocolEvents.mouseScroll,
+          event: ProtocolEvent.mouseScroll,
           data: MouseMovementProtocolData(
             x: normalized.x,
             y: normalized.y,
@@ -121,7 +118,7 @@ class MouseRepository {
     Vector2D normalized = vector.normalized;
 
     _clientApiService.send(
-      event: MouseProtocolEvents.mouseMove,
+      event: ProtocolEvent.mouseMove,
       data: MouseMovementProtocolData(
         x: normalized.x,
         y: normalized.y,

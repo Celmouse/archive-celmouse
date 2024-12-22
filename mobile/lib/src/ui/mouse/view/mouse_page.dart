@@ -1,4 +1,5 @@
 import 'package:controller/getit.dart';
+import 'package:controller/src/routing/routes.dart';
 import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
@@ -8,6 +9,7 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
@@ -43,39 +45,34 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    widget.viewmodel.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // App has resumed
-      print('App has resumed');
-      widget.viewmodel.reconnect();
-      widget.viewmodel.enableMouse();
-    } else if (state == AppLifecycleState.paused) {
-      // App has paused (gone to background)
-      print('App has paused');
-      widget.viewmodel.disconnect();
-      widget.viewmodel.disableMouse();
-    } else if (state == AppLifecycleState.inactive) {
-      // App is inactive (e.g., when the phone is locked)
-      print('App is inactive');
-    } else if (state == AppLifecycleState.detached) {
-      // App is detached (e.g., when the app is terminated)
-      print('App is detached');
-      widget.viewmodel.disableMouse();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        widget.viewmodel.reconnect();
+        break;
+      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        widget.viewmodel.disableMouse();
     }
   }
 
   void _onToggle(int index) {
+    widget.viewmodel.disableMouse();
+    widget.viewmodel.closeKeyboard();
+
     setState(() {
       _currentPageIndex = index;
     });
-    widget.viewmodel.disableMouse();
     _pageController.jumpToPage(index);
     if (index != 1) {
-      widget.viewmodel.enableMouse();
+      // widget.viewmodel.enableMouse();
     }
   }
 
@@ -98,51 +95,62 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
           MouseSettingsPersistenceService.saveSettings(getIt<MouseSettings>());
         } else {
           widget.viewmodel.disableMouse();
+          widget.viewmodel.closeKeyboard();
         }
       },
       appBar: AppBar(
         title: const Text('Mouse'),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        actions: [
-          const Visibility(
-            visible: kDebugMode,
-            child: IconButton(
-              onPressed: null, //isMicOn ? disableVoiceType : enableVoiceType,
-              icon: Icon(
-                Icons.mic,
-                color: null, // isMicOn ? Colors.greenAccent : null,
-              ),
-            ),
+        leading: IconButton(
+          onPressed: () {
+            widget.viewmodel.disconnect();
+            context.go(Routes.connect);
+          },
+          icon: const Icon(
+            Icons.exit_to_app,
+            color: Colors.red,
           ),
+        ),
+        actions: [
           Visibility(
             visible: kDebugMode,
             child: ListenableBuilder(
-              listenable: widget.viewmodel,
+              listenable: widget.viewmodel.isKeyboardOpen,
               builder: (context, _) {
                 return IconButton(
                   onPressed: () {
                     widget.viewmodel.disableMouse();
-                    if (widget.viewmodel.keyboardOpenClose()) {
+                    if (!widget.viewmodel.isKeyboardOpen.value) {
+                      widget.viewmodel.openKeyboard();
                       showBottomSheet(
                         context: context,
                         builder: (context) {
-                          return SizedBox(
-                            height: size.height * 0.4,
-                            child: KeyboardTyppingPage(
-                              viewmodel: KeyboardViewModel(
-                                keyboardRepository: context.read(),
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text('Keyboard is experimental'),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                child: KeyboardTyppingPage(
+                                  viewmodel: KeyboardViewModel(
+                                    keyboardRepository: context.read(),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           );
                         },
                       );
                     } else {
-                      Navigator.pop(context);
+                      widget.viewmodel.closeKeyboard();
+                      Navigator.of(context).pop();
                     }
                   },
                   icon: Icon(
-                    widget.viewmodel.isKeyboardOpen
+                    widget.viewmodel.isKeyboardOpen.value
                         ? Icons.keyboard_arrow_down
                         : Icons.keyboard,
                   ),
