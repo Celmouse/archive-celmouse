@@ -167,7 +167,6 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -194,10 +193,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 12,
-            ),
-            const BannerAdWidget(),
+           
           ],
         ),
       ),

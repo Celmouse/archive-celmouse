@@ -1,4 +1,5 @@
 import 'package:controller/src/domain/models/button_settings.dart';
+import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/mouse/view/left_button.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
 import 'package:controller/src/ui/mouse/view/right_button.dart';
@@ -56,55 +57,54 @@ class _MoveMouseBodyState extends State<MoveMouseBody> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return OrientationBuilder(builder: (
-      context,
-      orientation,
-    ) {
-      if (orientation == Orientation.landscape) {
-        return const Center(child: CupertinoActivityIndicator());
-      }
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CursorFeatLabel("L Click", Colors.red),
-                  CursorFeatLabel("Toggle Move", Colors.green),
-                ],
-              ),
-              SizedBox(
-                width: 16,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CursorFeatLabel("R Click", Colors.blue),
-                  CursorFeatLabel("Hold Scroll", Colors.purple),
-                ],
-              ),
-            ],
-          ),
-          const Spacer(),
-          ElevatedButton.icon(
-            onPressed: null,
-            icon: const Icon(Icons.rocket),
-            label: const Text('Game Mode'),
-          ),
-          const SizedBox(
-            height: 28,
-          ),
-          Flexible(
-            flex: 2,
-            child: SizedBox(
+    return OrientationBuilder(
+      builder: (
+        context,
+        orientation,
+      ) {
+        if (orientation == Orientation.landscape) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CursorFeatLabel("L Click", Colors.red),
+                    CursorFeatLabel("Toggle Move", Colors.green),
+                  ],
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CursorFeatLabel("R Click", Colors.blue),
+                    CursorFeatLabel("Hold Scroll", Colors.purple),
+                  ],
+                ),
+              ],
+            ),
+            const Spacer(),
+            ElevatedButton.icon(
+              onPressed: null,
+              icon: const Icon(Icons.rocket),
+              label: const Text('Game Mode'),
+            ),
+            const SizedBox(
+              height: 28,
+            ),
+            SizedBox(
               width: double.infinity,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -134,42 +134,46 @@ class _MoveMouseBodyState extends State<MoveMouseBody> {
                 ],
               ),
             ),
-          ),
-          const Divider(),
-          Flexible(
-            flex: 2,
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 8,
-                  child: MoveMouseButton(
-                    settings: ButtonSettings(
-                      color: Colors.green,
-                      width: double.infinity,
-                      height: size.height * 0.13,
-                      borderRadius: BorderRadius.circular(24),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 8,
+                    child: MoveMouseButton(
+                      settings: ButtonSettings(
+                        color: Colors.green,
+                        width: double.infinity,
+                        height: size.height * 0.13,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Flexible(
-                  flex: 3,
-                  child: ScrollMouseButton(
-                    settings: ButtonSettings(
-                      color: Colors.purple,
-                      width: double.infinity,
-                      height: size.height * 0.13,
-                      borderRadius: BorderRadius.circular(24),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                  Flexible(
+                    flex: 3,
+                    child: ScrollMouseButton(
+                      settings: ButtonSettings(
+                        color: Colors.purple,
+                        width: double.infinity,
+                        height: size.height * 0.13,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      );
-    });
+            const SizedBox(
+              height: 12,
+            ),
+            const BannerAdWidget(),
+          ],
+        );
+      },
+    );
   }
 }
