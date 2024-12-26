@@ -7,6 +7,7 @@ import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../../utils/launch_site.dart';
 
@@ -25,6 +26,10 @@ class ConnectHUBPage extends StatefulWidget {
 class _ConnectHUBPageState extends State<ConnectHUBPage> {
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     widget.viewmodel.addListener(_listener);
     if (kDebugMode) {
       widget.viewmodel.startScan();

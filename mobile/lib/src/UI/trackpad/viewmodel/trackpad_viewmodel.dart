@@ -56,6 +56,7 @@ class TrackPadViewModel extends ChangeNotifier {
     _previousX = _mouseX;
     _previousY = _mouseY;
     notifyListeners();
+    if(!_isDragging) return;
     _mouseRepository.handleDrag(deltaX, deltaY);
   }
 

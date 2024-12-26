@@ -10,5 +10,7 @@ class Vector2D {
 
   bool get canNormalize => length != 0;
 
-  Vector2D get normalized => Vector2D(x / length, y / length);
+  Vector2D operator /(double value) => Vector2D(x / value, y / value);
+
+  Vector2D get normalized => this / length;
 }
