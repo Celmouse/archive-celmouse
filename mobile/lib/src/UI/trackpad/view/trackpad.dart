@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:controller/src/UI/trackpad/viewmodel/trackpad_viewmodel.dart';
 import 'package:controller/src/ui/ads/view/banner.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,33 +51,30 @@ class _TrackPadState extends State<TrackPad> {
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: GestureDetector(
-                onPanStart: (details) {
+              child: TouchpadGestureDetector(
+                onStartMoving: (details) {
                   viewModel.startDragging(
-                      details.localPosition.dx, details.localPosition.dy);
+                    details.localPosition.dx,
+                    details.localPosition.dy,
+                  );
                 },
-                onPanUpdate: (details) {
-                  viewModel.updateDragging(details.delta.dx, details.delta.dy);
-                  widget.onDragUpdate(DragUpdateDetails(
-                    delta: details.delta,
-                    localPosition: details.localPosition,
-                    globalPosition: details.globalPosition,
-                  ));
+                onMove: (details) {
+                  viewModel.updateDragging(
+                    details.delta.dx,
+                    details.delta.dy,
+                  );
                 },
-                onPanEnd: (details) {
+                onEndMoving: (details) {
                   viewModel.stopDragging();
                 },
-                onTap: () {
-                  viewModel.handleTap();
-                  widget.onTap();
-                },
-                onDoubleTap: () {
-                  viewModel.handleDoubleTap();
-                  widget.onDoubleTap();
-                },
-                onSecondaryTapDown: (details) {
+                onRightClick: () {
                   viewModel.handleTwoFingerTap();
-                  widget.onTwoFingerTap();
+                },
+                onClick: () {
+                  viewModel.handleTap();
+                },
+                onDoubleClick: () {
+                  viewModel.handleDoubleTap();
                 },
                 child: Container(
                   width: 400,
@@ -165,5 +166,117 @@ class _TrackPadState extends State<TrackPad> {
         );
       }
     });
+  }
+}
+
+class TwoFingerDoubleTapGestureRecognizer extends OneSequenceGestureRecognizer {
+  VoidCallback? onTwoFingerDoubleTap;
+
+  final List<PointerDownEvent> _pointerEvents = [];
+  static const int _maxPointers = 2;
+
+  @override
+  void addPointer(PointerEvent event) {
+    if (event is PointerDownEvent) {
+      _pointerEvents.add(event);
+    }
+    startTrackingPointer(event.pointer);
+  }
+
+  @override
+  void handleEvent(PointerEvent event) {
+    if (event is PointerDownEvent) {
+      Timer(const Duration(milliseconds: 100), () {
+        _pointerEvents.clear();
+      });
+      if (_pointerEvents.length == _maxPointers) {
+        if (onTwoFingerDoubleTap != null) {
+          onTwoFingerDoubleTap!();
+          print(_pointerEvents);
+        }
+      }
+    } else {
+      _pointerEvents.clear();
+    }
+  }
+
+  @override
+  String get debugDescription => 'TwoFingerDoubleTap';
+
+  @override
+  void didStopTrackingLastPointer(int pointer) {}
+
+  @override
+  void stopTrackingPointer(int pointer) {
+    super.stopTrackingPointer(pointer);
+  }
+
+  @override
+  void resolve(GestureDisposition disposition) {
+    super.resolve(disposition);
+  }
+}
+
+class TouchpadGestureDetector extends StatelessWidget {
+  const TouchpadGestureDetector({
+    super.key,
+    required this.child,
+    required this.onClick,
+    required this.onRightClick,
+    required this.onDoubleClick,
+    this.onMove,
+    this.onEndMoving,
+    this.onStartMoving,
+  });
+
+  final Widget child;
+  final VoidCallback onRightClick;
+  final VoidCallback onClick;
+  final VoidCallback onDoubleClick;
+  final void Function(DragStartDetails)? onStartMoving;
+  final void Function(DragUpdateDetails)? onMove;
+  final void Function(DragEndDetails)? onEndMoving;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawGestureDetector(
+      gestures: <Type, GestureRecognizerFactory>{
+        PanGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
+          () => PanGestureRecognizer(),
+          (PanGestureRecognizer instance) {
+            instance
+              ..onStart = onStartMoving
+              ..onUpdate = onMove
+              ..onEnd = onEndMoving;
+          },
+        ),
+        DoubleTapGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<DoubleTapGestureRecognizer>(
+          () => DoubleTapGestureRecognizer(),
+          (DoubleTapGestureRecognizer instance) {
+            instance.onDoubleTap = onDoubleClick;
+          },
+        ),
+        TapGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+          () => TapGestureRecognizer(),
+          (TapGestureRecognizer instance) {
+            instance.onTap = onClick;
+          },
+        ),
+        TwoFingerDoubleTapGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<
+                TwoFingerDoubleTapGestureRecognizer>(
+          () => TwoFingerDoubleTapGestureRecognizer(),
+          (
+            TwoFingerDoubleTapGestureRecognizer instance,
+          ) {
+            instance.onTwoFingerDoubleTap = onRightClick;
+          },
+        ),
+      },
+      child: child,
+    );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:controller/getit.dart';
 import 'package:controller/src/routing/routes.dart';
-import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
