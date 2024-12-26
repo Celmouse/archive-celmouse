@@ -4,40 +4,20 @@ import 'package:controller/src/ui/mouse/view/left_button.dart';
 import 'package:controller/src/ui/mouse/view/move_button.dart';
 import 'package:controller/src/ui/mouse/view/right_button.dart';
 import 'package:controller/src/ui/mouse/view/scroll_button.dart';
+import 'package:controller/src/ui/mouse_move/view/components/mouse_mode_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CursorFeatLabel extends StatelessWidget {
-  const CursorFeatLabel(
-    this.text,
-    this.color, {
-    super.key,
-  });
-  final String text;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          Icons.circle,
-          color: color,
-        ),
-        Text(
-          text,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        )
-      ],
-    );
-  }
-}
-
 class MoveMouseBody extends StatefulWidget {
   const MoveMouseBody({
     super.key,
+    required this.currentIndex,
+    required this.onToggle,
   });
+
+  final int currentIndex;
+  final void Function(int) onToggle;
 
   @override
   State<MoveMouseBody> createState() => _MoveMouseBodyState();
@@ -68,6 +48,13 @@ class _MoveMouseBodyState extends State<MoveMouseBody> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            MouseModeSwitch(
+              onToggle: widget.onToggle,
+              currentIndex: widget.currentIndex,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -174,6 +161,32 @@ class _MoveMouseBodyState extends State<MoveMouseBody> {
           ],
         );
       },
+    );
+  }
+}
+
+class CursorFeatLabel extends StatelessWidget {
+  const CursorFeatLabel(
+    this.text,
+    this.color, {
+    super.key,
+  });
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          Icons.circle,
+          color: color,
+        ),
+        Text(
+          text,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        )
+      ],
     );
   }
 }

@@ -1,28 +1,22 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:controller/src/UI/trackpad/viewmodel/trackpad_viewmodel.dart';
 import 'package:controller/src/ui/ads/view/banner.dart';
+import 'package:controller/src/ui/mouse_move/view/components/mouse_mode_switch.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class TrackPad extends StatefulWidget {
-  final Function(DragUpdateDetails) onDragUpdate;
-  final VoidCallback onTwoFingerTap;
-  final VoidCallback onTap;
-  final VoidCallback onDoubleTap;
-  final Color baseColor;
-
   const TrackPad({
     super.key,
-    required this.onDragUpdate,
-    required this.onTwoFingerTap,
-    required this.onTap,
-    required this.onDoubleTap,
-    required this.baseColor,
+    required this.currentIndex,
+    required this.onToggle,
   });
 
+  final int currentIndex;
+  final void Function(int) onToggle;
   @override
   State<TrackPad> createState() => _TrackPadState();
 }
@@ -31,6 +25,13 @@ class _TrackPadState extends State<TrackPad> {
   late final TrackPadViewModel viewModel;
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.initState();
     viewModel = TrackPadViewModel(
       mouseRepository: context.read(),
     );
@@ -143,6 +144,13 @@ class _TrackPadState extends State<TrackPad> {
       if (orientation == Orientation.portrait) {
         return Column(
           children: [
+            MouseModeSwitch(
+              onToggle: widget.onToggle,
+              currentIndex: widget.currentIndex,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             body,
             const SizedBox(
               height: 12,
@@ -155,8 +163,24 @@ class _TrackPadState extends State<TrackPad> {
       } else {
         return Row(
           children: [
-            BannerAdWidget(
-              orientation: orientation,
+            SizedBox(
+              width: 250,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    MouseModeSwitch(
+                      onToggle: widget.onToggle,
+                      currentIndex: widget.currentIndex,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    BannerAdWidget(
+                      orientation: orientation,
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(
               height: 8,
@@ -192,7 +216,6 @@ class TwoFingerDoubleTapGestureRecognizer extends OneSequenceGestureRecognizer {
       if (_pointerEvents.length == _maxPointers) {
         if (onTwoFingerDoubleTap != null) {
           onTwoFingerDoubleTap!();
-          print(_pointerEvents);
         }
       }
     } else {

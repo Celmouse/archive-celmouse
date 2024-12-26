@@ -26,7 +26,7 @@ class TrackPadViewModel extends ChangeNotifier {
   double get mouseY => _mouseY;
 
   Color get backgroundColor {
-    if (_isDragging) return Colors.blue[100]!;
+    if (_isDragging) return Colors.grey[300]!;
     if (_isTapped) return Colors.green[100]!;
     if (_isDoubleTapped) return Colors.red[100]!;
     if (_isTwoFingerTapped) return Colors.yellow[100]!;

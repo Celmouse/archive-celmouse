@@ -5,13 +5,13 @@ import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_settings_page.dart';
 import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
-import 'package:controller/src/ui/trackpad/view/trackpad_page.dart';
+import 'package:controller/src/ui/trackpad/view/trackpad.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
-import '../../mouse_move/view/components/mouse_mode_switch.dart';
 
 class MousePage extends StatefulWidget {
   const MousePage({
@@ -69,8 +69,18 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
       _currentPageIndex = index;
     });
     _pageController.jumpToPage(index);
-    if (index != 1) {
-      // widget.viewmodel.enableMouse();
+    if (index == 0) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    } else if (index == 1) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
     }
   }
 
@@ -166,33 +176,24 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentPageIndex = index;
+            });
+          },
           children: [
-            MouseModeSwitch(
-              onToggle: _onToggle,
+            MoveMouseBody(
               currentIndex: _currentPageIndex,
+              onToggle: _onToggle,
             ),
-            const SizedBox(
-              height: 12,
+            TrackPad(
+              currentIndex: _currentPageIndex,
+              onToggle: _onToggle,
             ),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPageIndex = index;
-                  });
-                },
-                children: [
-                  const MoveMouseBody(),
-                  const TrackpadPage(),
-                  _buildDragPage(size),
-                ],
-              ),
-            ),
-           
+            _buildDragPage(size),
           ],
         ),
       ),
