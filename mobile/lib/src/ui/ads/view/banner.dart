@@ -6,7 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class BannerAdWidget extends StatefulWidget {
-  const BannerAdWidget({super.key});
+  const BannerAdWidget({
+    super.key,
+    this.orientation = Orientation.portrait,
+  });
+
+  final Orientation orientation;
 
   @override
   State<BannerAdWidget> createState() => _BannerAdWidgetState();
@@ -46,16 +51,19 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   Widget build(BuildContext context) {
     if (_bannerAd != null && _isLoaded) {
-      return SizedBox(
-        width: _bannerAd!.size.width.toDouble(),
-        height: _bannerAd!.size.height.toDouble(),
-        child: AdWidget(ad: _bannerAd!),
+      return RotatedBox(
+        quarterTurns: widget.orientation == Orientation.landscape ? 1 : 0,
+        child: SizedBox(
+          width: _bannerAd!.size.width.toDouble(),
+          height: _bannerAd!.size.height.toDouble(),
+          child: AdWidget(ad: _bannerAd!),
+        ),
       );
     }
     return const SizedBox.shrink();
   }
 
-   /// Loads and shows a banner ad.
+  /// Loads and shows a banner ad.
   ///
   /// Dimensions of the ad are determined by the width of the screen.
   void _loadAd() async {
@@ -70,23 +78,25 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       return;
     }
 
-    final String _adUnitId = Platform.isAndroid
+    final String adUnitId = Platform.isAndroid
         ? EnviromentVariables.admobBannerIdAndroid
         : EnviromentVariables.admobBannerId;
 
     // Get an AnchoredAdaptiveBannerAdSize before loading the ad.
-    final size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-        MediaQuery.sizeOf(context).width.truncate());
-
+    final size = await AdSize.getAnchoredAdaptiveBannerAdSize(
+      widget.orientation,
+       MediaQuery.sizeOf(context).width.truncate(),
+    );
+    
     if (size == null) {
       // Unable to get width of anchored banner.
       return;
     }
 
     BannerAd(
-      adUnitId: _adUnitId,
+      adUnitId: adUnitId,
       request: const AdRequest(),
-      size: size,
+      size: widget.orientation == Orientation.portrait ? AdSize.fullBanner: AdSize.mediumRectangle,
       listener: BannerAdListener(
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
