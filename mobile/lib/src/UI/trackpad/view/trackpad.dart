@@ -38,6 +38,8 @@ class _TrackPadState extends State<TrackPad> {
     super.initState();
   }
 
+  bool _isMoving = false;
+
   @override
   void dispose() {
     viewModel.dispose();
@@ -54,19 +56,26 @@ class _TrackPadState extends State<TrackPad> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: TouchpadGestureDetector(
                 onStartMoving: (details) {
+                  _isMoving = true;
                   viewModel.startDragging(
                     details.localPosition.dx,
                     details.localPosition.dy,
                   );
                 },
                 onMove: (details) {
+                  if (!_isMoving) return;
+                  print(details.delta);
                   viewModel.updateDragging(
                     details.delta.dx,
                     details.delta.dy,
                   );
                 },
                 onEndMoving: (details) {
+                  _isMoving = false;
                   viewModel.stopDragging();
+                },
+                onCancelMove: () {
+                  _isMoving = false;
                 },
                 onRightClick: () {
                   viewModel.handleTwoFingerTap();
@@ -250,6 +259,7 @@ class TouchpadGestureDetector extends StatelessWidget {
     this.onMove,
     this.onEndMoving,
     this.onStartMoving,
+    this.onCancelMove,
   });
 
   final Widget child;
@@ -258,6 +268,7 @@ class TouchpadGestureDetector extends StatelessWidget {
   final VoidCallback onDoubleClick;
   final void Function(DragStartDetails)? onStartMoving;
   final void Function(DragUpdateDetails)? onMove;
+  final void Function()? onCancelMove;
   final void Function(DragEndDetails)? onEndMoving;
 
   @override
@@ -271,6 +282,7 @@ class TouchpadGestureDetector extends StatelessWidget {
             instance
               ..onStart = onStartMoving
               ..onUpdate = onMove
+              ..onCancel = onCancelMove
               ..onEnd = onEndMoving;
           },
         ),
