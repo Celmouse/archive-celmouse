@@ -10,14 +10,14 @@ class KeyboardRepository {
 
   void type(String text) {
     _clientApiService.send(
-      event: KeyboardProtocolEvents.keyPressed,
+      event: ProtocolEvent.keyPressed,
       data: text,
     );
   }
 
   void pressSpecialKey(SpecialKeyType type) {
     _clientApiService.send(
-      event: KeyboardProtocolEvents.specialKeyPressed,
+      event: ProtocolEvent.specialKeyPressed,
       data: KeyboardProtocolData(
         key: type,
       ),
@@ -26,7 +26,7 @@ class KeyboardRepository {
   
   void releaseSpecialKey(SpecialKeyType type) {
     _clientApiService.send(
-      event: KeyboardProtocolEvents.specialKeyReleased,
+      event: ProtocolEvent.specialKeyReleased,
       data: KeyboardProtocolData(
         key: type,
       ),

@@ -4,5 +4,4 @@
 library;
 
 export 'src/data.dart';
-export 'src/events.dart';
 export 'src/button_type.dart';
