@@ -14,6 +14,11 @@ class LayoutButtonProperties {
     required this.y,
     required this.size,
   });
+
+  @override
+  String toString() {
+    return "id: $id, x: $x, y: $y";
+  }
 }
 
 class LayoutBuilderItem extends StatefulWidget {
