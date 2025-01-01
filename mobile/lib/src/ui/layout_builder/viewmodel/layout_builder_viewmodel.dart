@@ -2,21 +2,21 @@ import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
 import 'package:flutter/foundation.dart';
 
 class LayoutBuilderViewmodel extends ChangeNotifier {
-  bool isItemSelected = false;
-  List<LayoutButtonProperties> items = [];
+  String? selectedItem;
   bool isHovering = false;
+  final Map<String, LayoutButtonProperties> _items = {};
+  Map<String, LayoutButtonProperties> get items => Map.from(_items);
 
   void holdItem(String id) {
-    isItemSelected = true;
+    selectedItem = id;
     notifyListeners();
   }
 
   void releaseItem(String id) {
-    if(isHovering){
-      print(id);
-      items.removeWhere((element) => element.id == id);
+    if (isHovering) {
+      _items.remove(id);
     }
-    isItemSelected = false;
+    selectedItem = null;
     notifyListeners();
   }
 
@@ -25,8 +25,14 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addItem(LayoutButtonProperties item) {
-    items.add(item);
+  void updateItem(String id, LayoutButtonProperties item) {
+    print(id == selectedItem);
+    _items.update(id, (value) => item);
+    notifyListeners();
+  }
+
+  void addItem(String id, LayoutButtonProperties item) {
+    _items.addAll({id: item});
     notifyListeners();
   }
 }

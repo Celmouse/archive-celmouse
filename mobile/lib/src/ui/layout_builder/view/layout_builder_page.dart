@@ -23,9 +23,9 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
 
   addItem(Offset offset) {
     final id = UniqueKey().toString();
-    print(id);
 
     viewmodel.addItem(
+      id,
       LayoutButtonProperties(
         id: id,
         x: offset.dx,
@@ -38,7 +38,7 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
   onPositionChanged(String id, double x, double y) {}
 
   void _checkTouch(PointerEvent event) {
-    if (!viewmodel.isItemSelected) {
+    if (viewmodel.selectedItem == null) {
       return;
     }
 
@@ -90,8 +90,9 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
               listenable: viewmodel,
               builder: (context, _) {
                 return Stack(
-                  children: viewmodel.items.map(
+                  children: viewmodel.items.values.map(
                     (item) {
+                      print(item);
                       return LayoutBuilderItem(
                         properties: item,
                         viewmodel: viewmodel,
@@ -107,7 +108,7 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
                 listenable: viewmodel,
                 builder: (context, _) {
                   return Visibility(
-                    visible: viewmodel.isItemSelected,
+                    visible: viewmodel.selectedItem != null,
                     child: CircleAvatar(
                       key: _widgetKey,
                       radius: viewmodel.isHovering ? 42 : 32,
