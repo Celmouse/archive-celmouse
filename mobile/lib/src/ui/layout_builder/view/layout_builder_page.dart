@@ -3,7 +3,6 @@ import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
 import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 const bool extendsBodyBehindAppBar = false;
 
@@ -38,44 +37,18 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: viewmodel.scaffoldKey,
-      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: ListenableBuilder(
         listenable: viewmodel,
-        builder: (_, __) {
-          return Visibility(
-            visible: viewmodel.selectedItem != null,
-            child: ExpandableFab(
-              key: viewmodel.menuKey,
-              type: ExpandableFabType.up,
-              distance: 72,
-              openButtonBuilder: RotateFloatingActionButtonBuilder(
-                child: const Icon(Icons.edit),
-                fabSize: ExpandableFabSize.regular,
-                shape: const CircleBorder(),
-              ),
-              children: [
-                FloatingActionButton.small(
-                  heroTag: null,
-                  onPressed: viewmodel.unselectItem,
-                  child: const Icon(Icons.edit_off_sharp),
-                ),
-                FloatingActionButton.small(
-                  heroTag: null,
-                  onPressed: viewmodel.deleteSelected,
-                  backgroundColor: Colors.red[400],
-                  foregroundColor: Colors.white,
-                  child: const Icon(Icons.delete),
-                ),
-                FloatingActionButton.small(
-                  heroTag: null,
-                  onPressed: viewmodel.openButtonSettings,
-                  child: const Icon(Icons.menu),
-                ),
-              ],
-            ),
-          );
-        },
+        builder: (_, __) => Visibility(
+          visible: viewmodel.selectedItem != null,
+          child: FloatingActionButton(
+            onPressed: viewmodel.openButtonSettings,
+            child: const Icon(Icons.edit),
+          ),
+        ),
       ),
+      endDrawerEnableOpenDragGesture: false,
       endDrawer: ButtomPropertiesDrawer(
         viewmodel: viewmodel,
       ),

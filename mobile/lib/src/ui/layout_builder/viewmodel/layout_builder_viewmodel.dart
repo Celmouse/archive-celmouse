@@ -1,12 +1,10 @@
 import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 class LayoutBuilderViewmodel extends ChangeNotifier {
   final DeleteButtonViewmodel deleteButtonViewmodel = DeleteButtonViewmodel();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final menuKey = GlobalKey<ExpandableFabState>();
   final GlobalKey widgetKey = GlobalKey();
 
   String? selectedItem;
@@ -23,7 +21,6 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     }
     _items.removeWhere((i) => i.id == selectedItem);
     selectedItem = null;
-    menuKey.currentState?.toggle();
     notifyListeners();
   }
 
@@ -43,7 +40,6 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     } else {
       _items[_items.indexWhere((i) => i.id == item.id)] = item;
     }
-    selectedItem = null;
     notifyListeners();
   }
 

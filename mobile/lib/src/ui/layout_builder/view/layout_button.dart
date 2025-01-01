@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:controller/src/ui/layout_builder/view/layout_builder_page.dart';
 import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,7 @@ class LayoutButtonProperties {
   Color color;
   BoxShape shape;
   String label;
-  // TODO: Add shape
-  // TODO: Add custom image
+  File? customImage;
 
   LayoutButtonProperties({
     required this.id,
@@ -21,6 +22,7 @@ class LayoutButtonProperties {
     this.label = "",
     this.color = Colors.blue,
     this.shape = BoxShape.rectangle,
+    this.customImage,
   });
 
   @override
@@ -90,7 +92,14 @@ class LayoutBuilderItem extends StatelessWidget {
                     : Colors.transparent,
                 width: 2,
               ),
+              image: properties.customImage != null
+                  ? DecorationImage(
+                      image: FileImage(properties.customImage!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
+            
             child: Center(
               child: Text(
                 properties.label,

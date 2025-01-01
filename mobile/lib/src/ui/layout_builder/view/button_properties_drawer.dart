@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ButtomPropertiesDrawer extends StatefulWidget {
   const ButtomPropertiesDrawer({
@@ -15,10 +18,14 @@ class ButtomPropertiesDrawer extends StatefulWidget {
 
 class _ButtomPropertiesDrawerState extends State<ButtomPropertiesDrawer> {
   double buttomSize = 0;
+  late final TextEditingController labelController;
 
   @override
   void initState() {
     buttomSize = widget.viewmodel.selectedButtom.size;
+    labelController = TextEditingController(
+      text: widget.viewmodel.selectedButtom.label,
+    );
     super.initState();
   }
 
@@ -119,8 +126,7 @@ class _ButtomPropertiesDrawerState extends State<ButtomPropertiesDrawer> {
                           onTap: () {
                             setState(() {
                               widget.viewmodel.updateItem(
-                                widget.viewmodel.selectedButtom
-                                  ..shape = shape,
+                                widget.viewmodel.selectedButtom..shape = shape,
                               );
                             });
                           },
@@ -144,26 +150,172 @@ class _ButtomPropertiesDrawerState extends State<ButtomPropertiesDrawer> {
                         ),
                     ],
                   ),
-                   Text(
-                    'Label:',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Text(
+                          'Label:',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        flex: 3,
+                        child: TextField(
+                          controller: labelController,
+                          onChanged: (value) {
+                            widget.viewmodel.updateItem(
+                              widget.viewmodel.selectedButtom..label = value,
+                            );
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            labelController.clear();
+                            widget.viewmodel.updateItem(
+                              widget.viewmodel.selectedButtom..label = "",
+                            );
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.grey,
+                        ),
+                      )
+                    ],
                   ),
-                  TextField(
-                    controller: TextEditingController(
-                      text: widget.viewmodel.selectedButtom.label,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Text(
+                            'Image:',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        GestureDetector(
+                          child: widget.viewmodel.selectedButtom.customImage !=
+                                  null
+                              ? Image.file(
+                                  widget.viewmodel.selectedButtom.customImage!,
+                                  width: 50,
+                                  height: 50,
+                                )
+                              : Container(
+                                  width: 50,
+                                  height: 50,
+                                  color: Colors.grey,
+                                  child: const Icon(
+                                    Icons.image,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                          onTap: () async {
+                            final ImagePicker picker = ImagePicker();
+
+                            final XFile? image = await picker.pickImage(
+                              source: ImageSource.gallery,
+                            );
+
+                            if (image == null) {
+                              return;
+                            }
+                            setState(() {
+                              widget.viewmodel.updateItem(
+                                widget.viewmodel.selectedButtom
+                                  ..customImage = File(image.path),
+                              );
+                            });
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              widget.viewmodel.updateItem(
+                                widget.viewmodel.selectedButtom
+                                  ..customImage = null,
+                              );
+                            });
+                          },
+                          icon: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    onChanged: (value) {
-                      widget.viewmodel.updateItem(
-                        widget.viewmodel.selectedButtom..label = value,
-                      );
-                    },
-                    decoration: const InputDecoration(
-                      hintText: 'Label',
-                    ),
-                  ),
+                  )
                 ],
               ),
-            )
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      'Save',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  widget.viewmodel.deleteSelected();
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
