@@ -7,12 +7,20 @@ class LayoutButtonProperties {
   double x;
   double y;
   double size;
+  Color color;
+  BoxShape shape;
+  String label;
+  // TODO: Add shape
+  // TODO: Add custom image
 
   LayoutButtonProperties({
     required this.id,
     required this.x,
     required this.y,
     required this.size,
+    this.label = "",
+    this.color = Colors.blue,
+    this.shape = BoxShape.rectangle,
   });
 
   @override
@@ -35,13 +43,12 @@ class LayoutBuilderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final double x = properties.x - properties.size / 2;
     final double y = properties.y - properties.size / 2;
-
     return Positioned(
       top: y,
       left: x,
       child: GestureDetector(
         onTap: () {
-          //TODO: Implement select item and show options.
+          viewmodel.selectItem(properties.id);
         },
         child: Draggable(
           // rootOverlay: true,
@@ -65,13 +72,31 @@ class LayoutBuilderItem extends StatelessWidget {
           feedback: Container(
             width: properties.size,
             height: properties.size,
-            color: Colors.blue.withValues(alpha: .5),
+            decoration: BoxDecoration(
+              color: properties.color.withValues(alpha: .4),
+              shape: properties.shape,
+            ),
           ),
           childWhenDragging: Container(),
           child: Container(
             width: properties.size,
             height: properties.size,
-            color: Colors.blue,
+            decoration: BoxDecoration(
+              color: properties.color,
+              shape: properties.shape,
+              border: Border.all(
+                color: viewmodel.selectedItem == properties.id
+                    ? Colors.black
+                    : Colors.transparent,
+                width: 2,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                properties.label,
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ),
       ),

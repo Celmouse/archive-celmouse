@@ -1,7 +1,9 @@
+import 'package:controller/src/ui/layout_builder/view/button_properties_drawer.dart';
 import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
 import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 const bool extendsBodyBehindAppBar = false;
 
@@ -19,8 +21,6 @@ class LayoutBuilderPage extends StatefulWidget {
 class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
   final LayoutBuilderViewmodel viewmodel = LayoutBuilderViewmodel();
 
-  final GlobalKey _widgetKey = GlobalKey();
-
   addItem(Offset offset) {
     final id = UniqueKey().toString();
 
@@ -34,51 +34,67 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
     );
   }
 
-  void _checkTouch(PointerEvent event) {
-    if (viewmodel.selectedItem == null) {
-      return;
-    }
-
-    final RenderBox? renderBox =
-        _widgetKey.currentContext?.findRenderObject() as RenderBox?;
-
-    if (renderBox == null) {
-      return;
-    }
-
-    final Offset widgetPosition = renderBox.localToGlobal(Offset.zero);
-    final Size widgetSize = renderBox.size;
-
-    // Define the widget boundaries
-    final Rect widgetRect = Rect.fromLTWH(
-      widgetPosition.dx,
-      widgetPosition.dy,
-      widgetSize.width,
-      widgetSize.height,
-    );
-
-    viewmodel.deleteButtonViewmodel.isHoveringDeletionButton =
-        widgetRect.contains(event.position);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: viewmodel.scaffoldKey,
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ListenableBuilder(
+        listenable: viewmodel,
+        builder: (_, __) {
+          return Visibility(
+            visible: viewmodel.selectedItem != null,
+            child: ExpandableFab(
+              key: viewmodel.menuKey,
+              type: ExpandableFabType.up,
+              distance: 72,
+              openButtonBuilder: RotateFloatingActionButtonBuilder(
+                child: const Icon(Icons.edit),
+                fabSize: ExpandableFabSize.regular,
+                shape: const CircleBorder(),
+              ),
+              children: [
+                FloatingActionButton.small(
+                  heroTag: null,
+                  onPressed: viewmodel.unselectItem,
+                  child: const Icon(Icons.edit_off_sharp),
+                ),
+                FloatingActionButton.small(
+                  heroTag: null,
+                  onPressed: viewmodel.deleteSelected,
+                  backgroundColor: Colors.red[400],
+                  foregroundColor: Colors.white,
+                  child: const Icon(Icons.delete),
+                ),
+                FloatingActionButton.small(
+                  heroTag: null,
+                  onPressed: viewmodel.openButtonSettings,
+                  child: const Icon(Icons.menu),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+      endDrawer: ButtomPropertiesDrawer(
+        viewmodel: viewmodel,
+      ),
       appBar: AppBar(
         title: const Text('Build Custom Layout'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              icon: const Icon(Icons.visibility),
-              onPressed: () {},
-            ),
-          ),
+        actions: const [
+          SizedBox.shrink(),
+          //   Padding(
+          //     padding: const EdgeInsets.only(right: 8.0),
+          //     child: IconButton(
+          //       icon: const Icon(Icons.visibility),
+          //       onPressed: () {},
+          //     ),
+          //   ),
         ],
       ),
       extendBodyBehindAppBar: extendsBodyBehindAppBar,
       body: Listener(
-        onPointerMove: _checkTouch,
+        onPointerMove: viewmodel.checkTouch,
         child: Stack(
           children: [
             GestureDetector(
@@ -88,19 +104,16 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
             ),
             ListenableBuilder(
               listenable: viewmodel,
-              builder: (context, _) {
-                print(viewmodel.items);
-                return Stack(
-                  children: viewmodel.items.map(
-                    (item) {
-                      return LayoutBuilderItem(
+              builder: (__, _) => Stack(
+                children: viewmodel.items
+                    .map(
+                      (item) => LayoutBuilderItem(
                         properties: item,
                         viewmodel: viewmodel,
-                      );
-                    },
-                  ).toList(),
-                );
-              },
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
             Align(
               alignment: const Alignment(0, 0.9),
@@ -110,7 +123,7 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
                   return Visibility(
                     visible: viewmodel.deleteButtonViewmodel.showDeletionButton,
                     child: CircleAvatar(
-                      key: _widgetKey,
+                      key: viewmodel.widgetKey,
                       radius: viewmodel
                               .deleteButtonViewmodel.isHoveringDeletionButton
                           ? 42

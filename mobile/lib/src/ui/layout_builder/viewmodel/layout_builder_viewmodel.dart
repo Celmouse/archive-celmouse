@@ -1,23 +1,44 @@
 import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
 class LayoutBuilderViewmodel extends ChangeNotifier {
   final DeleteButtonViewmodel deleteButtonViewmodel = DeleteButtonViewmodel();
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final menuKey = GlobalKey<ExpandableFabState>();
+  final GlobalKey widgetKey = GlobalKey();
 
   String? selectedItem;
   final List<LayoutButtonProperties> _items = [];
   List<LayoutButtonProperties> get items => _items.toList();
 
+  LayoutButtonProperties get selectedButtom => _items.firstWhere(
+        (i) => i.id == selectedItem,
+      );
+
+  void deleteSelected() {
+    if (selectedItem == null) {
+      return;
+    }
+    _items.removeWhere((i) => i.id == selectedItem);
+    selectedItem = null;
+    menuKey.currentState?.toggle();
+    notifyListeners();
+  }
+
   void holdItem(String id) {
-    print("Selected item: $id");
     deleteButtonViewmodel.showDeletionButton = true;
     selectedItem = id;
+  }
+
+  void openButtonSettings() {
+    scaffoldKey.currentState?.openEndDrawer();
   }
 
   void releaseItem(LayoutButtonProperties item) {
     deleteButtonViewmodel.showDeletionButton = false;
     if (deleteButtonViewmodel.isHoveringDeletionButton) {
-      print("Deleting item: ${item.id}");
       _items.removeWhere((i) => i.id == item.id);
     } else {
       _items[_items.indexWhere((i) => i.id == item.id)] = item;
@@ -26,9 +47,57 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   void addItem(LayoutButtonProperties item) {
     _items.add(item);
     notifyListeners();
+  }
+
+  void selectItem(String id) {
+    if(selectedItem == id){
+      selectedItem = null;
+    } else {
+      selectedItem = id;
+    }
+    notifyListeners();
+  }
+
+  void unselectItem() {
+    selectedItem = null;
+    notifyListeners();
+  }
+
+  void updateItem(LayoutButtonProperties item) {
+    _items[_items.indexWhere((i) => i.id == item.id)] = item;
+    notifyListeners();
+  }
+
+  void checkTouch(PointerEvent event) {
+    if (selectedItem == null) {
+      return;
+    }
+
+    final RenderBox? renderBox =
+        widgetKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (renderBox == null) {
+      return;
+    }
+
+    final Offset widgetPosition = renderBox.localToGlobal(Offset.zero);
+    final Size widgetSize = renderBox.size;
+
+    // Define the widget boundaries
+    final Rect widgetRect = Rect.fromLTWH(
+      widgetPosition.dx,
+      widgetPosition.dy,
+      widgetSize.width,
+      widgetSize.height,
+    );
+
+    deleteButtonViewmodel.isHoveringDeletionButton =
+        widgetRect.contains(event.position);
   }
 }
 
