@@ -20,19 +20,6 @@ class LayoutBuilderPage extends StatefulWidget {
 class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
   final LayoutBuilderViewmodel viewmodel = LayoutBuilderViewmodel();
 
-  addItem(Offset offset) {
-    final id = UniqueKey().toString();
-
-    viewmodel.addItem(
-      LayoutButtonProperties(
-        id: id,
-        x: offset.dx,
-        y: offset.dy,
-        size: 50,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,15 +41,17 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
       ),
       appBar: AppBar(
         title: const Text('Build Custom Layout'),
-        actions: const [
-          SizedBox.shrink(),
-          //   Padding(
-          //     padding: const EdgeInsets.only(right: 8.0),
-          //     child: IconButton(
-          //       icon: const Icon(Icons.visibility),
-          //       onPressed: () {},
-          //     ),
-          //   ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.play_arrow_rounded,
+                size: 32,
+              ),
+              onPressed: () {},
+            ),
+          ),
         ],
       ),
       extendBodyBehindAppBar: extendsBodyBehindAppBar,
@@ -72,7 +61,7 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
           children: [
             GestureDetector(
               onTapDown: (TapDownDetails details) {
-                addItem(details.localPosition);
+                viewmodel.addItem(details.localPosition);
               },
             ),
             ListenableBuilder(

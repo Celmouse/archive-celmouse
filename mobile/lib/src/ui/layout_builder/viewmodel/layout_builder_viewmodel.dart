@@ -43,15 +43,22 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addItem(Offset offset) {
+    final id = UniqueKey().toString();
 
-
-  void addItem(LayoutButtonProperties item) {
-    _items.add(item);
+    _items.add(
+      LayoutButtonProperties(
+        id: id,
+        x: offset.dx,
+        y: offset.dy,
+        size: 50,
+      ),
+    );
     notifyListeners();
   }
 
   void selectItem(String id) {
-    if(selectedItem == id){
+    if (selectedItem == id) {
       selectedItem = null;
     } else {
       selectedItem = id;
