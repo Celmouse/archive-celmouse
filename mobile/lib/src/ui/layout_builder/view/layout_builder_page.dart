@@ -25,7 +25,6 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
     final id = UniqueKey().toString();
 
     viewmodel.addItem(
-      id,
       LayoutButtonProperties(
         id: id,
         x: offset.dx,
@@ -92,7 +91,7 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
               builder: (context, _) {
                 print(viewmodel.items);
                 return Stack(
-                  children: viewmodel.items.values.map(
+                  children: viewmodel.items.map(
                     (item) {
                       return LayoutBuilderItem(
                         properties: item,

@@ -33,7 +33,6 @@ class LayoutBuilderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Button id: ${properties.id}");
     final double x = properties.x - properties.size / 2;
     final double y = properties.y - properties.size / 2;
 
@@ -53,7 +52,6 @@ class LayoutBuilderItem extends StatelessWidget {
             }
 
             viewmodel.releaseItem(
-              properties.id,
               properties
                 ..x = details.offset.dx + properties.size / 2
                 ..y = details.offset.dy -

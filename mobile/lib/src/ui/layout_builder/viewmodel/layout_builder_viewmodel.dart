@@ -5,8 +5,8 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
   final DeleteButtonViewmodel deleteButtonViewmodel = DeleteButtonViewmodel();
 
   String? selectedItem;
-  final Map<String, LayoutButtonProperties> _items = {};
-  Map<String, LayoutButtonProperties> get items => Map.from(_items);
+  final List<LayoutButtonProperties> _items = [];
+  List<LayoutButtonProperties> get items => _items.toList();
 
   void holdItem(String id) {
     print("Selected item: $id");
@@ -14,20 +14,20 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     selectedItem = id;
   }
 
-  void releaseItem(String id, LayoutButtonProperties item) {
+  void releaseItem(LayoutButtonProperties item) {
     deleteButtonViewmodel.showDeletionButton = false;
     if (deleteButtonViewmodel.isHoveringDeletionButton) {
-      print("Deleting item: $id");
-      _items.remove(id);
+      print("Deleting item: ${item.id}");
+      _items.removeWhere((i) => i.id == item.id);
     } else {
-      _items.update(id, (value) => item);
+      _items[_items.indexWhere((i) => i.id == item.id)] = item;
     }
     selectedItem = null;
     notifyListeners();
   }
 
-  void addItem(String id, LayoutButtonProperties item) {
-    _items.addAll({id: item});
+  void addItem(LayoutButtonProperties item) {
+    _items.add(item);
     notifyListeners();
   }
 }
