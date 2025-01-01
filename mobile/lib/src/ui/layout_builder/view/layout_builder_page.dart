@@ -35,8 +35,6 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
     );
   }
 
-  onPositionChanged(String id, double x, double y) {}
-
   void _checkTouch(PointerEvent event) {
     if (viewmodel.selectedItem == null) {
       return;
@@ -44,9 +42,11 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
 
     final RenderBox? renderBox =
         _widgetKey.currentContext?.findRenderObject() as RenderBox?;
+
     if (renderBox == null) {
       return;
     }
+
     final Offset widgetPosition = renderBox.localToGlobal(Offset.zero);
     final Size widgetSize = renderBox.size;
 
@@ -58,7 +58,8 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
       widgetSize.height,
     );
 
-    viewmodel.changeHoveringDeletion(widgetRect.contains(event.position));
+    viewmodel.deleteButtonViewmodel.isHoveringDeletionButton =
+        widgetRect.contains(event.position);
   }
 
   @override
@@ -89,10 +90,10 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
             ListenableBuilder(
               listenable: viewmodel,
               builder: (context, _) {
+                print(viewmodel.items);
                 return Stack(
                   children: viewmodel.items.values.map(
                     (item) {
-                      print(item);
                       return LayoutBuilderItem(
                         properties: item,
                         viewmodel: viewmodel,
@@ -105,15 +106,20 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
             Align(
               alignment: const Alignment(0, 0.9),
               child: ListenableBuilder(
-                listenable: viewmodel,
+                listenable: viewmodel.deleteButtonViewmodel,
                 builder: (context, _) {
                   return Visibility(
-                    visible: viewmodel.selectedItem != null,
+                    visible: viewmodel.deleteButtonViewmodel.showDeletionButton,
                     child: CircleAvatar(
                       key: _widgetKey,
-                      radius: viewmodel.isHovering ? 42 : 32,
-                      backgroundColor:
-                          viewmodel.isHovering ? Colors.red.shade200 : null,
+                      radius: viewmodel
+                              .deleteButtonViewmodel.isHoveringDeletionButton
+                          ? 42
+                          : 32,
+                      backgroundColor: viewmodel
+                              .deleteButtonViewmodel.isHoveringDeletionButton
+                          ? Colors.red.shade200
+                          : null,
                       child: const Icon(
                         CupertinoIcons.trash,
                         color: Colors.red,

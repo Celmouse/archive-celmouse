@@ -3,10 +3,10 @@ import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmo
 import 'package:flutter/material.dart';
 
 class LayoutButtonProperties {
-  final String id;
-  final double x;
-  final double y;
-  final double size;
+  String id;
+  double x;
+  double y;
+  double size;
 
   LayoutButtonProperties({
     required this.id,
@@ -21,7 +21,7 @@ class LayoutButtonProperties {
   }
 }
 
-class LayoutBuilderItem extends StatefulWidget {
+class LayoutBuilderItem extends StatelessWidget {
   const LayoutBuilderItem({
     super.key,
     required this.properties,
@@ -32,28 +32,17 @@ class LayoutBuilderItem extends StatefulWidget {
   final LayoutBuilderViewmodel viewmodel;
 
   @override
-  State<LayoutBuilderItem> createState() => _LayoutBuilderItemState();
-}
-
-class _LayoutBuilderItemState extends State<LayoutBuilderItem> {
-  late double x;
-  late double y;
-
-  @override
-  void initState() {
-    x = widget.properties.x - widget.properties.size / 2;
-    y = widget.properties.y - widget.properties.size / 2;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print("Button id: ${properties.id}");
+    final double x = properties.x - properties.size / 2;
+    final double y = properties.y - properties.size / 2;
+
     return Positioned(
       top: y,
       left: x,
       child: GestureDetector(
         onTap: () {
-          print("Item selected!");
+          //TODO: Implement select item and show options.
         },
         child: Draggable(
           // rootOverlay: true,
@@ -63,25 +52,27 @@ class _LayoutBuilderItemState extends State<LayoutBuilderItem> {
               appBarHeight = Scaffold.of(context).appBarMaxHeight ?? 0;
             }
 
-            setState(() {
-              x = details.offset.dx;
-              y = details.offset.dy - appBarHeight.toDouble();
-            });
-
-            widget.viewmodel.releaseItem(widget.properties.id);
+            viewmodel.releaseItem(
+              properties.id,
+              properties
+                ..x = details.offset.dx + properties.size / 2
+                ..y = details.offset.dy -
+                    appBarHeight.toDouble() +
+                    properties.size / 2,
+            );
           },
           onDragStarted: () {
-            widget.viewmodel.holdItem(widget.properties.id);
+            viewmodel.holdItem(properties.id);
           },
           feedback: Container(
-            width: widget.properties.size,
-            height: widget.properties.size,
+            width: properties.size,
+            height: properties.size,
             color: Colors.blue.withValues(alpha: .5),
           ),
           childWhenDragging: Container(),
           child: Container(
-            width: widget.properties.size,
-            height: widget.properties.size,
+            width: properties.size,
+            height: properties.size,
             color: Colors.blue,
           ),
         ),
