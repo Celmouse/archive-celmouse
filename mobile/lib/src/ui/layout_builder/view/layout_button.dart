@@ -17,7 +17,7 @@ class LayoutButtonProperties {
 
   @override
   String toString() {
-    return "id: $id, x: $x, y: $y";
+    return "$id: ($x, $y)";
   }
 }
 
