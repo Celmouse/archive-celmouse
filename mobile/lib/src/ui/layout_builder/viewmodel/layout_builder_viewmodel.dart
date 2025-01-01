@@ -11,9 +11,8 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
   final List<LayoutButtonProperties> _items = [];
   List<LayoutButtonProperties> get items => _items.toList();
 
-  LayoutButtonProperties get selectedButtom => _items.firstWhere(
-        (i) => i.id == selectedItem,
-      );
+  LayoutButtonProperties get selectedButtom =>
+      _items.firstWhere((i) => i.id == selectedItem);
 
   void deleteSelected() {
     if (selectedItem == null) {
@@ -40,6 +39,7 @@ class LayoutBuilderViewmodel extends ChangeNotifier {
     } else {
       _items[_items.indexWhere((i) => i.id == item.id)] = item;
     }
+    selectedItem = null;
     notifyListeners();
   }
 
