@@ -1,5 +1,6 @@
 import 'package:controller/src/ui/layout_builder/view/button_properties_drawer.dart';
 import 'package:controller/src/ui/layout_builder/view/layout_button.dart';
+import 'package:controller/src/ui/layout_builder/view/runner/layout_builder_runner_page.dart';
 import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,18 @@ class _LayoutBuilderPageState extends State<LayoutBuilderPage> {
                 Icons.play_arrow_rounded,
                 size: 32,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return LayoutBuilderRunnerPage(
+                        items: viewmodel.items,
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ],

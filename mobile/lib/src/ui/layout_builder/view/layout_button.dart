@@ -1,35 +1,8 @@
-import 'dart:io';
-
+import 'package:controller/src/ui/layout_builder/model/model.dart';
 import 'package:controller/src/ui/layout_builder/view/layout_builder_page.dart';
 import 'package:controller/src/ui/layout_builder/viewmodel/layout_builder_viewmodel.dart';
 import 'package:flutter/material.dart';
 
-class LayoutButtonProperties {
-  String id;
-  double x;
-  double y;
-  double size;
-  Color color;
-  BoxShape shape;
-  String label;
-  File? customImage;
-
-  LayoutButtonProperties({
-    required this.id,
-    required this.x,
-    required this.y,
-    required this.size,
-    this.label = "",
-    this.color = Colors.blue,
-    this.shape = BoxShape.rectangle,
-    this.customImage,
-  });
-
-  @override
-  String toString() {
-    return "$id: ($x, $y)";
-  }
-}
 
 class LayoutBuilderItem extends StatelessWidget {
   const LayoutBuilderItem({
