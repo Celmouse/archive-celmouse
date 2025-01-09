@@ -32,6 +32,10 @@ class SocketRepository {
     }
   }
 
+  void close() {
+    socket.close();
+  }
+
   void createSocket({
     required VoidCallback onConnected,
     required VoidCallback onDisconnected,
