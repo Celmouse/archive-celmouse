@@ -6,6 +6,8 @@ import 'package:server/src/data/services/device_info_service.dart';
 import 'package:server/src/data/services/mouse_service.dart';
 import 'services/keyboard_service.dart';
 
+const ALLOW_PRINTING = false;
+
 class SocketRepository {
   final MouseService _mouseService;
   final KeyboardService _keyboardService;
@@ -30,6 +32,10 @@ class SocketRepository {
     } on Exception catch (e) {
       return Failure(e);
     }
+  }
+
+  void close() {
+    socket.close();
   }
 
   void createSocket({

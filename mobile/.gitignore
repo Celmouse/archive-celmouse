@@ -48,3 +48,6 @@ app.*.map.json
 # **/**.freezed.dart
 # **/**.g.dart
 /.vscode
+
+# FVM Version Cache
+.fvm/

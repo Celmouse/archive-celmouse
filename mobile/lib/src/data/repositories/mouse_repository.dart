@@ -8,7 +8,7 @@ import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:protocol/protocol.dart';
 
-class MouseRepository  {
+class MouseRepository {
   final ClientApiService _clientApiService;
   final SensorsApiService _sensorsService;
 
@@ -33,7 +33,8 @@ class MouseRepository  {
   }
 
   ValueNotifier<StreamSubscription?> movementSubscription = ValueNotifier(null);
-  ValueNotifier<StreamSubscription?> scrollingSubscription = ValueNotifier(null);
+  ValueNotifier<StreamSubscription?> scrollingSubscription =
+      ValueNotifier(null);
 
   void enableMovement() {
     final double threshold =
@@ -57,7 +58,7 @@ class MouseRepository  {
           data: MouseMovementProtocolData(
             x: normalized.x,
             y: normalized.y,
-            intensity: vector.length * sensitivity,
+            intensity: vector.length * sensitivity * 0.8,
           ),
         );
       },
