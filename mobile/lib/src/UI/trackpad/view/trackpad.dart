@@ -64,11 +64,11 @@ class _TrackPadState extends State<TrackPad> {
                 },
                 onMove: (details) {
                   if (!_isMoving) return;
-                  print(details.delta);
-                  viewModel.updateDragging(
-                    details.delta.dx,
-                    details.delta.dy,
-                  );
+
+                  final x = details.delta.dx;
+                  final y = details.delta.dy;
+
+                  viewModel.updateDragging(x, y);
                 },
                 onEndMoving: (details) {
                   _isMoving = false;
