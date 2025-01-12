@@ -46,6 +46,8 @@ class _TrackPadState extends State<TrackPad> {
     super.dispose();
   }
 
+  Size lastMovimentDelta = const Size(0, 0);
+
   @override
   Widget build(BuildContext context) {
     final body = ListenableBuilder(
@@ -69,9 +71,13 @@ class _TrackPadState extends State<TrackPad> {
                   final y = details.delta.dy;
 
                   viewModel.updateDragging(x, y);
+                  lastMovimentDelta = Size(x, y);
+                  print(lastMovimentDelta);
                 },
                 onEndMoving: (details) {
                   _isMoving = false;
+                  viewModel.updateDragging(lastMovimentDelta.width * -1,
+                      lastMovimentDelta.height * -1);
                   viewModel.stopDragging();
                 },
                 onCancelMove: () {
