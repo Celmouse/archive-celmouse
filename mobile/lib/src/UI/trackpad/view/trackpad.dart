@@ -46,6 +46,8 @@ class _TrackPadState extends State<TrackPad> {
     super.dispose();
   }
 
+  Size lastMovimentDelta = const Size(0, 0);
+
   @override
   Widget build(BuildContext context) {
     final body = ListenableBuilder(
@@ -64,14 +66,17 @@ class _TrackPadState extends State<TrackPad> {
                 },
                 onMove: (details) {
                   if (!_isMoving) return;
-                  print(details.delta);
-                  viewModel.updateDragging(
-                    details.delta.dx,
-                    details.delta.dy,
-                  );
+
+                  final x = details.delta.dx;
+                  final y = details.delta.dy;
+
+                  viewModel.updateDragging(x, y);
+                  lastMovimentDelta = Size(x, y);
                 },
                 onEndMoving: (details) {
                   _isMoving = false;
+                  viewModel.updateDragging(lastMovimentDelta.width * -1,
+                      lastMovimentDelta.height * -1);
                   viewModel.stopDragging();
                 },
                 onCancelMove: () {
@@ -113,7 +118,7 @@ class _TrackPadState extends State<TrackPad> {
                                       viewModel.isTwoFingerTapped
                                   ? [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
+                                        color: Colors.black.withValues(alpha: 0.2),
                                         offset: const Offset(5, 5),
                                         blurRadius: 10,
                                         spreadRadius: 1,
