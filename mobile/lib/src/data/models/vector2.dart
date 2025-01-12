@@ -13,4 +13,8 @@ class Vector2D {
   Vector2D operator /(double value) => Vector2D(x / value, y / value);
 
   Vector2D get normalized => this / length;
+  @override
+  String toString() {
+    return "($x, $y)";
+  }
 }
