@@ -52,9 +52,6 @@ dependencies:
   json_annotation: ^4.9.0
   shared_preferences: ^2.3.3
   provider: ^6.1.2
-  
-  protocol:
-    path: ../packages/protocol/protocol
   network_info_plus: ^6.1.1
   dart_ping: ^9.0.1
   flutter_bloc: ^8.1.6
@@ -66,6 +63,9 @@ dependencies:
   flutter_dotenv: ^5.2.1
   google_mobile_ads: ^5.2.0
   retry: ^3.1.2
+  protocol:
+    path: ../packages/protocol/protocol
+  
 
 dev_dependencies:
   flutter_test:

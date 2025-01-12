@@ -10,16 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-
-  mouse:
-    path: ../plugins/mouse/mouse
-
-  keyboard:
-    path: ../plugins/keyboard/keyboard
-
-  protocol:
-    path: ../packages/protocol/protocol
-
   url_launcher: ^6.3.1
   qr_flutter: ^4.1.0
   desktop_window: ^0.4.2
@@ -27,7 +17,12 @@ dependencies:
   device_info_plus: ^11.2.0
   result_dart: ^2.0.0
   flutter_screenutil: ^5.9.3
-
+  mouse:
+    path: ../plugins/mouse/mouse
+  keyboard:
+    path: ../plugins/keyboard/keyboard
+  protocol:
+    path: ../packages/protocol/protocol
 
 dev_dependencies:
   flutter_test:
