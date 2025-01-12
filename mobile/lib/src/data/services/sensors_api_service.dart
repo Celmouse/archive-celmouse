@@ -22,7 +22,7 @@ class SensorsApiService {
         event.x * -1,
         event.timestamp,
       );
-
+      
       if (x.abs() <= threshold) {
         x = 0;
       }
