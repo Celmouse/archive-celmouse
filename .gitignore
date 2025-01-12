@@ -14,3 +14,5 @@
 .fvm/
 **/.env
 **/.fmv/
+.flutter-plugins
+.flutter-plugins-dependencies
