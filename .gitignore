@@ -1,35 +1,14 @@
-nodejs/dist/builder-effective-config.yaml
-server/out/
-server/package-lock.json
-server/yarn.lock
-server/forge.config.ts
-server/package-lock.json
-server/yarn.lock
-server/Certificates.p12
-/server/dist
-/server/node_modules
-/server/_arch
-server/.env
-**/.DS_Store
-
-
-
-pubspec_overrides.yaml
 **/.metadata
-
-melos_celmouse.iml
 
 /.idea
 
 **/.dart_tool
-**/pubspec.lock
 **/.vscode
 **/build
 
 *.map
 *.p8
 *.log
-**/**/melos_**.iml
-*.g.dart
-*.freezed.dart
-/builds
+
+# FVM Version Cache
+.fvm/
