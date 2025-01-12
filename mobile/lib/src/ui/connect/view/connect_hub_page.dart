@@ -31,18 +31,14 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
       DeviceOrientation.portraitDown,
     ]);
     widget.viewmodel.addListener(_listener);
-    if (kDebugMode) {
-      widget.viewmodel.startScan();
-    }
+    widget.viewmodel.startScan();
     super.initState();
   }
 
   @override
   void dispose() {
     widget.viewmodel.removeListener(_listener);
-    if (kDebugMode) {
-      widget.viewmodel.stopScan();
-    }
+    widget.viewmodel.stopScan();
     super.dispose();
   }
 
@@ -118,8 +114,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                         ),
                       ),
                       const Divider(),
-                      if (kDebugMode)
-                        DevicesScanner(viewmodel: widget.viewmodel),
+                      DevicesScanner(viewmodel: widget.viewmodel),
                       const Divider(),
                       EnterHubIPTile(viewmodel: widget.viewmodel),
                       const Divider(),
