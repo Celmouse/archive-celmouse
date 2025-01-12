@@ -1,8 +1,8 @@
 import 'dart:math';
 
 class Vector2D {
-  final double x;
-  final double y;
+  double x;
+  double y;
 
   Vector2D(this.x, this.y);
 
@@ -13,4 +13,8 @@ class Vector2D {
   Vector2D operator /(double value) => Vector2D(x / value, y / value);
 
   Vector2D get normalized => this / length;
+  @override
+  String toString() {
+    return "($x, $y)";
+  }
 }

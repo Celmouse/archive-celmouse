@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vector_math/vector_math.dart' as vectors;
 
+const PREVENT_JUMP_THRESHOLD = 4;
+
 class SensorsApiService {
   DateTime? tmpTimestamp;
 
@@ -26,6 +28,12 @@ class SensorsApiService {
       }
 
       if (y.abs() <= threshold) {
+        y = 0;
+      }
+
+      if (y.abs() > PREVENT_JUMP_THRESHOLD ||
+          x.abs() > PREVENT_JUMP_THRESHOLD) {
+        x = 0;
         y = 0;
       }
 

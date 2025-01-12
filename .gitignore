@@ -12,3 +12,7 @@
 
 # FVM Version Cache
 .fvm/
+**/.env
+**/.fmv/
+.flutter-plugins
+.flutter-plugins-dependencies
