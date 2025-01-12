@@ -72,7 +72,6 @@ class _TrackPadState extends State<TrackPad> {
 
                   viewModel.updateDragging(x, y);
                   lastMovimentDelta = Size(x, y);
-                  print(lastMovimentDelta);
                 },
                 onEndMoving: (details) {
                   _isMoving = false;
@@ -119,7 +118,7 @@ class _TrackPadState extends State<TrackPad> {
                                       viewModel.isTwoFingerTapped
                                   ? [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
+                                        color: Colors.black.withValues(alpha: 0.2),
                                         offset: const Offset(5, 5),
                                         blurRadius: 10,
                                         spreadRadius: 1,
