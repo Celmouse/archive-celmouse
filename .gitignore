@@ -11,4 +11,4 @@
 *.log
 
 # FVM Version Cache
-.fvm/
+.fvm/**/.env
