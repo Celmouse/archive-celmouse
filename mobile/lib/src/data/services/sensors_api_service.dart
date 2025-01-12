@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vector_math/vector_math.dart' as vectors;
@@ -5,14 +6,15 @@ import 'package:vector_math/vector_math.dart' as vectors;
 class SensorsApiService {
   DateTime? tmpTimestamp;
 
-  Stream<(double x, double y)> gyroscope(
+  StreamSubscription<GyroscopeEvent> gyroscope(
     bool invertX,
     bool invertY,
     double threshold,
+    Function(double x, double y) onDone,
   ) {
     return gyroscopeEventStream(
       samplingPeriod: const Duration(milliseconds: 16, microseconds: 666),
-    ).map<(double x, double y)>((event) {
+    ).listen((event) {
       var (x, y) = _tranformGyroscopeCoordinates(
         event.z * -1,
         event.x * -1,
@@ -30,7 +32,7 @@ class SensorsApiService {
       final invertedX = invertX ? -1 : 1;
       final invertedY = invertY ? -1 : 1;
 
-      return (invertedX * x, invertedY * y);
+      onDone(invertedX * x, invertedY * y);
     });
   }
 
@@ -48,7 +50,6 @@ class SensorsApiService {
     // X é Y e pra cima é positivo
     final diffMS = timestamp.difference(tmpTimestamp!).inMicroseconds;
     tmpTimestamp = timestamp;
-
 
     final seconds = diffMS / pow(10, 6);
 

@@ -6,6 +6,7 @@ publish_to: none
 environment:
   sdk: ^3.5.4
   flutter: ">=3.3.0"
+resolution: workspace
 
 dependencies:
   flutter:
@@ -25,10 +26,11 @@ dev_dependencies:
 flutter:
   plugin:
     platforms:
-      linux:
-        pluginClass: KeyboardPlugin
+    # TODO: Implement linux and windows
+      # linux:
+      #   pluginClass: KeyboardPlugin
       macos:
         default_package: keyboard_macos
         pluginClass: KeyboardPlugin
-      windows:
-        pluginClass: KeyboardPluginCApi
+      # windows:
+      #   pluginClass: KeyboardPluginCApi

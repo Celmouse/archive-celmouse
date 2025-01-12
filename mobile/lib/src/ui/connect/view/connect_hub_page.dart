@@ -1,13 +1,15 @@
 import 'package:controller/src/routing/routes.dart';
+import 'package:controller/src/ui/ads/view/banner.dart';
+import 'package:controller/src/ui/connect/view/devices_scanner.dart';
 import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../../utils/launch_site.dart';
-import 'connect_qr_code.dart';
-import 'devices_scanner.dart';
 
 class ConnectHUBPage extends StatefulWidget {
   const ConnectHUBPage({
@@ -24,13 +26,23 @@ class ConnectHUBPage extends StatefulWidget {
 class _ConnectHUBPageState extends State<ConnectHUBPage> {
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     widget.viewmodel.addListener(_listener);
+    if (kDebugMode) {
+      widget.viewmodel.startScan();
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     widget.viewmodel.removeListener(_listener);
+    if (kDebugMode) {
+      widget.viewmodel.stopScan();
+    }
     super.dispose();
   }
 
@@ -52,14 +64,14 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal: 32),
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ExpansionTile(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: ExpansionTile(
                   dense: true,
                   tilePadding: EdgeInsets.zero,
                   title: const Text(
@@ -73,7 +85,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                     GestureDetector(
                       onTap: () => launchSite(),
                       child: const Text(
-                        '2. Download the HUB.',
+                        '2. Download the HUB (Version 2.2.0)',
                         style: TextStyle(
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
@@ -86,49 +98,47 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                     const Text("4. Start moving your pointer."),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Connection Options',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+              ),
+              const SizedBox(height: 20),
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Connection Options',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const Divider(),
-                        DevicesScanner(connectionViewmodel: widget.viewmodel),
-                        const Divider(),
-                        EnterHubIPTile(viewmodel: widget.viewmodel),
-                        const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.qr_code_scanner),
-                          title: const Text('Connect via QR Code'),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ConnectFromQrCodePage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                      ),
+                      const Divider(),
+                      if (kDebugMode)
+                        DevicesScanner(viewmodel: widget.viewmodel),
+                      const Divider(),
+                      EnterHubIPTile(viewmodel: widget.viewmodel),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.qr_code_scanner),
+                        title: const Text('Connect via QR Code'),
+                        onTap: () {
+                          context.go(Routes.connectQRCode);
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              const Spacer(),
+              const BannerAdWidget(),
+              const SizedBox(height: 8),
+            ],
           ),
         ),
       ),

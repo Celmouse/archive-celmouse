@@ -1,6 +1,8 @@
 PODS:
   - desktop_window (0.0.1):
     - FlutterMacOS
+  - device_info_plus (0.0.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - keyboard_macos (0.0.1):
     - FlutterMacOS
@@ -11,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - desktop_window (from `Flutter/ephemeral/.symlinks/plugins/desktop_window/macos`)
+  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - keyboard_macos (from `Flutter/ephemeral/.symlinks/plugins/keyboard_macos/macos`)
   - mouse_macos (from `Flutter/ephemeral/.symlinks/plugins/mouse_macos/macos`)
@@ -19,6 +22,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   desktop_window:
     :path: Flutter/ephemeral/.symlinks/plugins/desktop_window/macos
+  device_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   keyboard_macos:
@@ -29,12 +34,13 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
-  desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
+  desktop_window: de6acd6053564bdccd9f4b9473d25bf4f2ad9bdf
+  device_info_plus: 4fb280989f669696856f8b129e4a5e3cd6c48f76
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  keyboard_macos: 3c4baf2e7be408db901499990895a261d99206a6
-  mouse_macos: fe125fdfc275d25112af0d3bbeb8430176f72b53
-  url_launcher_macos: c82c93949963e55b228a30115bd219499a6fe404
+  keyboard_macos: ccd5187ec4573558c985fc4fdd0c6eb011c563c5
+  mouse_macos: 88fc3d86942af2f2c96323eefb7598632b657a46
+  url_launcher_macos: 0fba8ddabfc33ce0a9afe7c5fef5aab3d8d2d673
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
