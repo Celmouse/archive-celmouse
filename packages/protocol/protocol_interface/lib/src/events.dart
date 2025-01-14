@@ -9,16 +9,7 @@ enum ProtocolEvent {
   @JsonValue('ConnectionPing')
   /// Send information to the device.
   ping,
-  // // Delete those
-  // @JsonValue('ConnectionInfo')
-  // connectionInfo,
-  // @JsonValue('ConnectionStatus')
-  // connectionStatus,
-  // @JsonValue('DesktopToMobileData')
-  // desktopToMobileData,
-  // @JsonValue('MobileToDesktopData')
-  // mobileToDesktopData,
-
+  
   // Mouse
   @JsonValue('MouseMove')
   mouseMove,

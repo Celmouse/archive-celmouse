@@ -203,7 +203,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   Widget _buildDragPage(Size size) {
     return Center(
         child: Hero(
-      tag: 'mouse-mode-switch',
+      tag: 'mouse-mode-switch-$size',
       child: IconButton(
         onPressed: () {
           context.go(Routes.remote);

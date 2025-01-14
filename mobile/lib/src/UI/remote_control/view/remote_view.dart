@@ -57,7 +57,7 @@ class RemoteView extends StatelessWidget {
                 child: VerticalVolumeSlider(
                   isDark: viewmodel.isDark,
                   onVolumeChanged: (volume) {
-                    // viewmodel.adjustVolume(volume);
+                    viewmodel.sendVolumeCommand(volume);
                   },
                 ),
               ),

@@ -3,6 +3,21 @@ import 'package:keyboard_platform_interface/keyboard_platform_interface.dart';
 extension SpecialKeyTypeWithCode on SpecialKeyType {
   get code {
     switch (this) {
+      /// FN
+      case SpecialKeyType.fn:
+        return 63;
+
+      /// VOLUMES
+      case SpecialKeyType.volumeUp:
+        return 72;
+
+      case SpecialKeyType.volumeDown:
+        return 73;
+
+      case SpecialKeyType.volumeMute:
+        return 74;
+
+      /// ARROWS
       case SpecialKeyType.arrowLeft:
         return 123;
 
@@ -15,6 +30,7 @@ extension SpecialKeyTypeWithCode on SpecialKeyType {
       case SpecialKeyType.arrowUp:
         return 126;
 
+      /// SPECIAL KEYS
       case SpecialKeyType.space:
         return 49;
       case SpecialKeyType.backspace:

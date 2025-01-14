@@ -9,7 +9,7 @@ class RemoteViewModel extends ChangeNotifier {
   bool _isDark = true;
   String _currentApp = '';
   double _volume = 50;
-  int _channel = 1;
+  final int _channel = 1;
   String _activeApp = '';
 
   RemoteViewModel(this._connectionRepository, this._keyboardRepository);
@@ -31,35 +31,6 @@ class RemoteViewModel extends ChangeNotifier {
     _currentApp = appName;
     _activeApp = appName;
     // Implement app launch logic
-    notifyListeners();
-  }
-
-  Future<void> adjustVolume(bool increase) async {
-    if (!await isConnected) return;
-    if (increase && _volume < 100) {
-      _volume += 5;
-    } else if (!increase && _volume > 0) {
-      _volume -= 5;
-    }
-    // Implement volume change logic
-    notifyListeners();
-  }
-
-  Future<void> setVolume(double value) async {
-    if (!await isConnected) return;
-    _volume = value;
-    // Implement volume change logic
-    notifyListeners();
-  }
-
-  Future<void> changeChannel(bool increase) async {
-    if (!await isConnected) return;
-    if (increase) {
-      _channel++;
-    } else if (_channel > 1) {
-      _channel--;
-    }
-    // Implement channel change logic
     notifyListeners();
   }
 
@@ -85,13 +56,33 @@ class RemoteViewModel extends ChangeNotifier {
     }
 
     _keyboardRepository.pressSpecialKey(keyType);
-    print('Pressed $direction');
     notifyListeners();
   }
 
   Future<void> sendCommand(String command) async {
     if (!await isConnected) return;
     // Implement general command sending logic
+    notifyListeners();
+  }
+
+  void sendVolumeCommand(double amount) {
+    if (amount > 0) {
+      // Increase volume
+      _keyboardRepository.pressSpecialKey(SpecialKeyType.volumeUp);
+      _keyboardRepository.releaseSpecialKey(SpecialKeyType.volumeUp);
+      _volume = (_volume + amount).clamp(0, 100);
+    } else if (amount < 0) {
+      // Decrease volume
+      _keyboardRepository.pressSpecialKey(SpecialKeyType.volumeDown);
+      _keyboardRepository.releaseSpecialKey(SpecialKeyType.volumeDown);
+
+      _volume = (_volume + amount).clamp(0, 100);
+    } else {
+      // Mute/unmute
+
+      _keyboardRepository.pressSpecialKey(SpecialKeyType.volumeMute);
+      _keyboardRepository.releaseSpecialKey(SpecialKeyType.volumeMute);
+    }
     notifyListeners();
   }
 }

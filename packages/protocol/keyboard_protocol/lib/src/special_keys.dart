@@ -21,4 +21,12 @@ enum SpecialKeyType {
   specialChars,
   @JsonValue('defaultLayout')
   defaultLayout,
+  @JsonValue('volumeUp') // Add volume up
+  volumeUp,
+  @JsonValue('volumeDown') // Add volume down
+  volumeDown,
+  @JsonValue('volumeMute') // Add volume mute
+  volumeMute,
+  @JsonValue('fn')
+  fn,
 }
