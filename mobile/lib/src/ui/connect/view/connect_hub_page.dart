@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:controller/src/config/enviroment.dart';
 import 'package:controller/src/routing/routes.dart';
 import 'package:controller/src/ui/ads/view/banner.dart';
 import 'package:controller/src/ui/connect/view/devices_scanner.dart';
@@ -5,11 +7,12 @@ import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/launch_site.dart';
+import 'package:controller/src/UI/ads/manager/ad_manager.dart';
 
 class ConnectHUBPage extends StatefulWidget {
   const ConnectHUBPage({
@@ -24,15 +27,25 @@ class ConnectHUBPage extends StatefulWidget {
 }
 
 class _ConnectHUBPageState extends State<ConnectHUBPage> {
+  final String adUnitId = Platform.isAndroid
+      ? EnviromentVariables.admobBannerIdAndroid
+      : EnviromentVariables.admobBannerId;
+
+  final adManager = AdManager();
+  bool isFirstConnection = true;
+  DateTime connectionStartTime = DateTime.now();
+
   @override
   void initState() {
+    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     widget.viewmodel.addListener(_listener);
     widget.viewmodel.startScan();
-    super.initState();
+    _loadConnectionTime();
+    adManager.loadRewardedAd(); // Preload the ad when the page is initialized
   }
 
   @override
@@ -44,7 +57,56 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
 
   void _listener() {
     if (widget.viewmodel.isConnected) {
-      context.go(Routes.mouse);
+      final connectionDuration = DateTime.now().difference(connectionStartTime);
+      if (isFirstConnection &&
+          connectionDuration > const Duration(minutes: 1)) {
+        _showAdOnReconnect();
+      } else if (!isFirstConnection &&
+          connectionDuration > const Duration(minutes: 1)) {
+        _showAdOnReconnect();
+      }
+      isFirstConnection = false;
+      connectionStartTime = DateTime.now();
+      _saveConnectionTime();
+      if (mounted) {
+        context.go(Routes.mouse);
+      }
+    }
+  }
+
+  Future<void> _loadConnectionTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final connectionTimeString = prefs.getString('connectionStartTime');
+    if (connectionTimeString != null) {
+      connectionStartTime = DateTime.parse(connectionTimeString);
+    }
+    isFirstConnection = prefs.getBool('isFirstConnection') ?? true;
+  }
+
+  Future<void> _saveConnectionTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        'connectionStartTime', connectionStartTime.toIso8601String());
+    await prefs.setBool('isFirstConnection', isFirstConnection);
+  }
+
+  Future<void> _showAdOnReconnect() async {
+    if (adManager.isRewardedAdReady) {
+      await adManager.showRewardedAd();
+    } else {
+      await adManager.loadRewardedAd();
+      if (adManager.isRewardedAdReady) {
+        await adManager.showRewardedAd();
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ad not ready yet.'),
+            ),
+          );
+        }
+        print('Ad not ready yet.');
+      }
     }
   }
 
@@ -109,9 +171,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                       const Text(
                         'Connection Options',
                         style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const Divider(),
                       DevicesScanner(viewmodel: widget.viewmodel),
@@ -122,7 +182,9 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                         leading: const Icon(Icons.qr_code_scanner),
                         title: const Text('Connect via QR Code'),
                         onTap: () {
-                          context.go(Routes.connectQRCode);
+                          if (mounted) {
+                            context.go(Routes.connectQRCode);
+                          }
                         },
                       ),
                     ],
