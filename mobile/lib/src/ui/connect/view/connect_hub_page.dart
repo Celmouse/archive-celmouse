@@ -59,10 +59,10 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
     if (widget.viewmodel.isConnected) {
       final connectionDuration = DateTime.now().difference(connectionStartTime);
       if (isFirstConnection &&
-          connectionDuration > const Duration(minutes: 1)) {
+          connectionDuration > const Duration(minutes: 10)) {
         _showAdOnReconnect();
       } else if (!isFirstConnection &&
-          connectionDuration > const Duration(minutes: 1)) {
+          connectionDuration > const Duration(minutes: 10)) {
         _showAdOnReconnect();
       }
       isFirstConnection = false;
