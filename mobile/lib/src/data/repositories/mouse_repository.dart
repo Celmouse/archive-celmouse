@@ -25,6 +25,19 @@ class MouseRepository {
     );
   }
 
+  void hold(){
+    _clientApiService.send(
+      event: ProtocolEvent.mouseButtonHold,
+      data: MouseButtonProtocolData(type: MouseButton.left),
+    );
+  }
+  void release(){
+    _clientApiService.send(
+      event: ProtocolEvent.mouseButtonReleased,
+      data: MouseButtonProtocolData(type: MouseButton.left),
+    );
+  }
+
   void doubleClick() {
     _clientApiService.send(
       event: ProtocolEvent.mouseDoubleClick,

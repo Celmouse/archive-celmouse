@@ -10,10 +10,9 @@ const xMultiplier = 27;
 
 class MouseService {
   final mouse = Mouse();
+  final _channel = MousePlatformChannel();
 
-  MouseService();
-
-  void move(double x, double y, double sense) => mouse.move(
+  void move(double x, double y, double sense) => _channel.move(
         x * xMultiplier * sense,
         y * yMultiplier * sense,
       );
@@ -22,37 +21,26 @@ class MouseService {
 
   get screenSize => mouse.getScreenSize();
 
-  void click(MouseButton button) {
-    mouse.click(button);
-  }
+  void click(MouseButton button) => _channel.click();
 
   void doubleClick(MouseButton button) {
     mouse.doubleClick();
   }
 
-  void holdLeftButton() {
-    mouse.holdLeftButton();
-  }
+  void holdLeftButton() => _channel.hold(0);
 
-  void releaseLeftButton() {
-    mouse.releaseLeftButton();
-  }
+  void releaseLeftButton() => _channel.release(0);
 }
 
 class MousePlatformChannel {
   static const platform = MethodChannel('com.celmouse.plugins/mouse');
 
-  void move(double x, double y) async {
-    // for (var i = 0; i < 100; i++) {
-    //   var x = i;
-    //   var y = i;
-    final coordinates = {'x': x, 'y': y};
-    final result = await platform.invokeMethod<Map>(
-      'move',
-      coordinates,
-    );
-    print(result);
-    //   await Future.delayed(const Duration(milliseconds: 100));
-    // }
-  }
+  void move(double x, double y) => platform.invokeMethod<Map>(
+        'moveRelative',
+        {'x': x, 'y': y},
+      );
+
+  void click() => platform.invokeMethod('tapMouseButton');
+  void hold(int button) => platform.invokeMethod('holdButton', button);
+  void release(int button) => platform.invokeMethod('releaseButton', button);
 }

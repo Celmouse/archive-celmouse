@@ -21,7 +21,9 @@ class LeftMouseButton extends StatelessWidget {
     return ListenableBuilder(
       listenable: viewmodel,
       builder: (_, __) => GestureDetector(
-        onTap: viewmodel.click,
+        // onTap: viewmodel.click,
+        onTapDown: (_)=> viewmodel.hold(),
+        onTapUp: (_)=> viewmodel.release(),
         child: Container(
           width: settings.width,
           height: settings.height,

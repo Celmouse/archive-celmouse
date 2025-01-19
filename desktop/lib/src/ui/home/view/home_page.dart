@@ -1,16 +1,8 @@
 import 'dart:ui';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:server/src/data/services/mouse_service.dart';
 import 'package:server/src/ui/home/viewmodel/home_viewmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-onFabTapped() {
-  if (!kDebugMode) return;
-
-  MousePlatformChannel().move(500, 500);
-}
 
 class Home extends StatefulWidget {
   const Home({
@@ -80,13 +72,6 @@ class _HomeState extends State<Home> {
             },
           ),
         ],
-      ),
-      floatingActionButton: Visibility(
-        visible: kDebugMode,
-        child: FloatingActionButton(
-          onPressed: onFabTapped,
-          child: Icon(Icons.add),
-        ),
       ),
       body: SafeArea(
         child: _isLoading
@@ -334,7 +319,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Active Connections",
+              "Available Connections",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -345,7 +330,7 @@ class _HomeState extends State<Home> {
               child: availableIPS.isEmpty
                   ? Center(
                       child: Text(
-                        "No active connections",
+                        "No Available Connections",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[600],
