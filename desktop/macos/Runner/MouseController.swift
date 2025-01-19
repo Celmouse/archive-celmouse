@@ -9,7 +9,7 @@ import Cocoa
 
 class MouseController {
     
-    func moveMousePointer(to point: CGPoint)  {
+    func moveTo(to point: CGPoint)  {
         if let event = CGEvent(
             mouseEventSource: nil,
             mouseType: .mouseMoved,
@@ -20,7 +20,7 @@ class MouseController {
         }
     }
     
-    func moveMousePointerRelative(x: Double, y: Double) {
+    func move(x: Double, y: Double) {
         print("Testando isso aqui")
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
@@ -29,7 +29,7 @@ class MouseController {
             let newX = currentMousePosition.x + CGFloat(x)
             let newY = currentMousePosition.y + CGFloat(y)
             
-            var mouseEvent: CGEventType = .mouseMoved
+            let mouseEvent: CGEventType = .mouseMoved
             
             if let moveEvent = CGEvent(
                 mouseEventSource: nil,
@@ -42,7 +42,29 @@ class MouseController {
         }
     }
     
-    func tapMouseButton(button: Int) {
+    func scroll(x: Double, y: Double) {
+        print("Testando isso aqui")
+        if let event = CGEvent(source: nil) {
+            let currentMousePosition = event.location
+            
+            // Calculate the new position
+            let newX = currentMousePosition.x + CGFloat(x)
+            let newY = currentMousePosition.y + CGFloat(y)
+            
+            let mouseEvent: CGEventType = .scrollWheel
+            
+            if let moveEvent = CGEvent(
+                mouseEventSource: nil,
+                mouseType: mouseEvent,
+                mouseCursorPosition: CGPoint(x: newX, y: newY),
+                mouseButton: .left
+            ) {
+                moveEvent.post(tap: .cghidEventTap)
+            }
+        }
+    }
+    
+    func click(button: Int) {
         let mouseButton: CGMouseButton
         let mousePressEventType: CGEventType
         let mouseReleaseEventType: CGEventType
@@ -90,7 +112,12 @@ class MouseController {
         }
     }
     
-    func holdMouseButton(button: Int) {
+    func doubleClick(){
+        self.click(button: 0);
+        self.click(button: 0);
+    }
+    
+    func holdButton(button: Int) {
         let mouseButton: CGMouseButton
         let mouseEventType: CGEventType
         
@@ -126,7 +153,7 @@ class MouseController {
     }
     
     // Method to release the mouse button
-    func releaseMouseButton(button: Int) {
+    func releaseButton(button: Int) {
         let mouseButton: CGMouseButton
         let mouseEventType: CGEventType
         

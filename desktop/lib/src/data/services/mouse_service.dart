@@ -17,15 +17,16 @@ class MouseService {
         y * yMultiplier * sense,
       );
 
-  void scroll(int x, int y, int sense) => mouse.scroll(x, y, sense);
+  void scroll(int x, int y, int sense) => _channel.scroll(
+        (x * sense).toDouble(),
+        (y * sense).toDouble(),
+      );
 
-  get screenSize => mouse.getScreenSize();
+  // get screenSize => mouse.getScreenSize();
 
   void click(MouseButton button) => _channel.click();
 
-  void doubleClick(MouseButton button) {
-    mouse.doubleClick();
-  }
+  void doubleClick(MouseButton button) => _channel.doubleClick();
 
   void holdLeftButton() => _channel.hold(0);
 
@@ -36,11 +37,16 @@ class MousePlatformChannel {
   static const platform = MethodChannel('com.celmouse.plugins/mouse');
 
   void move(double x, double y) => platform.invokeMethod<Map>(
-        'moveRelative',
+        'move',
+        {'x': x, 'y': y},
+      );
+  void scroll(double x, double y) => platform.invokeMethod<Map>(
+        'scroll',
         {'x': x, 'y': y},
       );
 
-  void click() => platform.invokeMethod('tapMouseButton');
+  void click() => platform.invokeMethod('click');
+  void doubleClick() => platform.invokeMethod('doubleClick');
   void hold(int button) => platform.invokeMethod('holdButton', button);
   void release(int button) => platform.invokeMethod('releaseButton', button);
 }

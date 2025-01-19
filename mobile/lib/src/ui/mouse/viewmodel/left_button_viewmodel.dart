@@ -32,27 +32,28 @@ class LeftButtonViewmodel extends ChangeNotifier {
   }
 
   //TODO: Fix double click instead of clicking
-  void click() {}
-  // return;
-  // _isPressed = true;
-  // notifyListeners();
+  void click() {
+    _isPressed = true;
+    notifyListeners();
 
-  // Future.delayed(const Duration(milliseconds: 100), () {
-  //   _isPressed = false;
-  //   notifyListeners();
-  // });
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _isPressed = false;
+      notifyListeners();
+    });
 
-  // if (doubleClickTimer?.isActive == false) {
-  //   _mouseRepository.click(MouseButton.left);
-  // } else {
-  //   _mouseRepository.doubleClick();
-  // }
+    if (doubleClickTimer?.isActive == false) {
+      _mouseRepository.click(MouseButton.left);
+    } else {
+      _mouseRepository.doubleClick();
+    }
 
-  // doubleClickTimer ??= Timer(
-  //     Duration(
-  //       milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
-  //     ), () {
-  //   doubleClickTimer = null;
-  // });
+    doubleClickTimer ??= Timer(
+        Duration(
+          milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
+        ), () {
+      doubleClickTimer = null;
+    });
+  }
+
   // }
 }

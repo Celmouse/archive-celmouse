@@ -19,11 +19,28 @@ class MainFlutterWindow: NSWindow {
         mouseChannel.setMethodCallHandler { (call, result) in
             print("Entrou")
             switch call.method {
+            case "moveTo":
+                if let arguments = call.arguments as? [String: Double],
+                   let x = arguments["x"],
+                   let y = arguments["y"] {
+                    mouseController.moveTo(to: CGPoint(x: x, y: y))
+                    
+                    result(nil)
+                } else {
+                    result(
+                        FlutterError(
+                            code: "INVALID_ARGUMENTS",
+                            message: "Invalid arguments",
+                            details: nil
+                        )
+                    )
+                }
             case "move":
                 if let arguments = call.arguments as? [String: Double],
                    let x = arguments["x"],
                    let y = arguments["y"] {
-                    mouseController.moveMousePointer(to: CGPoint(x: x, y: y))
+                    
+                    mouseController.move(x: x, y: y);
                     
                     result(nil)
                 } else {
@@ -35,12 +52,12 @@ class MainFlutterWindow: NSWindow {
                         )
                     )
                 }
-            case "moveRelative":
+            case "scroll":
                 if let arguments = call.arguments as? [String: Double],
                    let x = arguments["x"],
                    let y = arguments["y"] {
                     
-                    mouseController.moveMousePointerRelative(x: x, y: y);
+                    mouseController.scroll(x: x, y: y);
                     
                     result(nil)
                 } else {
@@ -52,9 +69,9 @@ class MainFlutterWindow: NSWindow {
                         )
                     )
                 }
-            case "tapButton":
+            case "click":
                 if let arguments = call.arguments as? Int {
-                    mouseController.tapMouseButton(button: arguments)
+                    mouseController.click(button: arguments)
                     result(nil)
                 }
                 
@@ -67,9 +84,12 @@ class MainFlutterWindow: NSWindow {
                         )
                     )
                 }
+            case "doubleClick":
+                    mouseController.doubleClick()
+                    result(nil)
             case "holdButton":
                 if let arguments = call.arguments as? Int {
-                    mouseController.holdMouseButton(button: arguments)
+                    mouseController.holdButton(button: arguments)
                     result(nil)
                 }
                 
@@ -84,7 +104,7 @@ class MainFlutterWindow: NSWindow {
                 }
             case "releaseButton":
                 if let arguments = call.arguments as? Int {
-                    mouseController.releaseMouseButton(button: arguments)
+                    mouseController.releaseButton(button: arguments)
                     result(nil)
                 }
                 
