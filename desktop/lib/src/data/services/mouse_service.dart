@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:mouse/mouse.dart';
 import 'package:protocol/protocol.dart';
 
@@ -35,5 +36,23 @@ class MouseService {
 
   void releaseLeftButton() {
     mouse.releaseLeftButton();
+  }
+}
+
+class MousePlatformChannel {
+  static const platform = MethodChannel('com.celmouse.plugins/mouse');
+
+  void move(double x, double y) async {
+    // for (var i = 0; i < 100; i++) {
+    //   var x = i;
+    //   var y = i;
+    final coordinates = {'x': x, 'y': y};
+    final result = await platform.invokeMethod<Map>(
+      'move',
+      coordinates,
+    );
+    print(result);
+    //   await Future.delayed(const Duration(milliseconds: 100));
+    // }
   }
 }
