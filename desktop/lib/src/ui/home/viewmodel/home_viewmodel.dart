@@ -4,61 +4,70 @@ import 'package:flutter/foundation.dart';
 import 'package:server/src/data/socket_repository.dart';
 import 'package:desktop_window/desktop_window.dart';
 
-class HomeViewmodel {
+Size _expandedScreenSize = const Size(800, 600);
+Size _colapsedScreenSize = const Size(400, 280);
+
+class HomeViewmodel extends ChangeNotifier {
   final SocketRepository _socketRepository;
 
   HomeViewmodel({
     required SocketRepository socketRepository,
   }) : _socketRepository = socketRepository;
 
-  Size expandedScreenSize = const Size(800, 600);
-  Size colapsedScreenSize = const Size(400, 250);
-
-  ValueNotifier<bool> connected = ValueNotifier(false);
-  ValueNotifier<String?> errorMessage = ValueNotifier(null);
-  ValueNotifier<List<String>> availableIPS = ValueNotifier([]);
-  ValueNotifier<String?> selectedIP = ValueNotifier(null);
+  bool _connected = false;
+  bool get connected => _connected;
+  bool isLoading = true;
+  String? errorMessage;
+  List<String> availableIPS = [];
+  String? selectedIP;
 
   init() async {
+    isLoading = true;
     _socketRepository.createSocket(
       onError: (error) {
-        errorMessage.value = error.toString();
+        errorMessage = error.toString();
+        notifyListeners();
       },
       onConnected: () {
-        connected.value = true;
-        DesktopWindow.setWindowSize(colapsedScreenSize, animate: true);
+        _connected = true;
+        DesktopWindow.setWindowSize(_colapsedScreenSize, animate: true);
+        notifyListeners();
       },
       onDisconnected: () {
-        connected.value = false;
-        DesktopWindow.setWindowSize(expandedScreenSize, animate: true);
+        _connected = false;
+        DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
+        notifyListeners();
       },
     );
 
     _socketRepository.fetchIPList().then((result) {
       result.fold((list) {
-        availableIPS.value = list;
+        availableIPS = list;
         if (list.isNotEmpty) {
-          selectedIP.value = list.first;
+          selectedIP = list.first;
+          notifyListeners();
         }
       }, (err) {
-        errorMessage.value = err.toString();
+        errorMessage = err.toString();
+        notifyListeners();
       });
     });
 
-    DesktopWindow.setWindowSize(expandedScreenSize, animate: true);
+    DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
+    isLoading = false;
+    notifyListeners();
   }
 
   // Add this method to disconnect the WebSocket
   void disconnect() {
     _socketRepository.close();
-    connected.value = false;
-    DesktopWindow.setWindowSize(expandedScreenSize, animate: true);
+    _connected = false;
+    DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
+    notifyListeners();
   }
 
-  dispose() {
-    availableIPS.dispose();
-    connected.dispose();
-    errorMessage.dispose();
-    selectedIP.dispose();
+  void selectIP(String selectedIP) {
+    this.selectedIP = selectedIP;
+    notifyListeners();
   }
 }

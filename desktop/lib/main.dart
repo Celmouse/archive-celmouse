@@ -27,14 +27,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: Home(
-            viewmodel: HomeViewmodel(
-              socketRepository: SocketRepository(
-                mouseService: MouseService(),
-                keyboardService: KeyboardService(),
-                deviceInfoService: DeviceInfoService(),
-                connectionService: ConnectionService(),
-              ),
-            ),
+
           ),
         );
       },
