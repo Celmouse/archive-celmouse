@@ -6,10 +6,9 @@
 //
 import Cocoa
 
-
 class MouseController {
-    
-    func moveTo(to point: CGPoint)  {
+
+    func moveTo(to point: CGPoint) {
         if let event = CGEvent(
             mouseEventSource: nil,
             mouseType: .mouseMoved,
@@ -19,18 +18,18 @@ class MouseController {
             event.post(tap: .cghidEventTap)
         }
     }
-    
+
     func move(x: Double, y: Double) {
         print("Testando isso aqui")
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
-            
+
             // Calculate the new position
             let newX = currentMousePosition.x + CGFloat(x)
             let newY = currentMousePosition.y + CGFloat(y)
-            
+
             let mouseEvent: CGEventType = .mouseMoved
-            
+
             if let moveEvent = CGEvent(
                 mouseEventSource: nil,
                 mouseType: mouseEvent,
@@ -41,18 +40,18 @@ class MouseController {
             }
         }
     }
-    
+
     func scroll(x: Double, y: Double) {
         print("Testando isso aqui")
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
-            
+
             // Calculate the new position
             let newX = currentMousePosition.x + CGFloat(x)
             let newY = currentMousePosition.y + CGFloat(y)
-            
+
             let mouseEvent: CGEventType = .scrollWheel
-            
+
             if let moveEvent = CGEvent(
                 mouseEventSource: nil,
                 mouseType: mouseEvent,
@@ -63,12 +62,12 @@ class MouseController {
             }
         }
     }
-    
+
     func click(button: Int) {
         let mouseButton: CGMouseButton
         let mousePressEventType: CGEventType
         let mouseReleaseEventType: CGEventType
-        
+
         // Determine the button and event type based on the input value
         switch button {
         case 0:
@@ -85,11 +84,11 @@ class MouseController {
             )
             return
         }
-        
+
         // Get the current mouse position
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
-            
+
             // Create a mouse down event
             if let mouseDownEvent = CGEvent(
                 mouseEventSource: nil,
@@ -111,16 +110,16 @@ class MouseController {
             }
         }
     }
-    
-    func doubleClick(){
-        self.click(button: 0);
-        self.click(button: 0);
+
+    func doubleClick() {
+        self.click(button: 0)
+        self.click(button: 0)
     }
-    
+
     func holdButton(button: Int) {
         let mouseButton: CGMouseButton
         let mouseEventType: CGEventType
-        
+
         // Determine the button and event type based on the input value
         switch button {
         case 0:
@@ -135,11 +134,11 @@ class MouseController {
             )
             return
         }
-        
+
         // Get the current mouse position
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
-            
+
             // Create and post the mouse down event
             if let mouseDownEvent = CGEvent(
                 mouseEventSource: nil,
@@ -151,12 +150,12 @@ class MouseController {
             }
         }
     }
-    
+
     // Method to release the mouse button
     func releaseButton(button: Int) {
         let mouseButton: CGMouseButton
         let mouseEventType: CGEventType
-        
+
         // Determine the button and event type based on the input value
         switch button {
         case 0:
@@ -171,11 +170,11 @@ class MouseController {
             )
             return
         }
-        
+
         // Get the current mouse position
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
-            
+
             // Create and post the mouse up event
             if let mouseUpEvent = CGEvent(
                 mouseEventSource: nil,

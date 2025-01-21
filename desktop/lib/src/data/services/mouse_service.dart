@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:mouse/mouse.dart';
+// import 'package:mouse/mouse.dart';
 import 'package:protocol/protocol.dart';
 
 /// Multipliers to make movement viable
@@ -9,8 +9,18 @@ const yMultiplier = 21;
 const xMultiplier = 27;
 
 class MouseService {
-  final mouse = Mouse();
+  // final mouse = Mouse();
   final _channel = MousePlatformChannel();
+
+  MouseService() {
+    // _channel.getScreenSize().then((size) {
+    //   if (size != null && size['x'] != null && size['y'] != null) {
+    //     _screenSize = Size(size['x']!, size['y']!);
+    //   }
+    // });
+  }
+
+  Size _screenSize = Size(1, 1);
 
   void move(double x, double y, double sense) => _channel.move(
         x * xMultiplier * sense,
@@ -22,11 +32,17 @@ class MouseService {
         (y * sense).toDouble(),
       );
 
-  // get screenSize => mouse.getScreenSize();
+  void center() => _channel.moveTo(
+        _screenSize.width / 2,
+        _screenSize.height / 2,
+      );
 
   void click(MouseButton button) => _channel.click();
 
-  void doubleClick(MouseButton button) => _channel.doubleClick();
+  void doubleClick(MouseButton button) {
+    print('Double Click');
+    _channel.doubleClick();
+  }
 
   void holdLeftButton() => _channel.hold(0);
 
@@ -36,6 +52,10 @@ class MouseService {
 class MousePlatformChannel {
   static const platform = MethodChannel('com.celmouse.plugins/mouse');
 
+  void moveTo(double x, double y) => platform.invokeMethod<Map>(
+        'moveTo',
+        {'x': x, 'y': y},
+      );
   void move(double x, double y) => platform.invokeMethod<Map>(
         'move',
         {'x': x, 'y': y},
@@ -49,4 +69,10 @@ class MousePlatformChannel {
   void doubleClick() => platform.invokeMethod('doubleClick');
   void hold(int button) => platform.invokeMethod('holdButton', button);
   void release(int button) => platform.invokeMethod('releaseButton', button);
+
+  // Future<Map<String, double>?> getScreenSize() async {
+  //   final result =
+  //       await platform.invokeMethod<Map<String, double>>('screenSize');
+  //   return result;
+  // }
 }
