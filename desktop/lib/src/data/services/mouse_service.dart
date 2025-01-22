@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-// import 'package:mouse/mouse.dart';
 import 'package:protocol/protocol.dart';
 
 /// Multipliers to make movement viable
@@ -11,14 +10,6 @@ const xMultiplier = 27;
 class MouseService {
   // final mouse = Mouse();
   final _channel = MousePlatformChannel();
-
-  MouseService() {
-    // _channel.getScreenSize().then((size) {
-    //   if (size != null && size['x'] != null && size['y'] != null) {
-    //     _screenSize = Size(size['x']!, size['y']!);
-    //   }
-    // });
-  }
 
   Size _screenSize = Size(1, 1);
 

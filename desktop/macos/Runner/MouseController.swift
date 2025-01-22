@@ -4,7 +4,7 @@
 //
 //  Created by marcelo viana on 19/01/25.
 //
-import Cocoa
+import CoreGraphics
 
 class MouseController {
 
@@ -20,7 +20,6 @@ class MouseController {
     }
 
     func move(x: Double, y: Double) {
-        print("Testando isso aqui")
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
 
@@ -42,24 +41,15 @@ class MouseController {
     }
 
     func scroll(x: Double, y: Double) {
-        print("Testando isso aqui")
-        if let event = CGEvent(source: nil) {
-            let currentMousePosition = event.location
-
-            // Calculate the new position
-            let newX = currentMousePosition.x + CGFloat(x)
-            let newY = currentMousePosition.y + CGFloat(y)
-
-            let mouseEvent: CGEventType = .scrollWheel
-
-            if let moveEvent = CGEvent(
-                mouseEventSource: nil,
-                mouseType: mouseEvent,
-                mouseCursorPosition: CGPoint(x: newX, y: newY),
-                mouseButton: .left
-            ) {
-                moveEvent.post(tap: .cghidEventTap)
-            }
+        if let scrollEvent = CGEvent(
+            scrollWheelEvent2Source: nil,
+            units: .pixel,
+            wheelCount: 2,
+            wheel1: Int32(y),
+            wheel2: Int32(x),
+            wheel3: 0)
+        {
+            scrollEvent.post(tap: .cghidEventTap)
         }
     }
 
