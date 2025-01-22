@@ -28,12 +28,9 @@ class MouseService {
         _screenSize.height / 2,
       );
 
-  void click(MouseButton button) => _channel.click();
+  void click(MouseButton button) => _channel.click(button.value);
 
-  void doubleClick(MouseButton button) {
-    print('Double Click');
-    _channel.doubleClick();
-  }
+  void doubleClick(MouseButton button) => _channel.doubleClick();
 
   void holdLeftButton() => _channel.hold(0);
 
@@ -56,7 +53,7 @@ class MousePlatformChannel {
         {'x': x, 'y': y},
       );
 
-  void click() => platform.invokeMethod('click');
+  void click(int value) => platform.invokeMethod('click', value);
   void doubleClick() => platform.invokeMethod('doubleClick');
   void hold(int button) => platform.invokeMethod('holdButton', button);
   void release(int button) => platform.invokeMethod('releaseButton', button);
