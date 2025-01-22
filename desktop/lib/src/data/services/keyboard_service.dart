@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:keyboard/keyboard.dart';
 import 'package:protocol/protocol.dart';
 
 class KeyboardService {
-  final keyboard = Keyboard();
   final _channel = KeyboardPlatformChannel();
 
   void type(String key) {
