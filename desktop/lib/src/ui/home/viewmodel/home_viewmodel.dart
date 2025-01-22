@@ -22,22 +22,16 @@ class HomeViewmodel extends ChangeNotifier {
   String? selectedIP;
 
   init() async {
+    DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
+
     isLoading = true;
     _socketRepository.createSocket(
       onError: (error) {
         errorMessage = error.toString();
         notifyListeners();
       },
-      onConnected: () {
-        _connected = true;
-        DesktopWindow.setWindowSize(_colapsedScreenSize, animate: true);
-        notifyListeners();
-      },
-      onDisconnected: () {
-        _connected = false;
-        DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
-        notifyListeners();
-      },
+      onConnected: connect,
+      onDisconnected: disconnect,
     );
 
     _socketRepository.fetchIPList().then((result) {
@@ -53,17 +47,24 @@ class HomeViewmodel extends ChangeNotifier {
       });
     });
 
-    DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
     isLoading = false;
     notifyListeners();
   }
 
   // Add this method to disconnect the WebSocket
   void disconnect() {
-    _socketRepository.close();
-    _connected = false;
-    DesktopWindow.setWindowSize(_expandedScreenSize, animate: true);
-    notifyListeners();
+    DesktopWindow.setWindowSize(_expandedScreenSize, animate: true).then((_) {
+      _socketRepository.close();
+      _connected = false;
+      notifyListeners();
+    });
+  }
+
+  void connect() {
+    DesktopWindow.setWindowSize(_colapsedScreenSize, animate: true).then((_) {
+      _connected = true;
+      notifyListeners();
+    });
   }
 
   void selectIP(String selectedIP) {
