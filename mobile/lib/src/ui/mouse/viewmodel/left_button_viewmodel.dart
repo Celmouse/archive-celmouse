@@ -1,8 +1,5 @@
 import 'dart:async';
-
-import 'package:controller/getit.dart';
 import 'package:controller/src/data/repositories/mouse_repository.dart';
-import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:protocol/protocol.dart';
 
@@ -31,7 +28,6 @@ class LeftButtonViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  //TODO: Fix double click instead of clicking
   void click() {
     _isPressed = true;
     notifyListeners();

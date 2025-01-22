@@ -17,7 +17,6 @@ class MainFlutterWindow: NSWindow {
         let mouseController = MouseController()
 
         mouseChannel.setMethodCallHandler { (call, result) in
-            print("Entrou")
             switch call.method {
             case "moveTo":
                 if let arguments = call.arguments as? [String: Double],
