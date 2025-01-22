@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -46,7 +45,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    DesktopWindow.getWindowSize().then(print);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(

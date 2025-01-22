@@ -19,6 +19,18 @@ class LeftButtonViewmodel extends ChangeNotifier {
 
   Timer? doubleClickTimer;
 
+  void hold() {
+    _mouseRepository.hold();
+    _isPressed = true;
+    notifyListeners();
+  }
+
+  void release() {
+    _mouseRepository.release();
+    _isPressed = false;
+    notifyListeners();
+  }
+
   //TODO: Fix double click instead of clicking
   void click() {
     _isPressed = true;
@@ -29,17 +41,19 @@ class LeftButtonViewmodel extends ChangeNotifier {
       notifyListeners();
     });
 
-    if (doubleClickTimer?.isActive == false) {
-      _mouseRepository.click(MouseButton.left);
-    } else {
-      _mouseRepository.doubleClick();
-    }
+    // if (doubleClickTimer?.isActive == false) {
+    _mouseRepository.click(MouseButton.left);
+    // } else {
+    //   _mouseRepository.doubleClick();
+    // }
 
-    doubleClickTimer ??= Timer(
-        Duration(
-          milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
-        ), () {
-      doubleClickTimer = null;
-    });
+    // doubleClickTimer ??= Timer(
+    //     Duration(
+    //       milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
+    //     ), () {
+    //   doubleClickTimer = null;
+    // });
   }
+
+  // }
 }

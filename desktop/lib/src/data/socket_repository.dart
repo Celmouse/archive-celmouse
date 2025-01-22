@@ -76,6 +76,8 @@ class SocketRepository {
           final info = await _deviceInfoService.getDeviceInfo();
           return info;
         },
+        onMouseHold: () => _mouseService.holdLeftButton(),
+        onMouseRelease: () => _mouseService.releaseLeftButton(),
         onMouseMove: (data) {
           double x = data.x;
           double y = data.y;

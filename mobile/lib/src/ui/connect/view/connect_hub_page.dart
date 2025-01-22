@@ -5,7 +5,6 @@ import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
 import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
