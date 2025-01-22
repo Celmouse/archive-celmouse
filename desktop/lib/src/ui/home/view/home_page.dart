@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:server/src/data/services/connection_service.dart';
 import 'package:server/src/data/services/device_info_service.dart';
@@ -44,9 +45,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 600;
-
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -60,11 +58,11 @@ class _HomeState extends State<Home> {
           },
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Celmouse",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: 20.sp,
           ),
         ),
         elevation: 0,
@@ -97,16 +95,16 @@ class _HomeState extends State<Home> {
                         children: [
                           Text(
                             "Connected",
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: TextStyle(
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           Icon(
                             Icons.check_circle,
                             color: Colors.green,
-                            size: 24,
+                            size: 24.w,
                           ),
                         ],
                       ),
@@ -122,13 +120,13 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Container(
-                        height: 48,
-                        child: const Row(
+                      child: SizedBox(
+                        height: 48.h,
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           spacing: 8,
                           children: [
-                            Icon(Icons.logout, size: 16),
+                            Icon(Icons.logout, size: 16.w),
                             Text("Disconnect"),
                           ],
                         ),
@@ -138,33 +136,30 @@ class _HomeState extends State<Home> {
                 );
               }
               return Column(
+                spacing: 20.h,
                 children: [
                   // Top Section
                   _buildGlassmorphicCard(
                     child: _buildConnectionStatus(),
                   ),
-                  const SizedBox(height: 20),
-                  // Middle Section
                   Expanded(
-                    child: isSmallScreen
-                        ? const SizedBox()
-                        : Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: _buildGlassmorphicCard(
-                                  child: _buildQRCodeCard(),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                flex: 1,
-                                child: _buildGlassmorphicCard(
-                                  child: _buildActiveConnectionsList(),
-                                ),
-                              ),
-                            ],
+                    child: Row(
+                      spacing: 20.w,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: _buildGlassmorphicCard(
+                            child: _buildQRCodeCard(),
                           ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: _buildGlassmorphicCard(
+                            child: _buildActiveConnectionsList(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               );
@@ -179,6 +174,211 @@ class _HomeState extends State<Home> {
     required Widget child,
     double? height,
   }) {
+    return GlassMorphicCard(child: child);
+  }
+
+  Widget _buildExplanatoryText() {
+    return Column(
+      spacing: 4,
+      children: [
+        _buildInstructions(
+          Icons.download,
+          "1. Open or download Celmouse client app on mobile (Android or iOS).",
+        ),
+        _buildInstructions(
+          Icons.qr_code_scanner,
+          "2. Scan the QR code from the desktop app or enter IP manually or wait for auto-connect to known device on mobile.",
+        ),
+        _buildInstructions(
+          Icons.check_circle,
+          "3. You are all set!",
+        ),
+      ],
+    );
+  }
+
+  _buildInstructions(IconData iData, String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(iData, color: Colors.blue, size: 16.w),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTutorialSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 8.h),
+        _buildExplanatoryText(),
+      ],
+    );
+  }
+
+  Widget _buildIPSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          viewmodel.selectedIP!,
+          style: TextStyle(
+            fontSize: 12.sp,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConnectionStatus() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section 1: Connection Status
+        _buildStatusSection(),
+        const SizedBox(height: 8),
+
+        // Section 2: IP Address (if connected)
+        if (viewmodel.connected) _buildIPSection(),
+
+        // Section 3: Tutorial Steps (if not connected)
+        if (!viewmodel.connected) _buildTutorialSection(),
+      ],
+    );
+  }
+
+  Widget _buildStatusSection() {
+    return Row(
+      spacing: 8.w,
+      children: [
+        Text(
+          "Not Connected",
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Icon(
+          Icons.cancel,
+          color: Colors.red,
+          size: 24.w,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQRCodeCard() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Scan to Connect",
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Spacer(),
+        if (viewmodel.selectedIP != null)
+          QrImageView(
+            data: viewmodel.selectedIP!,
+            version: QrVersions.auto,
+            size: 180.w,
+          ),
+        Spacer(),
+      ],
+    );
+  }
+
+  Widget _buildActiveConnectionsList() {
+    final availableIPS = viewmodel.availableIPS;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Available Connections",
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 8.h),
+        Expanded(
+          child: availableIPS.isEmpty
+              ? Center(
+                  child: Text(
+                    "No active connections",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: availableIPS.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        viewmodel.selectIP(availableIPS[index]);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 12.w,
+                        children: [
+                          Icon(
+                            Icons.language,
+                            color: Colors.blue,
+                            size: 22.w,
+                          ),
+                          Expanded(
+                            child: Text(
+                              availableIPS[index],
+                              style: TextStyle(fontSize: 16.sp),
+                            ),
+                          ),
+                          Icon(
+                            Icons.qr_code,
+                            color: Colors.grey,
+                            size: 22.w,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class GlassMorphicCard extends StatelessWidget {
+  const GlassMorphicCard({
+    super.key,
+    required this.child,
+    this.height,
+  });
+
+  final Widget child;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: height,
       decoration: BoxDecoration(
@@ -213,171 +413,6 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildExplanatoryText() {
-    return Column(
-      spacing: 4,
-      children: [
-        _buildInstructions(
-          Icons.download,
-          "1. Open or download Celmouse client app on mobile (Android or iOS).",
-        ),
-        _buildInstructions(
-          Icons.qr_code_scanner,
-          "2. Scan the QR code from the desktop app or enter IP manually or wait for auto-connect to known device on mobile.",
-        ),
-        _buildInstructions(
-          Icons.check_circle,
-          "3. You are all set!",
-        ),
-      ],
-    );
-  }
-
-  _buildInstructions(IconData iData, String text) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Icon(iData, color: Colors.blue, size: 16),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTutorialSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        _buildExplanatoryText(),
-      ],
-    );
-  }
-
-  Widget _buildIPSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          viewmodel.selectedIP!,
-          style: const TextStyle(
-            fontSize: 12,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildConnectionStatus() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section 1: Connection Status
-        _buildStatusSection(),
-        const SizedBox(height: 8),
-
-        // Section 2: IP Address (if connected)
-        if (viewmodel.connected) _buildIPSection(),
-
-        // Section 3: Tutorial Steps (if not connected)
-        if (!viewmodel.connected) _buildTutorialSection(),
-      ],
-    );
-  }
-
-  Widget _buildStatusSection() {
-    return Row(
-      children: [
-        Text(
-          "Not Connected",
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Icon(
-          Icons.cancel,
-          color: Colors.red,
-          size: 24,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQRCodeCard() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          "Scan to Connect",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 20),
-        if (viewmodel.selectedIP != null)
-          QrImageView(
-            data: viewmodel.selectedIP!,
-            version: QrVersions.auto,
-            size: 200,
-          ),
-      ],
-    );
-  }
-
-  Widget _buildActiveConnectionsList() {
-    final availableIPS = viewmodel.availableIPS;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Available Connections",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Expanded(
-          child: availableIPS.isEmpty
-              ? Center(
-                  child: Text(
-                    "No active connections",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: availableIPS.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: const Icon(Icons.language, color: Colors.blue),
-                      title: Text(availableIPS[index]),
-                      trailing: const Icon(Icons.qr_code, color: Colors.grey),
-                      onTap: () {
-                        viewmodel.selectIP(availableIPS[index]);
-                      },
-                    );
-                  },
-                ),
-        ),
-      ],
     );
   }
 }
