@@ -41,18 +41,18 @@ class LeftButtonViewmodel extends ChangeNotifier {
       notifyListeners();
     });
 
-    if (doubleClickTimer?.isActive == false) {
-      _mouseRepository.click(MouseButton.left);
-    } else {
-      _mouseRepository.doubleClick();
-    }
+    // if (doubleClickTimer?.isActive == false) {
+    _mouseRepository.click(MouseButton.left);
+    // } else {
+    //   _mouseRepository.doubleClick();
+    // }
 
-    doubleClickTimer ??= Timer(
-        Duration(
-          milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
-        ), () {
-      doubleClickTimer = null;
-    });
+    // doubleClickTimer ??= Timer(
+    //     Duration(
+    //       milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
+    //     ), () {
+    //   doubleClickTimer = null;
+    // });
   }
 
   // }
