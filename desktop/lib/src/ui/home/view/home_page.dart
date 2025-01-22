@@ -64,12 +64,12 @@ class _HomeState extends State<Home> {
           },
         ),
         centerTitle: true,
-        title: Text(
-          "Celmouse",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+        title: Text("Celmouse"),
+        forceMaterialTransparency: true,
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          color: Colors.black54,
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
