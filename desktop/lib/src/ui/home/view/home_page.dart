@@ -46,6 +46,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    DesktopWindow.getWindowSize().then(print);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -143,12 +144,16 @@ class _HomeState extends State<Home> {
                           children: [
                             Icon(
                               Icons.logout,
-                              size: 22.spMin,
+                              size: 16.spMax,
                               color: Colors.white,
                             ),
-                            Text(
-                              "Disconnect",
-                              style: TextStyle(fontSize: 22.spMin),
+                            RichText(
+                              text: TextSpan(
+                                text: "Disconnect",
+                                style: TextStyle(fontSize: 16.spMax),
+                              ),
+                              // "Disconnect",
+                              // style: TextStyle(fontSize: 22.sp),
                             ),
                           ],
                         ),
