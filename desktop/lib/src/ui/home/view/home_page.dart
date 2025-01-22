@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -49,7 +50,11 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.support_agent, color: Colors.red.shade400),
+          icon: Icon(
+            Icons.support_agent,
+            color: Colors.red.shade400,
+            size: 24.spMax,
+          ),
           tooltip: "Contact Support",
           onPressed: () {
             launchUrl(Uri.parse(
@@ -62,14 +67,18 @@ class _HomeState extends State<Home> {
           "Celmouse",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 20.sp,
+            fontSize: 22,
           ),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-            icon: Icon(Icons.code, color: Colors.blue.shade400),
+            icon: Icon(
+              Icons.code,
+              color: Colors.blue.shade400,
+              size: 24.spMax,
+            ),
             tooltip: "Visit Website",
             onPressed: () {
               launchUrl(Uri.parse("https://celmouse.com"));
@@ -90,22 +99,27 @@ class _HomeState extends State<Home> {
                 return Column(
                   spacing: 8,
                   children: [
-                    _buildGlassmorphicCard(
-                      child: Row(
+                    GlassMorphicCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 8.h,
                         children: [
-                          Text(
+                          _connectedStatus(
                             "Connected",
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Icon(
                             Icons.check_circle,
-                            color: Colors.green,
-                            size: 24.w,
+                            Colors.green,
                           ),
+
+                          // Section 2: IP Address (if connected)
+                          Align(
+                            alignment: Alignment(-.9, 0),
+                            child: Text(
+                              viewmodel.selectedIP!,
+                              style: TextStyle(
+                                fontSize: 16.spMax,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -124,10 +138,18 @@ class _HomeState extends State<Home> {
                         height: 48.h,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           spacing: 8,
                           children: [
-                            Icon(Icons.logout, size: 16.w),
-                            Text("Disconnect"),
+                            Icon(
+                              Icons.logout,
+                              size: 22.spMin,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              "Disconnect",
+                              style: TextStyle(fontSize: 22.spMin),
+                            ),
                           ],
                         ),
                       ),
@@ -139,7 +161,7 @@ class _HomeState extends State<Home> {
                 spacing: 20.h,
                 children: [
                   // Top Section
-                  _buildGlassmorphicCard(
+                  GlassMorphicCard(
                     child: _buildConnectionStatus(),
                   ),
                   Expanded(
@@ -148,13 +170,13 @@ class _HomeState extends State<Home> {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: _buildGlassmorphicCard(
+                          child: GlassMorphicCard(
                             child: _buildQRCodeCard(),
                           ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: _buildGlassmorphicCard(
+                          child: GlassMorphicCard(
                             child: _buildActiveConnectionsList(),
                           ),
                         ),
@@ -170,11 +192,24 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildGlassmorphicCard({
-    required Widget child,
-    double? height,
-  }) {
-    return GlassMorphicCard(child: child);
+  _connectedStatus(String text, IconData iData, Color color) {
+    return Row(
+      spacing: 12.w,
+      children: [
+        Icon(
+          iData,
+          color: color,
+          size: 24.spMax,
+        ),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 20.spMax,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildExplanatoryText() {
@@ -201,40 +236,16 @@ class _HomeState extends State<Home> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
+      spacing: 8.w,
       children: [
-        Icon(iData, color: Colors.blue, size: 16.w),
-        SizedBox(width: 8.w),
+        Icon(iData, color: Colors.blue, size: 16.spMin),
         Expanded(
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: 16.spMin,
               fontWeight: FontWeight.bold,
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTutorialSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 8.h),
-        _buildExplanatoryText(),
-      ],
-    );
-  }
-
-  Widget _buildIPSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          viewmodel.selectedIP!,
-          style: TextStyle(
-            fontSize: 12.sp,
           ),
         ),
       ],
@@ -244,36 +255,17 @@ class _HomeState extends State<Home> {
   Widget _buildConnectionStatus() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8.h,
       children: [
         // Section 1: Connection Status
-        _buildStatusSection(),
-        const SizedBox(height: 8),
-
-        // Section 2: IP Address (if connected)
-        if (viewmodel.connected) _buildIPSection(),
+        _connectedStatus(
+          "Not Connected",
+          Icons.cancel,
+          Colors.red,
+        ),
 
         // Section 3: Tutorial Steps (if not connected)
-        if (!viewmodel.connected) _buildTutorialSection(),
-      ],
-    );
-  }
-
-  Widget _buildStatusSection() {
-    return Row(
-      spacing: 8.w,
-      children: [
-        Text(
-          "Not Connected",
-          style: TextStyle(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Icon(
-          Icons.cancel,
-          color: Colors.red,
-          size: 24.w,
-        ),
+        _buildExplanatoryText(), //if (!viewmodel.connected) _buildTutorialSection(),
       ],
     );
   }
@@ -281,25 +273,50 @@ class _HomeState extends State<Home> {
   Widget _buildQRCodeCard() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      spacing: 8.h,
       children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Scan to Connect",
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
+        Visibility(
+          visible: 200.h > 140 && 200.w > 110,
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Scan to Connect",
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-        Spacer(),
         if (viewmodel.selectedIP != null)
-          QrImageView(
-            data: viewmodel.selectedIP!,
-            version: QrVersions.auto,
-            size: 180.w,
+          Expanded(
+            child: Center(
+              widthFactor: 1.w,
+              heightFactor: 1.h,
+              child: QrImageView(
+                padding: EdgeInsets.zero,
+                // embeddedImage: AssetImage('assets/circle_blue_logo.png'),
+                // embeddedImageStyle: QrEmbeddedImageStyle(
+                //   size: Size(64.w, 64.w),
+                // ),
+                eyeStyle: QrEyeStyle(
+                  eyeShape: QrEyeShape.circle,
+                  color: Colors.black54,
+                ),
+                dataModuleStyle: QrDataModuleStyle(
+                  dataModuleShape: QrDataModuleShape.circle,
+                  color: Colors.black54,
+                ),
+                gapless: false,
+                embeddedImageEmitsError: false,
+                data: viewmodel.selectedIP!,
+                version: QrVersions.auto,
+                semanticsLabel: 'Scan this QR Code to connect',
+                size: 220.w,
+              ),
+            ),
           ),
-        Spacer(),
+        // Spacer(),
       ],
     );
   }
@@ -308,15 +325,33 @@ class _HomeState extends State<Home> {
     final availableIPS = viewmodel.availableIPS;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8.h,
       children: [
-        Text(
-          "Available Connections",
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Available Connections",
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Tooltip(
+              message:
+                  'Select one of the available connections to show QR code',
+              child: GestureDetector(
+                onTap: () {},
+                child: Icon(
+                  Icons.info_outline,
+                  size: 18.sp,
+                  color: Colors.black54,
+                ),
+              ),
+            )
+          ],
         ),
-        SizedBox(height: 8.h),
         Expanded(
           child: availableIPS.isEmpty
               ? Center(

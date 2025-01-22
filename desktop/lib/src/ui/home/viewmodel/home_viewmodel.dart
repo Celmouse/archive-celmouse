@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:server/src/data/socket_repository.dart';
 import 'package:desktop_window/desktop_window.dart';
 
-Size _expandedScreenSize = const Size(800, 600);
+Size _expandedScreenSize = const Size(490, 500);
 Size _colapsedScreenSize = const Size(400, 280);
 
 class HomeViewmodel extends ChangeNotifier {
