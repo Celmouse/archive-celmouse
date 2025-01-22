@@ -28,13 +28,13 @@ class MouseRepository {
   void hold(){
     _clientApiService.send(
       event: ProtocolEvent.mouseButtonHold,
-      data: MouseButtonProtocolData(type: MouseButton.left),
+      data: const MouseButtonProtocolData(type: MouseButton.left),
     );
   }
   void release(){
     _clientApiService.send(
       event: ProtocolEvent.mouseButtonReleased,
-      data: MouseButtonProtocolData(type: MouseButton.left),
+      data: const MouseButtonProtocolData(type: MouseButton.left),
     );
   }
 

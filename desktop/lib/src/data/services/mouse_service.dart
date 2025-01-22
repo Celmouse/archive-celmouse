@@ -11,7 +11,7 @@ class MouseService {
   // final mouse = Mouse();
   final _channel = MousePlatformChannel();
 
-  Size _screenSize = Size(1, 1);
+  final Size _screenSize = Size(1, 1);
 
   void move(double x, double y, double sense) => _channel.move(
         x * xMultiplier * sense,
