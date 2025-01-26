@@ -6,19 +6,15 @@ part of 'model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProtocolImpl _$$ProtocolImplFromJson(Map<String, dynamic> json) =>
-    _$ProtocolImpl(
+Protocol _$ProtocolFromJson(Map<String, dynamic> json) => Protocol(
       event: $enumDecode(_$ProtocolEventEnumMap, json['event']),
-      timestamp: json['timestamp'] == null
-          ? null
-          : DateTime.parse(json['timestamp'] as String),
+      timestamp: DateTime.parse(json['timestamp'] as String),
       data: json['data'],
     );
 
-Map<String, dynamic> _$$ProtocolImplToJson(_$ProtocolImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ProtocolToJson(Protocol instance) => <String, dynamic>{
       'event': _$ProtocolEventEnumMap[instance.event]!,
-      'timestamp': instance.timestamp?.toIso8601String(),
+      'timestamp': instance.timestamp.toIso8601String(),
       'data': instance.data,
     };
 

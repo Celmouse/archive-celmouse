@@ -35,7 +35,16 @@ enum SpecialKeyType {
   @JsonValue('ArrowDown')
   ArrowDown('ArrowDown'),
   @JsonValue('ArrowUp')
-  ArrowUp('ArrowUp');
+  ArrowUp('ArrowUp'),
+
+  @JsonValue('VolumeUp')
+  VolumeUp('VolumeUp'),
+
+  @JsonValue('VolumeDown')
+  VolumeDown('VolumeDown'),
+
+  @JsonValue('VolumeMute')
+  VolumeMute('VolumeMute');
 
   const SpecialKeyType(this.value);
 
