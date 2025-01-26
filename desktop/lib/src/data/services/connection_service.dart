@@ -26,10 +26,13 @@ class ConnectionService {
     String event,
     WebSocket socket, {
     required Function(MouseButtonProtocolData) onMouseClick,
+    required Function() onMouseHold,
+    required Function() onMouseRelease,
     required Function(MouseButtonProtocolData) onMouseDoubleClick,
     required Function(MouseMovementProtocolData) onMouseMove,
     required Function(MouseMovementProtocolData) onMouseScroll,
     required Function(String) onKeyPressed,
+    required Function(String) onKeyReleased,
     required Function(KeyboardProtocolData) onSpecialKeyPressed,
     required Function(KeyboardProtocolData) onSpecialKeyReleased,
     required VoidCallback onConnected,
@@ -75,15 +78,11 @@ class ConnectionService {
         }
       case ProtocolEvent.mouseButtonHold:
         {
-          throw UnimplementedError();
-
-          // mouse.holdLeftButton();
+          return onMouseHold();
         }
       case ProtocolEvent.mouseButtonReleased:
         {
-          throw UnimplementedError();
-
-          // mouse.releaseLeftButton();
+          return onMouseRelease();
         }
       case ProtocolEvent.keyPressed:
         {

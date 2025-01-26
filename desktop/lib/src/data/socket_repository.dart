@@ -76,6 +76,8 @@ class SocketRepository {
           final info = await _deviceInfoService.getDeviceInfo();
           return info;
         },
+        onMouseHold: _mouseService.holdLeftButton,
+        onMouseRelease: _mouseService.releaseLeftButton,
         onMouseMove: (data) {
           double x = data.x;
           double y = data.y;
@@ -92,7 +94,8 @@ class SocketRepository {
         },
         onMouseClick: (data) => _mouseService.click(data.type),
         onMouseDoubleClick: (data) => _mouseService.doubleClick(data.type),
-        onKeyPressed: (data) => _keyboardService.type(data),
+        onKeyPressed: _keyboardService.type,
+        onKeyReleased: _keyboardService.releaseKey,
         onSpecialKeyPressed: (data) => _keyboardService.pressSpecial(data.key),
         onSpecialKeyReleased: (data) =>
             _keyboardService.releaseSpecial(data.key),

@@ -1,8 +1,5 @@
 import 'dart:async';
-
-import 'package:controller/getit.dart';
 import 'package:controller/src/data/repositories/mouse_repository.dart';
-import 'package:controller/src/domain/models/mouse_settings_model.dart';
 import 'package:flutter/material.dart';
 import 'package:protocol/protocol.dart';
 
@@ -19,7 +16,18 @@ class LeftButtonViewmodel extends ChangeNotifier {
 
   Timer? doubleClickTimer;
 
-  //TODO: Fix double click instead of clicking
+  void hold() {
+    _mouseRepository.hold();
+    _isPressed = true;
+    notifyListeners();
+  }
+
+  void release() {
+    _mouseRepository.release();
+    _isPressed = false;
+    notifyListeners();
+  }
+
   void click() {
     _isPressed = true;
     notifyListeners();
@@ -29,17 +37,19 @@ class LeftButtonViewmodel extends ChangeNotifier {
       notifyListeners();
     });
 
-    if (doubleClickTimer?.isActive == false) {
-      _mouseRepository.click(MouseButton.left);
-    } else {
-      _mouseRepository.doubleClick();
-    }
+    // if (doubleClickTimer?.isActive == false) {
+    _mouseRepository.click(MouseButton.left);
+    // } else {
+    //   _mouseRepository.doubleClick();
+    // }
 
-    doubleClickTimer ??= Timer(
-        Duration(
-          milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
-        ), () {
-      doubleClickTimer = null;
-    });
+    // doubleClickTimer ??= Timer(
+    //     Duration(
+    //       milliseconds: getIt.get<MouseSettings>().doubleClickDelayMS.duration,
+    //     ), () {
+    //   doubleClickTimer = null;
+    // });
   }
+
+  // }
 }
