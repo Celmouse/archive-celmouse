@@ -40,16 +40,16 @@ class RemoteViewModel extends ChangeNotifier {
     SpecialKeyType keyType;
     switch (direction) {
       case 'up':
-        keyType = SpecialKeyType.arrowUp;
+        keyType = SpecialKeyType.ArrowUp;
         break;
       case 'down':
-        keyType = SpecialKeyType.arrowDown;
+        keyType = SpecialKeyType.ArrowDown;
         break;
       case 'left':
-        keyType = SpecialKeyType.arrowLeft;
+        keyType = SpecialKeyType.ArrowLeft;
         break;
       case 'right':
-        keyType = SpecialKeyType.arrowRight;
+        keyType = SpecialKeyType.ArrowRight;
         break;
       default:
         throw ArgumentError('Invalid direction: $direction');
@@ -68,20 +68,20 @@ class RemoteViewModel extends ChangeNotifier {
   void sendVolumeCommand(double amount) {
     if (amount > 0) {
       // Increase volume
-      _keyboardRepository.pressSpecialKey(SpecialKeyType.volumeUp);
-      _keyboardRepository.releaseSpecialKey(SpecialKeyType.volumeUp);
+      _keyboardRepository.pressSpecialKey(SpecialKeyType.VolumeUp);
+      _keyboardRepository.releaseSpecialKey(SpecialKeyType.VolumeUp);
       _volume = (_volume + amount).clamp(0, 100);
     } else if (amount < 0) {
       // Decrease volume
-      _keyboardRepository.pressSpecialKey(SpecialKeyType.volumeDown);
-      _keyboardRepository.releaseSpecialKey(SpecialKeyType.volumeDown);
+      _keyboardRepository.pressSpecialKey(SpecialKeyType.VolumeDown);
+      _keyboardRepository.releaseSpecialKey(SpecialKeyType.VolumeDown);
 
       _volume = (_volume + amount).clamp(0, 100);
     } else {
       // Mute/unmute
 
-      _keyboardRepository.pressSpecialKey(SpecialKeyType.volumeMute);
-      _keyboardRepository.releaseSpecialKey(SpecialKeyType.volumeMute);
+      _keyboardRepository.pressSpecialKey(SpecialKeyType.VolumeMute);
+      _keyboardRepository.releaseSpecialKey(SpecialKeyType.VolumeMute);
     }
     notifyListeners();
   }
