@@ -30,5 +30,13 @@
 	<string>NSApplication</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
+	<key>NSAppleEventsUsageDescription</key>
+    <string>This app needs to control mouse movement</string>
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+    <key>com.apple.security.temporary-exception.apple-events</key>
+    <array>
+        <string>com.apple.systemevents</string>
+    </array>
 </dict>
 </plist>

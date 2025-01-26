@@ -5,10 +5,63 @@
 //  Created by marcelo viana on 19/01/25.
 //
 import CoreGraphics
+import FlutterMacOS
 
-class MouseController {
+class MouseController: NSObject {
+    private let channel: FlutterMethodChannel
 
-    func moveTo(to point: CGPoint) {
+    init(channel: FlutterMethodChannel) {
+        self.channel = channel
+        super.init()
+        setupMethodHandlers()
+    }
+
+    private func setupMethodHandlers() {
+        channel.setMethodCallHandler { (call, result) in
+            switch call.method {
+            case "moveTo":
+                if let arguments = call.arguments as? [String: Double],
+                    let x = arguments["x"],
+                    let y = arguments["y"]
+                {
+                    self.moveTo(to: CGPoint(x: x, y: y), result: result)
+                }
+            case "move":
+                if let arguments = call.arguments as? [String: Double],
+                    let x = arguments["x"],
+                    let y = arguments["y"]
+                {
+                    self.move(x: x, y: y, result: result)
+                }
+            case "scroll":
+                if let arguments = call.arguments as? [String: Double],
+                    let x = arguments["x"],
+                    let y = arguments["y"]
+                {
+                    self.scroll(x: x, y: y, result: result)
+                }
+            case "click":
+                if let arguments = call.arguments as? Int {
+                    self.click(arguments, result: result)
+                }
+            case "doubleClick":
+                self.doubleClick(result: result)
+
+            case "holdButton":
+                if let arguments = call.arguments as? Int {
+                    self.holdButton(arguments, result: result)
+                }
+            case "releaseButton":
+                if let arguments = call.arguments as? Int {
+                    self.releaseButton(arguments, result: result)
+                }
+            default:
+                result(FlutterMethodNotImplemented)
+            }
+        }
+    }
+
+    private func moveTo(to point: CGPoint, result: @escaping FlutterResult) {
         if let event = CGEvent(
             mouseEventSource: nil,
             mouseType: .mouseMoved,
@@ -17,9 +70,10 @@ class MouseController {
         ) {
             event.post(tap: .cghidEventTap)
         }
+        result(nil)
     }
 
-    func move(x: Double, y: Double) {
+    private func move(x: Double, y: Double, result: @escaping FlutterResult) {
         if let event = CGEvent(source: nil) {
             let currentMousePosition = event.location
 
@@ -38,9 +92,10 @@ class MouseController {
                 moveEvent.post(tap: .cghidEventTap)
             }
         }
+        result(nil)
     }
 
-    func scroll(x: Double, y: Double) {
+    private func scroll(x: Double, y: Double, result: @escaping FlutterResult) {
         if let scrollEvent = CGEvent(
             scrollWheelEvent2Source: nil,
             units: .pixel,
@@ -51,9 +106,10 @@ class MouseController {
         {
             scrollEvent.post(tap: .cghidEventTap)
         }
+        result(nil)
     }
 
-    func click(button: Int) {
+    private func click(_ button: Int, result: @escaping FlutterResult) {
         let mouseButton: CGMouseButton
         let mousePressEventType: CGEventType
         let mouseReleaseEventType: CGEventType
@@ -99,14 +155,16 @@ class MouseController {
                 }
             }
         }
+        result(nil)
     }
 
-    func doubleClick() {
-        self.click(button: 0)
-        self.click(button: 0)
+    private func doubleClick(result: @escaping FlutterResult) {
+        //        self.click(button: 0)
+        //        self.click(button: 0)
+        result(nil)
     }
 
-    func holdButton(button: Int) {
+    private func holdButton(_ button: Int, result: @escaping FlutterResult) {
         let mouseButton: CGMouseButton
         let mouseEventType: CGEventType
 
@@ -139,10 +197,11 @@ class MouseController {
                 mouseDownEvent.post(tap: .cghidEventTap)
             }
         }
+        result(nil)
     }
 
     // Method to release the mouse button
-    func releaseButton(button: Int) {
+    private func releaseButton(_ button: Int, result: @escaping FlutterResult) {
         let mouseButton: CGMouseButton
         let mouseEventType: CGEventType
 
@@ -175,5 +234,6 @@ class MouseController {
                 mouseUpEvent.post(tap: .cghidEventTap)
             }
         }
+        result(nil)
     }
 }

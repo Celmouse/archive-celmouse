@@ -8,7 +8,6 @@ const yMultiplier = 21;
 const xMultiplier = 27;
 
 class MouseService {
-  // final mouse = Mouse();
   final _channel = MousePlatformChannel();
 
   final Size _screenSize = Size(1, 1);
