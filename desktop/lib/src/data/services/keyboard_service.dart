@@ -7,20 +7,26 @@ class KeyboardService {
   final _channel = KeyboardPlatformChannel();
 
   void type(String key) {
-    
     _channel.pressKey(key);
+    _channel.releaseKey(key);
+  }
 
-    // Timer(const Duration(milliseconds: 200), () {
-    //   // keyboard.releaseKey(key);
-    // });
+  void pressKey(String key) {
+    _channel.pressKey(key);
+  }
+
+  void releaseKey(String key) {
+    _channel.releaseKey(key);
   }
 
   void pressSpecial(SpecialKeyType key) {
-    _channel.pressSpecialKey(key.name);
+    _channel.pressSpecialKey(key.value);
+    //TODO: Remove this when release is allowed
+    releaseSpecial(key);
   }
 
   void releaseSpecial(SpecialKeyType key) {
-    // _channel.releaseSpecialKey(key);
+    _channel.releaseSpecialKey(key.value);
   }
 }
 
@@ -31,8 +37,17 @@ class KeyboardPlatformChannel {
     await channel.invokeMethod('pressKey', key);
   }
 
+  Future<void> releaseKey(String key) async {
+    await channel.invokeMethod('releaseKey', key);
+  }
+
   Future<void> pressSpecialKey(String key) async {
     final swiftKey = await channel.invokeMethod('convertDartKeyToSwift', key);
     await channel.invokeMethod('pressSpecialKey', swiftKey);
+  }
+
+  Future<void> releaseSpecialKey(String key) async {
+    final swiftKey = await channel.invokeMethod('convertDartKeyToSwift', key);
+    await channel.invokeMethod('releaseSpecialKey', swiftKey);
   }
 }

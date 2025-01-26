@@ -19,9 +19,17 @@ class KeyboardController: NSObject {
                 if let key = call.arguments as? String {
                     self.pressKey(key, result: result)
                 }
+            case "releaseKey":
+                if let key = call.arguments as? String {
+                    self.releaseKey(key, result: result)
+                }
             case "pressSpecialKey":
                 if let key = call.arguments as? String {
                     self.pressSpecialKey(key, result: result)
+                }
+            case "releaseSpecialKey":
+                if let key = call.arguments as? String {
+                    self.releaseSpecialKey(key, result: result)
                 }
             case "convertDartKeyToSwift":
                 if let key = call.arguments as? String {
@@ -40,20 +48,20 @@ class KeyboardController: NSObject {
     private func pressKey(_ key: String, result: @escaping FlutterResult) {
         let source = CGEventSource(stateID: .hidSystemState)
         
-//        guard let keyCode = key.unicodeScalars.first?.value else {
-//            result(FlutterError(code: "INVALID_KEY",
-//                                message: "Invalid key provided",
-//                                details: nil))
-//            return
-//        }
-        
         if let keyCode = charToCGKeyCode(Character(key)){
             if let event = CGEvent(keyboardEventSource: source,
                                    virtualKey: keyCode,
                                    keyDown: true) {
                 event.post(tap: .cghidEventTap)
             }
-            
+        }
+        result(nil)
+    }
+    
+    private func releaseKey(_ key: String, result: @escaping FlutterResult) {
+        let source = CGEventSource(stateID: .hidSystemState)
+        
+        if let keyCode = charToCGKeyCode(Character(key)){
             if let event = CGEvent(keyboardEventSource: source,
                                    virtualKey: keyCode,
                                    keyDown: false) {
@@ -62,6 +70,7 @@ class KeyboardController: NSObject {
         }
         result(nil)
     }
+    
     
     private func pressSpecialKey(_ key: String, result: @escaping FlutterResult) {
         let source = CGEventSource(stateID: .hidSystemState)
@@ -72,6 +81,13 @@ class KeyboardController: NSObject {
                                keyDown: true) {
             event.post(tap: .cghidEventTap)
         }
+        
+        result(nil)
+    }
+    
+    private func releaseSpecialKey(_ key: String, result: @escaping FlutterResult) {
+        let source = CGEventSource(stateID: .hidSystemState)
+        let keyCode = self.getSpecialKeyCode(key)
         
         if let event = CGEvent(keyboardEventSource: source,
                                virtualKey: keyCode,
