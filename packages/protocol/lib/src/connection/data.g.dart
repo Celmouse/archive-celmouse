@@ -6,16 +6,16 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ConnectionInfoProtocolDataImpl _$$ConnectionInfoProtocolDataImplFromJson(
+ConnectionInfoProtocolData _$ConnectionInfoProtocolDataFromJson(
         Map<String, dynamic> json) =>
-    _$ConnectionInfoProtocolDataImpl(
+    ConnectionInfoProtocolData(
       deviceName: json['deviceName'] as String,
       deviceOS: $enumDecode(_$DeviceOSEnumMap, json['deviceOS']),
       versionNumber: json['versionNumber'] as String,
     );
 
-Map<String, dynamic> _$$ConnectionInfoProtocolDataImplToJson(
-        _$ConnectionInfoProtocolDataImpl instance) =>
+Map<String, dynamic> _$ConnectionInfoProtocolDataToJson(
+        ConnectionInfoProtocolData instance) =>
     <String, dynamic>{
       'deviceName': instance.deviceName,
       'deviceOS': _$DeviceOSEnumMap[instance.deviceOS]!,
@@ -29,28 +29,26 @@ const _$DeviceOSEnumMap = {
   DeviceOS.unknown: 'unknown',
 };
 
-_$DesktopToMobileDataImpl _$$DesktopToMobileDataImplFromJson(
-        Map<String, dynamic> json) =>
-    _$DesktopToMobileDataImpl(
+DesktopToMobileData _$DesktopToMobileDataFromJson(Map<String, dynamic> json) =>
+    DesktopToMobileData(
       message: json['message'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
     );
 
-Map<String, dynamic> _$$DesktopToMobileDataImplToJson(
-        _$DesktopToMobileDataImpl instance) =>
+Map<String, dynamic> _$DesktopToMobileDataToJson(
+        DesktopToMobileData instance) =>
     <String, dynamic>{
       'message': instance.message,
       'timestamp': instance.timestamp.toIso8601String(),
     };
 
-_$MobileToDesktopDataImpl _$$MobileToDesktopDataImplFromJson(
-        Map<String, dynamic> json) =>
-    _$MobileToDesktopDataImpl(
+MobileToDesktopData _$MobileToDesktopDataFromJson(Map<String, dynamic> json) =>
+    MobileToDesktopData(
       message: json['message'] as String,
     );
 
-Map<String, dynamic> _$$MobileToDesktopDataImplToJson(
-        _$MobileToDesktopDataImpl instance) =>
+Map<String, dynamic> _$MobileToDesktopDataToJson(
+        MobileToDesktopData instance) =>
     <String, dynamic>{
       'message': instance.message,
     };

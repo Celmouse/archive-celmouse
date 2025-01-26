@@ -30,7 +30,7 @@ class DeviceInfoService {
         versionNumber: macOsInfo.osRelease,
       );
     } else {
-      return const ConnectionInfoProtocolData(
+      return  ConnectionInfoProtocolData(
         deviceName: 'Unknown',
         deviceOS: DeviceOS.unknown,
         versionNumber: 'Unknown',

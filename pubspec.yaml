@@ -6,7 +6,4 @@ environment:
 
 workspace:
   ## Packages
-  - packages/protocol/keyboard_protocol
-  - packages/protocol/mouse_protocol
-  - packages/protocol/protocol
-  - packages/protocol/protocol_interface
+  - packages/protocol

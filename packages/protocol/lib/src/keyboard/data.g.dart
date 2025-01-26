@@ -6,14 +6,14 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$KeyboardProtocolDataImpl _$$KeyboardProtocolDataImplFromJson(
+KeyboardProtocolData _$KeyboardProtocolDataFromJson(
         Map<String, dynamic> json) =>
-    _$KeyboardProtocolDataImpl(
+    KeyboardProtocolData(
       key: $enumDecode(_$SpecialKeyTypeEnumMap, json['key']),
     );
 
-Map<String, dynamic> _$$KeyboardProtocolDataImplToJson(
-        _$KeyboardProtocolDataImpl instance) =>
+Map<String, dynamic> _$KeyboardProtocolDataToJson(
+        KeyboardProtocolData instance) =>
     <String, dynamic>{
       'key': _$SpecialKeyTypeEnumMap[instance.key]!,
     };
@@ -36,4 +36,7 @@ const _$SpecialKeyTypeEnumMap = {
   SpecialKeyType.ArrowRight: 'ArrowRight',
   SpecialKeyType.ArrowDown: 'ArrowDown',
   SpecialKeyType.ArrowUp: 'ArrowUp',
+  SpecialKeyType.VolumeUp: 'VolumeUp',
+  SpecialKeyType.VolumeDown: 'VolumeDown',
+  SpecialKeyType.VolumeMute: 'VolumeMute',
 };

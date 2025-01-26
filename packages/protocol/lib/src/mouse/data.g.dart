@@ -6,14 +6,14 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MouseButtonProtocolDataImpl _$$MouseButtonProtocolDataImplFromJson(
+MouseButtonProtocolData _$MouseButtonProtocolDataFromJson(
         Map<String, dynamic> json) =>
-    _$MouseButtonProtocolDataImpl(
+    MouseButtonProtocolData(
       type: $enumDecode(_$MouseButtonEnumMap, json['type']),
     );
 
-Map<String, dynamic> _$$MouseButtonProtocolDataImplToJson(
-        _$MouseButtonProtocolDataImpl instance) =>
+Map<String, dynamic> _$MouseButtonProtocolDataToJson(
+        MouseButtonProtocolData instance) =>
     <String, dynamic>{
       'type': _$MouseButtonEnumMap[instance.type]!,
     };
@@ -24,16 +24,16 @@ const _$MouseButtonEnumMap = {
   MouseButton.center: 'center',
 };
 
-_$MouseMovementProtocolDataImpl _$$MouseMovementProtocolDataImplFromJson(
+MouseMovementProtocolData _$MouseMovementProtocolDataFromJson(
         Map<String, dynamic> json) =>
-    _$MouseMovementProtocolDataImpl(
+    MouseMovementProtocolData(
       x: (json['x'] as num).toDouble(),
       y: (json['y'] as num).toDouble(),
       intensity: (json['intensity'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$$MouseMovementProtocolDataImplToJson(
-        _$MouseMovementProtocolDataImpl instance) =>
+Map<String, dynamic> _$MouseMovementProtocolDataToJson(
+        MouseMovementProtocolData instance) =>
     <String, dynamic>{
       'x': instance.x,
       'y': instance.y,
