@@ -25,23 +25,24 @@ class MouseRepository {
     );
   }
 
-  void hold(){
+  void hold() {
     _clientApiService.send(
       event: ProtocolEvent.mouseButtonHold,
-      data: const MouseButtonProtocolData(type: MouseButton.left),
+      data: MouseButtonProtocolData(type: MouseButton.left),
     );
   }
-  void release(){
+
+  void release() {
     _clientApiService.send(
       event: ProtocolEvent.mouseButtonReleased,
-      data: const MouseButtonProtocolData(type: MouseButton.left),
+      data: MouseButtonProtocolData(type: MouseButton.left),
     );
   }
 
   void doubleClick() {
     _clientApiService.send(
       event: ProtocolEvent.mouseDoubleClick,
-      data: const MouseButtonProtocolData(type: MouseButton.left),
+      data: MouseButtonProtocolData(type: MouseButton.left),
     );
   }
 

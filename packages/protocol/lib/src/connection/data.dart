@@ -5,15 +5,17 @@ import 'device_os.dart';
 part 'data.g.dart';
 
 @JsonSerializable()
-class ConnectionInfoProtocolData  {
+class ConnectionInfoProtocolData {
   final String deviceName;
   final DeviceOS deviceOS;
   final String versionNumber;
+  Map<String, dynamic> extra;
 
   ConnectionInfoProtocolData({
     required this.deviceName,
     required this.deviceOS,
     required this.versionNumber,
+    this.extra = const {},
   });
 
   factory ConnectionInfoProtocolData.fromJson(Map<String, dynamic> json) =>
@@ -23,29 +25,29 @@ class ConnectionInfoProtocolData  {
 }
 
 @JsonSerializable()
-class DesktopToMobileData {
+class DesktopExtraInfoData {
   final String message;
   final DateTime timestamp;
-  DesktopToMobileData({
+  DesktopExtraInfoData({
     required this.message,
     required this.timestamp,
   });
 
-  factory DesktopToMobileData.fromJson(Map<String, Object?> json) =>
-      _$DesktopToMobileDataFromJson(json);
+  factory DesktopExtraInfoData.fromJson(Map<String, Object?> json) =>
+      _$DesktopExtraInfoDataFromJson(json);
 
-  Map<String, Object?> toJson() => _$DesktopToMobileDataToJson(this);
+  Map<String, Object?> toJson() => _$DesktopExtraInfoDataToJson(this);
 }
 
 @JsonSerializable()
-class MobileToDesktopData {
+class MobileExtraInfoData {
   final String message;
-  MobileToDesktopData({
+  MobileExtraInfoData({
     required this.message,
   });
 
-  factory MobileToDesktopData.fromJson(Map<String, Object?> json) =>
-      _$MobileToDesktopDataFromJson(json);
+  factory MobileExtraInfoData.fromJson(Map<String, Object?> json) =>
+      _$MobileExtraInfoDataFromJson(json);
 
-  Map<String, Object?> toJson() => _$MobileToDesktopDataToJson(this);
+  Map<String, Object?> toJson() => _$MobileExtraInfoDataToJson(this);
 }

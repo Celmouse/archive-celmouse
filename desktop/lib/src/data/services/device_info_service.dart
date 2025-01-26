@@ -4,7 +4,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:protocol/protocol.dart';
 
 class DeviceInfoService {
-
   Future<ConnectionInfoProtocolData> getDeviceInfo() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -30,7 +29,7 @@ class DeviceInfoService {
         versionNumber: macOsInfo.osRelease,
       );
     } else {
-      return  ConnectionInfoProtocolData(
+      return ConnectionInfoProtocolData(
         deviceName: 'Unknown',
         deviceOS: DeviceOS.unknown,
         versionNumber: 'Unknown',

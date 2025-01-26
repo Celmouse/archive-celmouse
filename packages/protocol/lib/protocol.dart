@@ -1,6 +1,7 @@
 library;
 
 export 'src/model.dart';
+export 'src/events.dart';
 
 export 'src/connection/data.dart';
 export 'src/connection/device_os.dart';

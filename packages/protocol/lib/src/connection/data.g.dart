@@ -12,6 +12,7 @@ ConnectionInfoProtocolData _$ConnectionInfoProtocolDataFromJson(
       deviceName: json['deviceName'] as String,
       deviceOS: $enumDecode(_$DeviceOSEnumMap, json['deviceOS']),
       versionNumber: json['versionNumber'] as String,
+      extra: json['extra'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$ConnectionInfoProtocolDataToJson(
@@ -20,6 +21,7 @@ Map<String, dynamic> _$ConnectionInfoProtocolDataToJson(
       'deviceName': instance.deviceName,
       'deviceOS': _$DeviceOSEnumMap[instance.deviceOS]!,
       'versionNumber': instance.versionNumber,
+      'extra': instance.extra,
     };
 
 const _$DeviceOSEnumMap = {
@@ -29,26 +31,27 @@ const _$DeviceOSEnumMap = {
   DeviceOS.unknown: 'unknown',
 };
 
-DesktopToMobileData _$DesktopToMobileDataFromJson(Map<String, dynamic> json) =>
-    DesktopToMobileData(
+DesktopExtraInfoData _$DesktopExtraInfoDataFromJson(
+        Map<String, dynamic> json) =>
+    DesktopExtraInfoData(
       message: json['message'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
     );
 
-Map<String, dynamic> _$DesktopToMobileDataToJson(
-        DesktopToMobileData instance) =>
+Map<String, dynamic> _$DesktopExtraInfoDataToJson(
+        DesktopExtraInfoData instance) =>
     <String, dynamic>{
       'message': instance.message,
       'timestamp': instance.timestamp.toIso8601String(),
     };
 
-MobileToDesktopData _$MobileToDesktopDataFromJson(Map<String, dynamic> json) =>
-    MobileToDesktopData(
+MobileExtraInfoData _$MobileExtraInfoDataFromJson(Map<String, dynamic> json) =>
+    MobileExtraInfoData(
       message: json['message'] as String,
     );
 
-Map<String, dynamic> _$MobileToDesktopDataToJson(
-        MobileToDesktopData instance) =>
+Map<String, dynamic> _$MobileExtraInfoDataToJson(
+        MobileExtraInfoData instance) =>
     <String, dynamic>{
       'message': instance.message,
     };
