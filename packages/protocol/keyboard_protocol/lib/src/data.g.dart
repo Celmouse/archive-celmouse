@@ -19,10 +19,21 @@ Map<String, dynamic> _$$KeyboardProtocolDataImplToJson(
     };
 
 const _$SpecialKeyTypeEnumMap = {
-  SpecialKeyType.shift: 'shift',
-  SpecialKeyType.space: 'space',
-  SpecialKeyType.backspace: 'backspace',
-  SpecialKeyType.enter: 'enter',
-  SpecialKeyType.specialChars: 'specialChars',
-  SpecialKeyType.defaultLayout: 'defaultLayout',
+  SpecialKeyType.Enter: 'Enter',
+  SpecialKeyType.Tab: 'Tab',
+  SpecialKeyType.Space: 'Space',
+  SpecialKeyType.Backspace: 'Backspace',
+  SpecialKeyType.Escape: 'Escape',
+  SpecialKeyType.MetaLeft: 'MetaLeft',
+  SpecialKeyType.ShiftLeft: 'ShiftLeft',
+  SpecialKeyType.ShiftRight: 'ShiftRight',
+  SpecialKeyType.CapsLock: 'CapsLock',
+  SpecialKeyType.AltLeft: 'AltLeft',
+  SpecialKeyType.AltRight: 'AltRight',
+  SpecialKeyType.ControlLeft: 'ControlLeft',
+  SpecialKeyType.ControlRight: 'ControlRight',
+  SpecialKeyType.ArrowLeft: 'ArrowLeft',
+  SpecialKeyType.ArrowRight: 'ArrowRight',
+  SpecialKeyType.ArrowDown: 'ArrowDown',
+  SpecialKeyType.ArrowUp: 'ArrowUp',
 };

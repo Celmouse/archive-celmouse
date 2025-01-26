@@ -16,7 +16,7 @@ class KeyboardService {
   }
 
   void pressSpecial(SpecialKeyType key) {
-    // _channel.pressSpecialKey(key);
+    _channel.pressSpecialKey(key.name);
   }
 
   void releaseSpecial(SpecialKeyType key) {
@@ -32,6 +32,7 @@ class KeyboardPlatformChannel {
   }
 
   Future<void> pressSpecialKey(String key) async {
-    await channel.invokeMethod('pressSpecialKey', key);
+    final swiftKey = await channel.invokeMethod('convertDartKeyToSwift', key);
+    await channel.invokeMethod('pressSpecialKey', swiftKey);
   }
 }
