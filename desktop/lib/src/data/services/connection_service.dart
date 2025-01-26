@@ -122,6 +122,7 @@ class ConnectionService {
               Protocol(
                 event: ProtocolEvent.ping,
                 data: data,
+                timestamp: DateTime.timestamp(),
               ),
             ),
           );
