@@ -17,8 +17,7 @@ class ClientApiService {
 
   void send({required ProtocolEvent event, dynamic data}) {
     if (_socket == null) {
-      print('WebSocket channel is not connected.');
-      return;
+      throw UnimplementedError("Socket is null");
     }
 
     final protocol = Protocol(
@@ -32,7 +31,7 @@ class ClientApiService {
     try {
       _socket?.sink.add(json);
     } catch (e) {
-      print('Failed to send data: $e');
+      rethrow;
     }
   }
 }
