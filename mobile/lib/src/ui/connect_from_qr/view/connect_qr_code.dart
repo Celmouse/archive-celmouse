@@ -1,19 +1,19 @@
 import 'dart:async';
-import 'package:controller/src/routing/routes.dart';
+import 'package:controller/src/UI/mouse/view/mouse_page.dart';
 import 'package:controller/src/ui/connect_from_qr/viewmodel/connect_qr_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
 
 class ConnectFromQrCodePage extends StatefulWidget {
   const ConnectFromQrCodePage({
     super.key,
-    required this.viewmodel,
+    this.viewmodel,
   });
 
-  final ConnectQrViewmodel viewmodel;
+  final ConnectQrViewmodel? viewmodel;
 
   @override
   State<ConnectFromQrCodePage> createState() => _ConnectFromQrCodePageState();
@@ -23,27 +23,34 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
     with WidgetsBindingObserver {
   late final MobileScannerController controller;
 
+  late final ConnectQrViewmodel viewmodel;
+
   StreamSubscription<Object?>? _subscription;
 
   _handleBarcode(BarcodeCapture e) async {
     if (e.barcodes.first.rawValue == null) return;
-    widget.viewmodel.connect(e.barcodes.first.rawValue!);
+    viewmodel.connect(e.barcodes.first.rawValue!);
   }
 
   void _listener() {
-    if (widget.viewmodel.isConnected) {
-      context.go(Routes.mouse);
+    if (viewmodel.isConnected) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MousePage(),
+        ),
+      );
     }
-    if (widget.viewmodel.isLoading) {
+    if (viewmodel.isLoading) {
       context.loaderOverlay.show();
     } else {
       context.loaderOverlay.hide();
     }
-    if (widget.viewmodel.errorMessage != null) {
+    if (viewmodel.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Theme.of(context).colorScheme.error,
-          content: Text(widget.viewmodel.errorMessage!),
+          content: Text(viewmodel.errorMessage!),
         ),
       );
     }
@@ -51,6 +58,10 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
   @override
   void initState() {
+    viewmodel = widget.viewmodel ??
+        ConnectQrViewmodel(
+          connectRepository: context.read(),
+        );
     super.initState();
 
     controller = MobileScannerController(
@@ -64,7 +75,7 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
     // Start listening to the barcode events.
     _subscription = controller.barcodes.listen(_handleBarcode);
-    widget.viewmodel.addListener(_listener);
+    viewmodel.addListener(_listener);
 
     // Finally, start the scanner itself.
     unawaited(controller.start());
@@ -100,7 +111,7 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
 
   @override
   Future<void> dispose() async {
-    widget.viewmodel.removeListener(_listener);
+    viewmodel.removeListener(_listener);
 
     // Stop listening to lifecycle changes.
     WidgetsBinding.instance.removeObserver(this);
@@ -134,7 +145,7 @@ class _ConnectFromQrCodePageState extends State<ConnectFromQrCodePage>
             overlayBuilder: (context, constraints) =>
                 _subscription?.isPaused == true
                     ? Container(
-                        color: Colors.black.withOpacity(0.7),
+                        color: Colors.black.withValues(alpha: .7),
                         child: const Center(
                           child: CircularProgressIndicator(),
                         ),
@@ -173,7 +184,7 @@ class ScannerOverlay extends CustomPainter {
       );
 
     final backgroundPaint = Paint()
-      ..color = Colors.black.withOpacity(0.5)
+      ..color = Colors.black.withValues(alpha: 0.5)
       ..style = PaintingStyle.fill
       ..blendMode = BlendMode.dstOut;
 

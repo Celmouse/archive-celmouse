@@ -25,7 +25,7 @@ class AppInfoButton extends StatelessWidget {
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("© 2024 Celmouse Ltda."),
+                      Text("© ${DateTime.now().year} Celmouse Ltda."),
                       const SizedBox(height: 4),
                       Text("Version: $version"),
                       const Text("HUB Min Version: 2.1.0"),
