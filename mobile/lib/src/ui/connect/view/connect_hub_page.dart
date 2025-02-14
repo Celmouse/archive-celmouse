@@ -1,5 +1,5 @@
-import 'package:controller/src/routing/routes.dart';
-import 'package:controller/src/ui/ads/view/banner.dart';
+import 'package:controller/src/UI/connect_from_qr/view/connect_qr_code.dart';
+import 'package:controller/src/UI/mouse/view/mouse_page.dart';
 import 'package:controller/src/ui/connect/view/devices_scanner.dart';
 import 'package:controller/src/ui/core/ui/support_button.dart';
 import 'package:controller/src/ui/connect/view/enter_hub_ip_tile.dart';
@@ -7,43 +7,54 @@ import 'package:controller/src/ui/connect/viewmodel/connect_hub_viewmodel.dart';
 import 'package:controller/src/ui/core/ui/app_info_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../../utils/launch_site.dart';
 
 class ConnectHUBPage extends StatefulWidget {
   const ConnectHUBPage({
     super.key,
-    required this.viewmodel,
+    this.viewmodel,
   });
 
-  final ConnectHUBViewmodel viewmodel;
+  final ConnectHUBViewmodel? viewmodel;
 
   @override
   State<ConnectHUBPage> createState() => _ConnectHUBPageState();
 }
 
 class _ConnectHUBPageState extends State<ConnectHUBPage> {
+  late final ConnectHUBViewmodel viewmodel;
   @override
   void initState() {
+    viewmodel = widget.viewmodel ??
+        ConnectHUBViewmodel(
+          connectRepository: context.read(),
+        );
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    widget.viewmodel.addListener(_listener);
-    widget.viewmodel.startScan();
+
+    viewmodel.addListener(_listener);
+    viewmodel.startScan();
     super.initState();
   }
 
   @override
   void dispose() {
-    widget.viewmodel.removeListener(_listener);
-    widget.viewmodel.stopScan();
+    viewmodel.removeListener(_listener);
+    viewmodel.stopScan();
     super.dispose();
   }
 
   void _listener() {
-    if (widget.viewmodel.isConnected) {
-      context.go(Routes.mouse);
+    if (viewmodel.isConnected) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MousePage(),
+        ),
+      );
     }
   }
 
@@ -113,16 +124,19 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
                         ),
                       ),
                       const Divider(),
-                      DevicesScanner(viewmodel: widget.viewmodel),
+                      DevicesScanner(viewmodel: viewmodel),
                       const Divider(),
-                      EnterHubIPTile(viewmodel: widget.viewmodel),
+                      EnterHubIPTile(viewmodel: viewmodel),
                       const Divider(),
                       ListTile(
                         leading: const Icon(Icons.qr_code_scanner),
                         title: const Text('Connect via QR Code'),
-                        onTap: () {
-                          context.go(Routes.connectQRCode);
-                        },
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ConnectFromQrCodePage(),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -130,8 +144,8 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
               ),
               const SizedBox(height: 20),
               const Spacer(),
-              const BannerAdWidget(),
-              const SizedBox(height: 8),
+              // const BannerAdWidget(),
+              // const SizedBox(height: 8),
             ],
           ),
         ),

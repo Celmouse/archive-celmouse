@@ -17,18 +17,17 @@ dependencies:
   device_info_plus: ^11.2.1
   result_dart: ^2.0.0
   flutter_screenutil: ^5.9.3
-  mouse:
-    path: ../plugins/mouse/mouse
-  keyboard:
-    path: ../plugins/keyboard/keyboard
   protocol:
-    path: ../packages/protocol/protocol
+    path: ../packages/protocol
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^5.0.0
+  json_serializable: ^6.9.3
+  build_runner: ^2.4.14
 
 flutter:
   uses-material-design: true

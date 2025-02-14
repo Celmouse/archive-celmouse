@@ -1,5 +1,7 @@
 import 'package:controller/getit.dart';
-import 'package:controller/src/routing/routes.dart';
+import 'package:controller/src/UI/connect/view/connect_hub_page.dart';
+import 'package:controller/src/data/repositories/connection_repository.dart';
+import 'package:controller/src/data/repositories/mouse_repository.dart';
 import 'package:controller/src/ui/keyboard/view/keyboard.dart';
 import 'package:controller/src/ui/keyboard/viewmodel/keyboard_view_model.dart';
 import 'package:controller/src/ui/mouse_move/view/mouse_move_body.dart';
@@ -8,7 +10,6 @@ import 'package:controller/src/ui/mouse/viewmodel/mouse_viewmodel.dart';
 import 'package:controller/src/ui/trackpad/view/trackpad.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/models/mouse_settings_model.dart';
 import '../../../data/services/mouse_settings_persistence_service.dart';
@@ -16,10 +17,10 @@ import '../../../data/services/mouse_settings_persistence_service.dart';
 class MousePage extends StatefulWidget {
   const MousePage({
     super.key,
-    required this.viewmodel,
+    this.viewmodel,
   });
 
-  final MouseViewmodel viewmodel;
+  final MouseViewmodel? viewmodel;
 
   @override
   State<MousePage> createState() => _MousePageState();
@@ -29,9 +30,15 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentPageIndex = 0;
   final PageController _pageController = PageController();
+  late final MouseViewmodel viewmodel;
 
   @override
   void initState() {
+    viewmodel = widget.viewmodel ??
+        MouseViewmodel(
+          context.read<ConnectionRepository>(),
+          mouseRepository: context.read<MouseRepository>(),
+        );
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
@@ -43,7 +50,7 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    widget.viewmodel.dispose();
+    viewmodel.dispose();
     super.dispose();
   }
 
@@ -51,19 +58,19 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        widget.viewmodel.reconnect();
+        viewmodel.reconnect();
         break;
       case AppLifecycleState.paused:
       case AppLifecycleState.inactive:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        widget.viewmodel.disableMouse();
+        viewmodel.disableMouse();
     }
   }
 
   void _onToggle(int index) {
-    widget.viewmodel.disableMouse();
-    widget.viewmodel.closeKeyboard();
+    viewmodel.disableMouse();
+    viewmodel.closeKeyboard();
 
     setState(() {
       _currentPageIndex = index;
@@ -102,8 +109,8 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         if (!isOpened) {
           MouseSettingsPersistenceService.saveSettings(getIt<MouseSettings>());
         } else {
-          widget.viewmodel.disableMouse();
-          widget.viewmodel.closeKeyboard();
+          viewmodel.disableMouse();
+          viewmodel.closeKeyboard();
         }
       },
       appBar: AppBar(
@@ -112,8 +119,14 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () {
-            widget.viewmodel.disconnect();
-            context.go(Routes.connect);
+            viewmodel.disconnect();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ConnectHUBPage(),
+              ),
+              (route) => false,
+            );
           },
           icon: const Icon(
             Icons.exit_to_app,
@@ -124,13 +137,13 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
           Visibility(
             visible: true,
             child: ListenableBuilder(
-              listenable: widget.viewmodel.isKeyboardOpen,
+              listenable: viewmodel.isKeyboardOpen,
               builder: (context, _) {
                 return IconButton(
                   onPressed: () {
-                    widget.viewmodel.disableMouse();
-                    if (!widget.viewmodel.isKeyboardOpen.value) {
-                      widget.viewmodel.openKeyboard();
+                    viewmodel.disableMouse();
+                    if (!viewmodel.isKeyboardOpen.value) {
+                      viewmodel.openKeyboard();
                       showBottomSheet(
                         context: context,
                         builder: (context) {
@@ -153,12 +166,12 @@ class _MousePageState extends State<MousePage> with WidgetsBindingObserver {
                         },
                       );
                     } else {
-                      widget.viewmodel.closeKeyboard();
+                      viewmodel.closeKeyboard();
                       Navigator.of(context).pop();
                     }
                   },
                   icon: Icon(
-                    widget.viewmodel.isKeyboardOpen.value
+                    viewmodel.isKeyboardOpen.value
                         ? Icons.keyboard_arrow_down
                         : Icons.keyboard,
                   ),

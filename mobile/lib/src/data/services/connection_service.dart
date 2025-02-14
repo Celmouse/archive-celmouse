@@ -62,9 +62,10 @@ class ConnectionService {
     final channel = getChannel(ip, port);
 
     channel.sink.add(jsonEncode(
-      const Protocol(
+      Protocol(
         event: ProtocolEvent.connect,
         data: null,
+        timestamp: DateTime.timestamp(),
       ).toJson(),
     ));
 
@@ -75,9 +76,10 @@ class ConnectionService {
 
   Future<void> disconnect(WebSocketChannel channel) async {
     channel.sink.add(jsonEncode(
-      const Protocol(
+      Protocol(
         event: ProtocolEvent.disconnect,
         data: null,
+        timestamp: DateTime.timestamp(),
       ).toJson(),
     ));
     await channel.sink.close();
@@ -105,13 +107,14 @@ class ConnectionService {
     });
 
     channel.sink.add(jsonEncode(
-      const Protocol(
+      Protocol(
+        timestamp: DateTime.timestamp(),
         event: ProtocolEvent.ping,
         data: null, // MobileToDesktopData(message: ''),
       ),
     ));
 
-    Timer(const Duration(seconds: 1) ,(){
+    Timer(const Duration(seconds: 1), () {
       channel.sink.close();
     });
   }

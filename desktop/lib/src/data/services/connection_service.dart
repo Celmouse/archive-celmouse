@@ -32,6 +32,7 @@ class ConnectionService {
     required Function(MouseMovementProtocolData) onMouseMove,
     required Function(MouseMovementProtocolData) onMouseScroll,
     required Function(String) onKeyPressed,
+    required Function(String) onKeyReleased,
     required Function(KeyboardProtocolData) onSpecialKeyPressed,
     required Function(KeyboardProtocolData) onSpecialKeyReleased,
     required VoidCallback onConnected,
@@ -121,6 +122,7 @@ class ConnectionService {
               Protocol(
                 event: ProtocolEvent.ping,
                 data: data,
+                timestamp: DateTime.timestamp(),
               ),
             ),
           );
