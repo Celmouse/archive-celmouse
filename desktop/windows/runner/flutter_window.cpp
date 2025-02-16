@@ -1,5 +1,5 @@
 #include "flutter_window.h"
-
+#include <flutter/event_channel.h>
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
