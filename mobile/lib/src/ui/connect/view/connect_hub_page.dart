@@ -75,36 +75,7 @@ class _ConnectHUBPageState extends State<ConnectHUBPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: ExpansionTile(
-                  dense: true,
-                  tilePadding: EdgeInsets.zero,
-                  title: const Text(
-                    "How to use this app?",
-                  ),
-                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                  childrenPadding: const EdgeInsets.only(bottom: 16),
-                  expandedAlignment: Alignment.centerLeft,
-                  children: [
-                    const Text("1. Check if your phone supports gyroscope."),
-                    GestureDetector(
-                      onTap: () => launchSite(),
-                      child: const Text(
-                        '2. Download the HUB (Version 2.2.0)',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                    const Text("3. Connect to the HUB."),
-                    const Text("4. Start moving your pointer."),
-                  ],
-                ),
-              ),
+             
               const SizedBox(height: 20),
               Card(
                 elevation: 4,
