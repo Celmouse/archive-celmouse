@@ -24,8 +24,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
     final messages = [
-      'Download Celmouse HUB for Windows or Mac.',
-      'Connect the App to the your computer App.',
+      "You don't need a lot of devices anymore.",
+      'Download Celmouse HUB for your computer. After installation, launch the application and a QR code will appear.',
     ];
 
     return FutureBuilder<bool>(
@@ -39,7 +39,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               return OnBoardingSlider(
                 headerBackgroundColor: Colors.transparent,
                 finishButtonText: 'Connect',
-                pageBackgroundColor: Colors.white,
+                // pageBackgroundColor: Colors.white,
                 controllerColor: Colors.pink,
                 finishButtonStyle: const FinishButtonStyle(
                   backgroundColor: Colors.black,
@@ -52,17 +52,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 ),
                 background: [
                   Image.asset(
-                    'assets/images/onboarding/download.png',
+                    'assets/images/onboarding/phone_mice_keyboard.webp',
                     fit: BoxFit.fill,
                   ),
                   Image.asset(
-                    'assets/images/onboarding/connect.png',
+                    'assets/images/onboarding/wireless_desktop.webp',
                     fit: BoxFit.fill,
                   ),
                   // Image.asset('assets/slide_2.png'),
                 ],
                 centerBackground: true,
-                skipTextButton: const Text('Do not show again'),
                 skipFunctionOverride: () {
                   neverShowAgain();
                   return Navigator.push(
@@ -81,13 +80,23 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            Text(
-                              m,
-                              style: Theme.of(context).textTheme.labelLarge,
+                            const Expanded(
+                              flex: 3,
+                              child: SizedBox.shrink(),
                             ),
-                            const SizedBox(
-                              height: 86,
-                            )
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                m,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: Colors.blue,
+                                    ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
