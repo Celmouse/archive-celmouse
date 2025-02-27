@@ -1,4 +1,6 @@
-WARNING: This repository has been archived and further updates will be only available through [Celmouse](https://github.com/Celmouse/celmouse)
+<div style="background-color:#ffdddd; border-left:5px solid #f44336; padding:10px;">
+  <strong style="color:#f44336;">⚠ WARNING:</strong> This repository has been archived and further updates will be only available through [Celmouse](https://github.com/Celmouse/celmouse)
+</div>
 
 # Slide Control with Flutter and NodeJS via WebSocket
 
