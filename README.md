@@ -1,3 +1,5 @@
+WARNING: This repository has been archived and further updates will be only available through [Celmouse](https://github.com/Celmouse/celmouse)
+
 # Slide Control with Flutter and NodeJS via WebSocket
 
 This project allows you to control a **Slideshow** (or any other software) remotely by simulating **mouse** and **keyboard** movements through a Flutter application connected via **WebSocket** to a NodeJS server. The Flutter app uses the device's **accelerometer** and **gyroscope** sensors to detect movements, providing a smooth experience for navigating slides or performing actions remotely.
